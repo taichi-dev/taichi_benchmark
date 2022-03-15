@@ -28,13 +28,6 @@ struct Ray
     float3 direction;
 };
 
-struct float3a
-{
- float x;
- float y;
- float z;
-}
-
 struct sphere
 {
     float radius;
@@ -289,7 +282,7 @@ int main(int argc, char *argv[])
     cudaMalloc(&outputGPU, width * height * sizeof(float3));
 
     // Ray Pool
-    dim3 blockSize(16, 16, 1);
+    dim3 blockSize(128, 1, 1);
     dim3 gridSize(width / blockSize.x, height / blockSize.y, 1);
 
     //t.start();

@@ -199,7 +199,7 @@ namespace mpm
 
         cudaDeviceProp prop{};
         cudaGetDeviceProperties(&prop, 0);
-        threads_per_block = std::min(512, prop.maxThreadsPerBlock);
+        threads_per_block = std::min(n_grid, prop.maxThreadsPerBlock);
         auto block_num = get_block_num(n_particles,
                 threads_per_block);
         init_kernel<<<block_num, threads_per_block>>>(J_dev);
@@ -236,6 +236,7 @@ namespace mpm
         auto x_host = std::make_unique<Vector[]>(n_particles);
         cudaMemcpy(x_host.get(), x_dev, n_particles * sizeof(Vector),
                 cudaMemcpyDeviceToHost);
+
         return x_host;
     }
 } // namespace mpm
