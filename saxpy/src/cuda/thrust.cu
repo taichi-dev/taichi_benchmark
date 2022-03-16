@@ -42,7 +42,7 @@ int saxpy(int _N) {
     double avg_time = tmr.getTimeMillisecond() / nIter;
     double GFlops = 1e-6 * N * 2 * fma_factor / avg_time;
     double GBs = 1e-6 * N * sizeof(float) * 3 / avg_time;
-    printf("%dx%d@%d, time %.3lfms, %.3lf GFLOPS, %.3lf GB/s\n", _N, _N, fma_factor, avg_time, GFlops, GBs);
+    printf("%dx%d@%d, %.3lf ms, %.3lf GFLOPS, %.3lf GB/s\n", _N, _N, fma_factor, avg_time, GFlops, GBs);
     
     y = d_y; // copy results to the host vector
 

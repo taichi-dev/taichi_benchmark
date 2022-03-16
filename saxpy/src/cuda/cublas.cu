@@ -45,8 +45,8 @@ __host__ void saxpy(int _N) {
     // Memory set on GPU
     cublasSetVector(N, sizeof(float), x, 1, d_x, 1);
     cublasSetVector(N, sizeof(float), y, 1, d_y, 1);
+
     float alpha = 2.0;
-    float alpha_1 = 4.0;
     
     // Bechmark loop
     int nIter = 5000;
@@ -54,16 +54,15 @@ __host__ void saxpy(int _N) {
     tmr.start();
     for (int i = 0; i < nIter; ++i) {
         cublasSaxpy(handle, N, &alpha, d_x, 1, d_y, 1);
-        cublasSaxpy(handle, N, &alpha_1, d_x, 1, d_y, 1);
     }
     cublasSetVector(N, sizeof(float), d_z, 1, z, 1);
     tmr.stop();
 
     // Performance report
     double avg_time = tmr.getTimeMillisecond() / nIter;
-    double GFlops = 1e-6 * N * 2 * 2/ avg_time;
+    double GFlops = 1e-6 * N * 2 / avg_time;
     double GBs = 1e-6 * N * sizeof(float) * 3 / avg_time;
-    printf("%dx%d, time %.3lf ms, %.3lf GFLOPS, %.3lf GB/s\n", _N, _N, avg_time, GFlops, GBs);
+    printf("%dx%d, %.3lf ms, %.3lf GFLOPS, %.3lf GB/s\n", _N, _N, avg_time, GFlops, GBs);
 
     // Clean up
     cublasDestroy(handle);

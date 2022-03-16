@@ -41,11 +41,11 @@ def saxpy(N, len_coeff):
         avg_time = (et - st) / repeats
         GFlops = 1e-9 * len(coeff) * 2 * N * N / avg_time
         GBs = 1e-9 * N * N * 4 * 3 / avg_time
-        print("{}x{}@{}, {:.3f} GFLOPS, {:.3f} GB/s".format(N, N, len(coeff), GFlops, GBs))
+        return {"N":N, "fold":len_coeff, "time":avg_time*1000.0, "gflops":GFlops,"gbs":GBs}
+    return benchmark()
 
-    benchmark()
 if __name__ == '__main__':
-    for i in [256, 512, 1024, 2048, 4096, 8192]:
+    for i in [256, 512, 1024, 2048, 4096]:
         for j in range(5):
-            saxpy(i, 2**(j))
-        #print("-----------------------")
+            rd = saxpy(i, 2**(j))
+            print("{}x{}@{}, {:.3f}ms, {:.3f} GFLOPS, {:.3f} GB/s".format(rd["N"], rd["N"], rd["fold"], rd["time"], rd["gflops"], rd["gbs"]))
