@@ -9,10 +9,9 @@ __host__ void saxpy(int _N) {
     
     // Handlers
     cublasHandle_t handle;
-    cublasStatus_t stat;
     cudaError_t    err;
 
-    stat = cublasCreate(&handle);
+    cublasCreate(&handle);
 
     float* x = nullptr;
     float* y = nullptr;
@@ -62,7 +61,11 @@ __host__ void saxpy(int _N) {
     double avg_time = tmr.getTimeMillisecond() / nIter;
     double GFlops = 1e-6 * N * 2 / avg_time;
     double GBs = 1e-6 * N * sizeof(float) * 3 / avg_time;
+#ifdef JSON_OUTPUT
+    printf("{\"N\": %d, \"time\":%.3lf, \"gflops\":%.3lf, \"gbs\": %.3lf}\n",  _N, avg_time, GFlops, GBs);
+#else
     printf("%dx%d, %.3lf ms, %.3lf GFLOPS, %.3lf GB/s\n", _N, _N, avg_time, GFlops, GBs);
+#endif
 
     // Clean up
     cublasDestroy(handle);
