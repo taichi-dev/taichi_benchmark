@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
-import math
 from benchmark_taichi import benchmark_taichi
+import math
+import os
 
 def plot_roofline_log_scale(ax):
     bw = 760
@@ -20,6 +21,7 @@ def plot_roofline_log_scale(ax):
             verticalalignment='top')
     ax.text(0.55, 0.98, compbound_str, fontsize=12, transform=ax.transAxes,
             verticalalignment='top')
+
 def plot_roofline_linear_scale(ax):
     bw = 760
     cc = 29700
@@ -45,10 +47,10 @@ def get_arithmetic_intensity(flops, bw):
 def get_color_marker(N):
     color_dict = {256:'gold', 512:'darkorange', 1024:'green', 2048:'blue', 4096:'red', 8192:'darkgrey',}
     return color_dict[N]
-def plot_results(ax, rds):
+def plot_results(ax, results):
     x = []
     y = []
-    for rd in rds:
+    for rd in results:
         gflops = rd["gflops"]
         gbs = rd["gbs"]
         x.append(gflops / gbs)
@@ -56,16 +58,19 @@ def plot_results(ax, rds):
         color = get_color_marker(rd["N"])
         ax.plot([gflops / gbs], [gflops], marker="+", color=color, markersize=6, mew=2)
 
-taichi_rds = benchmark_taichi(max_fma=512)
-fig, ax = plt.subplots()
-plot_roofline_linear_scale(ax)
-plot_results(ax, taichi_rds)
-fig.savefig('roofline_linear_scale.png',dpi=400)
-fig.clf()
-ax.cla()
-fig, ax = plt.subplots()
-plot_roofline_log_scale(ax)
-plot_results(ax, taichi_rds)
-fig.savefig('roofline_log_scale.png',dpi=400)
-
-
+if __name__ == '__main__':
+    try:
+        os.makedirs('fig')
+    except FileExistsError:
+        pass
+    taichi_results = benchmark_taichi(max_nesting=512)
+    fig, ax = plt.subplots()
+    plot_roofline_linear_scale(ax)
+    plot_results(ax, taichi_results)
+    fig.savefig('fig/roofline_linear_scale.png',dpi=200)
+    fig.clf()
+    ax.cla()
+    fig, ax = plt.subplots()
+    plot_roofline_log_scale(ax)
+    plot_results(ax, taichi_results)
+    fig.savefig('fig/roofline_log_scale.png',dpi=200)
