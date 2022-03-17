@@ -16,8 +16,8 @@ def extract_gflops(result_dict):
     x = []
     y = []
     for res in result_dict:
-        fma_depth = res.get("fold")
-        if fma_depth == 1 or fma_depth == None:
+        nesting_factor = res.get("fold")
+        if nesting_factor == 1 or nesting_factor == None:
             x.append(res["N"])
             y.append(res["gflops"])
     return x, y
@@ -26,8 +26,8 @@ def extract_bw(result_dict):
     x = []
     y = []
     for res in result_dict:
-        fma_depth = res.get("fold")
-        if fma_depth == 1 or fma_depth == None:
+        nesting_factor = res.get("fold")
+        if nesting_factor == 1 or nesting_factor == None:
             x.append(res["N"])
             y.append(res["gbs"])
     return x, y
@@ -36,10 +36,10 @@ def extract_nested(result_dict, N=4096):
     x = []
     y = []
     for res in result_dict:
-        fma_depth = res.get("fold")
+        nesting_factor = res.get("fold")
         if res["N"] == N:
-            if fma_depth != None:
-                x.append(fma_depth)
+            if nesting_factor != None:
+                x.append(nesting_factor)
             y.append(res["gflops"])
     return x, y
 
