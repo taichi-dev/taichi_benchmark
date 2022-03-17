@@ -117,7 +117,7 @@ def plot_nested(results, N=4096):
     plt.bar(bar_pos, y)
     plt.legend(['Taichi', 'CUDA/Thrust', 'CUDA/cuBLAS'])
     plt.xlabel("Nesting factor")
-    plt.ylabl("Performance (GFLOPS)")
+    plt.ylabel("Performance (GFLOPS)")
     plt.title("Nested saxpy compute benchmark on {}x{} arrays".format(N, N))
     plt.savefig("fig/nesting_bench_{}.png".format(N), dpi=200)
 
