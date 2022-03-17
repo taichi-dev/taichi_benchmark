@@ -1,9 +1,8 @@
 import taichi as ti
 import time
 
-ti.init(arch=ti.cuda, print_ir=False)
-
-def run_nbody(nBodies):
+def run_nbody(nBodies, arch=ti.cuda):
+    ti.init(arch=arch)
     softening = 1e-9
     dt = 0.01
     nIters = 10
@@ -26,7 +25,6 @@ def run_nbody(nBodies):
             Fy = 0.0
             Fz = 0.0
             for j in range(nBodies):
-                vec = ti.Vector([0.0, 0.0, 0.0])
                 dx = bodies[j, 0] - bodies[i, 0]
                 dy = bodies[j, 1] - bodies[i, 1]
                 dz = bodies[j, 2] - bodies[i, 2]
@@ -51,22 +49,17 @@ def run_nbody(nBodies):
         st = time.time()
         for i in range(nIters):
             bodyForce()
-            ti.sync()
+        ti.sync()
         et = time.time()
 
         avg_time =  (et - st) * 1000.0 / nIters
-        #print("Finishing...time {}ms".format(avg_time))
-        #print("nbodies={} speed {:.3f} billion bodies per second.".format(nBodies, 1e-6 * nBodies * nBodies / avg_time))
-        return avg_time, 1e-6 * nBodies * nBodies / avg_time
+        return {'nbodies': nBodies, 'time': avg_time, 'rate': 1e-6 * nBodies * nBodies / avg_time}
     return run()
 
 if __name__ == '__main__':
     nBodies = 1024
-    repeats = 1
     for i in range(10):
-        acc_time = 0.0
-        for i in range(repeats):
-            avg_time, _ = run_nbody(nBodies)
-            acc_time = acc_time + avg_time
-        print("{}, {:.3f}".format(nBodies, 1e-6 * nBodies * nBodies / acc_time * repeats))
+        result = run_nbody(nBodies)
+        avg_time = result['time']
+        print("nBodies={}, spped {:.3f} billion bodies per second.".format(nBodies, 1e-6 * nBodies * nBodies / avg_time))
         nBodies *= 2

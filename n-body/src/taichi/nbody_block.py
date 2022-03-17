@@ -1,23 +1,18 @@
 import taichi as ti
 import time
 
-#ti.init(arch=ti.cuda, print_ir=False, log_level=ti.TRACE)
-ti.init(arch=ti.cuda, print_ir=False, log_level=ti.INFO)
 
-def run_nbody(nBodies):
+def run_nbody(nBodies, arch=ti.cuda):
+    ti.init(arch=arch)
     softening = 1e-9
     dt = 0.01
     nIters = 10
     block_size = 128
 
-    velocities = ti.field(shape=(nBodies, 4), dtype=ti.float32)
-    #ti.root.pointer(ti.j, nBodies // block_size).dense(ti.j, block_size).dense(ti.i, 4).place(bodies)
-
-    #bodies = ti.field(shape=(nBodies, 4), dtype=ti.float32)
-
+    velocities = ti.field(dtype=ti.float32)
     bodies = ti.field(dtype=ti.float32)
+    ti.root.dense(ti.ij, (nBodies, 4)).place(velocities)
     ti.root.dense(ti.ij, (nBodies // block_size, 4)).dense(ti.i, block_size).place(bodies)
-
 
     @ti.kernel
     def randomizeBodies():
@@ -64,18 +59,13 @@ def run_nbody(nBodies):
         et = time.time()
 
         avg_time =  (et - st) * 1000.0 / (nIters- 1)
-        #print("Finishing...time {}ms".format(avg_time))
-        #print("nbodies={} speed {:.3f} billion bodies per second.".format(nBodies, 1e-6 * nBodies * nBodies / avg_time))
-        return avg_time, 1e-6 * nBodies * nBodies / avg_time
+        return {'nbodies': nBodies, 'time': avg_time, 'rate': 1e-6 * nBodies * nBodies / avg_time}
     return run()
 
 if __name__ == '__main__':
     nBodies = 1024
-    repeats = 1
     for i in range(10):
-        acc_time = 0.0
-        for i in range(repeats):
-            avg_time, _ = run_nbody(nBodies)
-            acc_time = acc_time + avg_time
-        print("{}, {:.3f}".format(nBodies, 1e-6 * nBodies * nBodies / acc_time * repeats))
+        result = run_nbody(nBodies)
+        avg_time = result['time']
+        print("nBodies={}, spped {:.3f} billion bodies per second.".format(nBodies, 1e-6 * nBodies * nBodies / avg_time))
         nBodies *= 2
