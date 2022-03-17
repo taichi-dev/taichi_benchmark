@@ -1,11 +1,10 @@
 import taichi as ti
 import time
 
-def run_nbody(nBodies, arch=ti.cuda):
+def run_nbody(nBodies, arch=ti.cuda, nIters=50):
     ti.init(arch=arch)
     softening = 1e-9
     dt = 0.01
-    nIters = 10
 
     bodies = ti.field(shape=(nBodies,  3), dtype=ti.float32)
     velocities = ti.field(shape=(nBodies, 3), dtype=ti.float32)
@@ -49,10 +48,12 @@ def run_nbody(nBodies, arch=ti.cuda):
         st = time.time()
         for i in range(nIters):
             bodyForce()
-        ti.sync()
+            ti.sync()
+            if st == None:
+                st = time.time()
         et = time.time()
 
-        avg_time =  (et - st) * 1000.0 / nIters
+        avg_time =  (et - st) * 1000.0 / (nIters - 1)
         return {'nbodies': nBodies, 'time': avg_time, 'rate': 1e-6 * nBodies * nBodies / avg_time}
     return run()
 

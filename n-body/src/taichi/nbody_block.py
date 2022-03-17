@@ -1,12 +1,10 @@
 import taichi as ti
 import time
 
-
-def run_nbody(nBodies, arch=ti.cuda):
+def run_nbody(nBodies, arch=ti.cuda, nIters=50):
     ti.init(arch=arch)
     softening = 1e-9
     dt = 0.01
-    nIters = 10
     block_size = 128
 
     velocities = ti.field(dtype=ti.float32)
@@ -39,14 +37,14 @@ def run_nbody(nBodies, arch=ti.cuda):
                 Fx += dx * invDist3
                 Fy += dy * invDist3
                 Fz += dz * invDist3
-            velocities[i, 0] += dt * Fx;
-            velocities[i, 1] += dt * Fy;
-            velocities[i, 2] += dt * Fz;
+            velocities[i, 0] = velocities[i, 0] + dt * Fx;
+            velocities[i, 1] = velocities[i, 1] + dt * Fy;
+            velocities[i, 2] = velocities[i, 2] + dt * Fz;
 
         for i in range(nBodies):
-            bodies[i, 0] += velocities[i, 0] * dt;
-            bodies[i, 1] += velocities[i, 1] * dt;
-            bodies[i, 2] += velocities[i, 2] * dt;
+            bodies[i, 0] = bodies[i, 0] + velocities[i, 0] * dt;
+            bodies[i, 1] = bodies[i, 1] + velocities[i, 1] * dt;
+            bodies[i, 2] = bodies[i, 2] + velocities[i, 2] * dt;
 
     def run():
         randomizeBodies()
