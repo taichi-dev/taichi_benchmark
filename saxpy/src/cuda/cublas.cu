@@ -15,29 +15,25 @@ __host__ void saxpy(int _N) {
 
     float* x = nullptr;
     float* y = nullptr;
-    float* z = nullptr;
 
     float* d_x = nullptr;
     float* d_y = nullptr;
-    float* d_z = nullptr;
 
     // Memory allocations
-    err = cudaMallocHost(&x, 3 * N * sizeof(float));
+    err = cudaMallocHost(&x, 2 * N * sizeof(float));
     if (err != cudaSuccess) {
         fprintf(stderr, "Failed to allocate memory on host.\n");
         exit(-1);
     }
     y = x + N;
-    z = y + N;
-    err = cudaMalloc(&d_x, 3 * N * sizeof(float));
+    err = cudaMalloc(&d_x, 2 * N * sizeof(float));
     if (err != cudaSuccess) {
-        fprintf(stderr, "Failed to allocate memory on device. Requested size %lu\n", 3 * N * sizeof(float));
+        fprintf(stderr, "Failed to allocate memory on device. Requested size %lu\n", 2 * N * sizeof(float));
         exit(-1);
     }
     d_y = d_x + N;
-    d_z = d_y + N;
 
-    for(int i = 0; i < 3 * N; ++i) {
+    for(int i = 0; i < 2 * N; ++i) {
         x[i] = rand() / RAND_MAX;
     }
 
@@ -54,7 +50,7 @@ __host__ void saxpy(int _N) {
     for (int i = 0; i < nIter; ++i) {
         cublasSaxpy(handle, N, &alpha, d_x, 1, d_y, 1);
     }
-    cublasSetVector(N, sizeof(float), d_z, 1, z, 1);
+    cublasSetVector(N, sizeof(float), d_y, 1, y, 1);
     tmr.stop();
 
     // Performance report
@@ -73,8 +69,6 @@ __host__ void saxpy(int _N) {
     cudaFree(d_x);
     cudaFree(y);
     cudaFree(d_y);
-    cudaFree(z);
-    cudaFree(d_z);
 }
 
 int main() {

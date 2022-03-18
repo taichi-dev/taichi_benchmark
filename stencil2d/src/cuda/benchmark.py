@@ -13,8 +13,25 @@ def pushd(path):
     finally:
         os.chdir(prev)
 
+def run_binary(binary_file, argv):
+    p = Popen(['./' + binary_file] + argv, stdout=PIPE)
+    output, err = p.communicate()
+    output = output.decode('utf-8')
+    output = output.split('\n')
+    results = []
+    for line in output[:-1]:
+        res_dict = None
+        try:
+            res_dict = json.loads(line)
+        except:
+            pass
+        if res_dict:
+            results.append(res_dict)
+    return results
+
 def compile_and_benchmark(source_name, output_binary_name, flags=[]):
-    with pushd('src/cuda'):
+    workdir = os.path.dirname(os.path.abspath(__file__))
+    with pushd(workdir):
         # Compile
         p = Popen(['nvcc', '-O3', source_name, '-DJSON_OUTPUT', '-o', output_binary_name] + flags, stdout=PIPE)
         output, err = p.communicate()
@@ -24,26 +41,17 @@ def compile_and_benchmark(source_name, output_binary_name, flags=[]):
         print("Successfully compiled {} into {}".format(source_name, output_binary_name))
 
         # Run Benchmark
-        p = Popen(['./'+output_binary_name], stdout=PIPE)
-        output, err = p.communicate()
-        output = output.decode('utf-8')
-        output = output.split('\n')
         results = []
-        for line in output[:-1]:
-            res_dict = None
-            try:
-                res_dict = json.loads(line)
-            except:
-                pass
-            if res_dict:
-                results.append(res_dict)
-        print(results)
+        N = 64
+        for k in range(8):
+            argv = ["{}".format(N)]
+            results += run_binary(output_binary_name, argv)
+            N *= 2
+        print("{} test finished.".format(output_binary_name))
         return results
 
-
 def benchmark():
-    return {"cublas": compile_and_benchmark("cublas.cu", "saxpy_cublas", flags=['-lcublas']),
-            "thrust": compile_and_benchmark("thrust.cu", "saxpy_thrust")}
+    return {"cuda": compile_and_benchmark("stencil2d.cu", "stencil_cuda")}
 
 if __name__ == '__main__':
     print(benchmark())
