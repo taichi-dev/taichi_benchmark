@@ -26,7 +26,7 @@ def saxpy(N, len_coeff):
         for i in ti.grouped(x):
             x[i] = ti.random(ti.float32) * 64.0
 
-    def benchmark(repeats=5000):
+    def run(repeats=5000):
         import time
 
         init(x)
@@ -42,7 +42,7 @@ def saxpy(N, len_coeff):
         GFlops = 1e-9 * len(coeff) * 2 * N * N / avg_time
         GBs = 1e-9 * N * N * 4 * 3 / avg_time
         return {"N":N, "fold":len_coeff, "time":avg_time*1000.0, "gflops":GFlops,"gbs":GBs}
-    return benchmark()
+    return run()
 
 if __name__ == '__main__':
     for i in [256, 512, 1024, 2048, 4096]:

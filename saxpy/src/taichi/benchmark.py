@@ -1,6 +1,6 @@
-from src.taichi.saxpy import saxpy as taichi_saxpy
+from .saxpy import saxpy as taichi_saxpy
 
-def benchmark_taichi(max_nesting=512, print_res=True):
+def benchmark(max_nesting=512, print_res=True):
     rd_arr = []
     for i in [256, 512, 1024, 2048, 4096]:
         for j in range(12):
@@ -13,4 +13,4 @@ def benchmark_taichi(max_nesting=512, print_res=True):
     return rd_arr
 
 if __name__ == '__main__':
-    benchmark_taichi()
+    benchmark()

@@ -14,7 +14,8 @@ def pushd(path):
         os.chdir(prev)
 
 def compile_and_benchmark(source_name, output_binary_name, flags=[]):
-    with pushd('src/cuda'):
+    workdir = os.path.dirname(os.path.abspath(__file__))
+    with pushd(workdir):
         # Compile
         p = Popen(['nvcc', '-O3', source_name, '-DJSON_OUTPUT', '-o', output_binary_name] + flags, stdout=PIPE)
         output, err = p.communicate()
