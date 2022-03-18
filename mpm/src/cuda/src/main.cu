@@ -150,9 +150,7 @@ __global__ void grid_to_particle_kernel(Vector *x, Vector *v, Matrix *C,
 
 class MPM {
 public:
-  explicit MPM(int n_grid, int steps) : 
-	  n_grid(n_grid),
-	  steps(steps) {
+  explicit MPM(int n_grid, int steps) : n_grid(n_grid), steps(steps) {
     dim = 2;
     n_particles = utils::power(n_grid, dim) / utils::power(2, dim - 1);
     neighbour = power(3, dim);
@@ -230,9 +228,7 @@ public:
     return x_host;
   }
 
-  int get_n_particles() const {
-    return n_particles;
-  }
+  int get_n_particles() const { return n_particles; }
 
 public:
   int dim = 2;
@@ -274,7 +270,8 @@ int main(const int argc, const char **argv) {
   std::chrono::duration<double> diff = end_time - start_time;
 
   float time_ms = diff.count() * 1000 / 2048;
-  printf("{\"n_particles\":%d, \"time\": %.3lf}\n", mpm->get_n_particles(), time_ms);
+  printf("{\"n_particles\":%d, \"time\": %.3lf}\n", mpm->get_n_particles(),
+         time_ms);
 
   return 0;
 }
