@@ -2,14 +2,10 @@ import numpy as np
 import taichi as ti
 from time import perf_counter
 
-def run_mpm3d(n_grid=32, dt=4e-4, nIters=2048):
+def run_mpm(n_grid=32, steps=32, nIters=2048):
     ti.init(arch=ti.gpu)
 
-    #dim, n_grid, steps, dt = 2, 128, 20, 2e-4
-    #dim, n_grid, steps, dt = 2, 256, 32, 1e-4
-    #dim, n_grid, steps, dt = 3, 32, 25, 4e-4
-    #dim, n_grid, steps, dt = 3, 64, 25, 2e-4
-    #dim, n_grid, steps, dt = 3, 128, 25, 8e-5
+    dim, dt = 2, 1e-4
 
     n_particles = n_grid**dim // 2**(dim - 1)
     dx = 1 / n_grid
@@ -37,7 +33,7 @@ def run_mpm3d(n_grid=32, dt=4e-4, nIters=2048):
         for I in ti.grouped(grid_m):
             grid_v[I] = ti.zero(grid_v[I])
             grid_m[I] = 0
-        ti.block_dim(n_grid)
+        ti.block_dim(64)
         for p in x:
             Xp = x[p] / dx
             base = int(Xp - 0.5)
@@ -59,7 +55,7 @@ def run_mpm3d(n_grid=32, dt=4e-4, nIters=2048):
             cond = (I < bound) & (grid_v[I] < 0) | \
                    (I > n_grid - bound) & (grid_v[I] > 0)
             grid_v[I] = 0 if cond else grid_v[I]
-        ti.block_dim(n_grid)
+        ti.block_dim(64)
         for p in x:
             Xp = x[p] / dx
             base = int(Xp - 0.5)
@@ -122,9 +118,9 @@ def run_mpm3d(n_grid=32, dt=4e-4, nIters=2048):
 
 if __name__ == '__main__':
     n_grid=32
-    dt=4e-4
+    steps=25
     for _ in range(5):
-        result = run_mpm3d(n_grid, dt)
+        result = run_mpm(n_grid, steps)
         avg_time = result['time']
         n_particles = result['n_particles']
         print("{} particles take {:.3f} ms".format(n_particles, avg_time))

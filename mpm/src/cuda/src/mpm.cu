@@ -192,7 +192,7 @@ public:
 
     cudaDeviceProp prop{};
     cudaGetDeviceProperties(&prop, 0);
-    threads_per_block = std::min(n_grid, prop.maxThreadsPerBlock);
+    threads_per_block = std::min(64, prop.maxThreadsPerBlock);
     auto block_num = get_block_num(n_particles, threads_per_block);
     init_kernel<<<block_num, threads_per_block>>>(J_dev);
     cuda_check_error();

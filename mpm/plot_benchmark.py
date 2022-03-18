@@ -1,12 +1,17 @@
-from benchmark_cuda import benchmark as benchmark_cuda
-from benchmark_taichi import benchmark as benchmark_taichi
+#from benchmark_cuda import benchmark as benchmark_cuda
+#from benchmark_taichi import benchmark as benchmark_taichi
 
 import matplotlib.pyplot as plt
 import sys
 import os
 
+#cuda_sample_results = {'cuda_baseline': [{'n_particles': 128, 'time': 0.632}, {'n_particles': 512, 'time': 0.628}, {'n_particles': 2048, 'time': 0.647}, {'n_particles': 8192, 'time': 0.773}, {'n_particles': 32768, 'time': 2.352}]}
+cuda_sample_results = {'cuda_baseline': [{'n_particles': 128, 'time': 0.636}, {'n_particles': 512, 'time': 0.637}, {'n_particles': 1152, 'time': 0.643}, {'n_particles': 2048, 'time': 0.645}, {'n_particles': 3200, 'time': 0.659}, {'n_particles': 4608, 'time': 0.702}, {'n_particles': 6272, 'time': 0.718}, {'n_particles': 8192, 'time': 0.772}, {'n_particles': 10368, 'time': 1.353}, {'n_particles': 12800, 'time': 1.462}, {'n_particles': 15488, 'time': 1.587}, {'n_particles': 18432, 'time': 1.796}, {'n_particles': 21632, 'time': 1.798}, {'n_particles': 25088, 'time': 2.092}, {'n_particles': 28800, 'time': 2.23}, {'n_particles': 32768, 'time': 2.488}]}
 
-cuda_sample_results = {'taichi_baseline': [{'n_particles': 16, 'time': 0.7686792123990926}, {'n_particles': 128, 'time': 0.7934009423777866}, {'n_particles': 1024, 'time': 0.833564200192427}, {'n_particles': 8192, 'time': 1.8873389345728242}, {'n_particles': 65536, 'time': 10.569774629885842}]}
+
+taichi_sample_results = {'taichi_baseline': [{'n_particles': 128, 'time': 0.3175147197254091}, {'n_particles': 512, 'time': 0.3185752607421932}, {'n_particles': 1152, 'time': 0.3198986733394804}, {'n_particles': 2048, 'time': 0.31859193944683284}, {'n_particles': 3200, 'time': 0.32409828710910915}, {'n_particles': 4608, 'time': 0.3323211162111761}, {'n_particles': 6272, 'time': 0.3408275234377811}, {'n_particles': 8192, 'time': 0.368112465331194}, {'n_particles': 10368, 'time': 0.6006463120158401}, {'n_particles': 12800, 'time': 0.6319817875990452}, {'n_particles': 15488, 'time': 0.6921672548827473}, {'n_particles': 18432, 'time': 0.8786921074204201}, {'n_particles': 21632, 'time': 0.9603567587888051}, {'n_particles': 25088, 'time': 1.0176723403318988}, {'n_particles': 28800, 'time': 1.1343457509767063}, {'n_particles': 32768, 'time': 1.2218140800754895}]}
+
+#taichi_sample_results = {'taichi_baseline': [{'n_particles': 128, 'time': 0.3188079111353659}, {'n_particles': 512, 'time': 0.31917445996043625}, {'n_particles': 2048, 'time': 0.3207612705082852}, {'n_particles': 8192, 'time': 0.3716928662171881}, {'n_particles': 32768, 'time': 1.2241718540053625}]}
 
 def run_benchmarks():
     return benchmark_cuda(), benchmark_taichi()
@@ -14,31 +19,30 @@ def run_benchmarks():
 def extract_perf(results):
     perf = []
     for record in results:
-        perf.append(record["rate"])
+        perf.append(record["time"])
     return perf
 
-def extract_nbodies(results):
-    nbodies = []
+def extract_particles(results):
+    particles = []
     for record in results:
-        nbodies.append(record["nbodies"])
-    return nbodies
+        particles.append(record["n_particles"])
+    return particles 
 
 def plot(cuda_results, taichi_results, plot_cuda_roofline=True):
     plt.figure()
-    x = extract_nbodies(taichi_results["taichi_baseline"])
+    x = extract_particles(cuda_results["cuda_baseline"])
+
+    plt.plot(x, extract_perf(cuda_results["cuda_baseline"]), marker='P')
     plt.plot(x, extract_perf(taichi_results["taichi_baseline"]), marker='o')
-    plt.plot(x, extract_perf(taichi_results["taichi_block"]), marker='o')
-    plt.plot(x, extract_perf(taichi_results["taichi_unroll"]), marker='o')
-    plt.plot(x, extract_perf(cuda_results["cuda_baseline"]), marker='P', ms=6)
-    plt.plot(x, extract_perf(cuda_results["cuda_block"]), marker='P', ms=6)
-    if plot_cuda_roofline:
-        plt.plot(x, extract_perf(cuda_results["cuda_best"]), marker='P', ms=6)
+    #if plot_cuda_roofline:
+    #    plt.plot(x, extract_perf(cuda_results["cuda_best"]), marker='P', ms=6)
+
     plt.xscale('log')
     plt.grid('minor')
-    plt.xlabel("#Bodies")
-    plt.ylabel("Speed (billion body interactions per second)")
-    plt.legend(["Taichi/Baseline", "Taichi/Block", "Taichi/Unroll", "CUDA/Baseline", "CUDA/Block", "CUDA/Roofline"], loc='lower right')
-    plt.title("N-Body benchmark")
+    plt.xlabel("#Particles")
+    plt.ylabel("Speed (millisecond)")
+    plt.legend(["CUDA", "Taichi"], loc='lower right')
+    plt.title("MPM benchmark")
     if plot_cuda_roofline:
         plt.savefig("fig/bench_roofline.png", dpi=150)
     else:
@@ -49,10 +53,10 @@ if __name__ == '__main__':
         os.makedirs('fig')
     except FileExistsError:
         pass
-    if len(sys.argv) >= 2 and sys.argv[1] == "sample":
-        cuda_results = cuda_sample_results
-        #taichi_results = taichi_sample_results
-    else:
-        cuda_results, taichi_results = run_benchmarks()
+    #if len(sys.argv) >= 2 and sys.argv[1] == "sample":
+    cuda_results = cuda_sample_results
+    taichi_results = taichi_sample_results
+    #else:
+    #    cuda_results, taichi_results = run_benchmarks()
     #plot(cuda_results, taichi_results, plot_cuda_roofline=True)
     plot(cuda_results, taichi_results, plot_cuda_roofline=False)
