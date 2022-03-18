@@ -1,4 +1,4 @@
-from src.taichi.stencil2d import run_stencil
+from .stencil2d import run_stencil
 
 def benchmark():
     N = 64
@@ -9,4 +9,5 @@ def benchmark():
     return {"taichi": results}
 
 if __name__ == "__main__":
+
     print(benchmark())
