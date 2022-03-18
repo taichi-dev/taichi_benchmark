@@ -1,6 +1,6 @@
-from src.taichi.nbody import run_nbody as run_baseline
-from src.taichi.nbody_block import run_nbody as run_block
-from src.taichi.nbody_explicit_unroll import run_nbody as run_unroll
+from .nbody import run_nbody as run_baseline
+from .nbody_block import run_nbody as run_block
+from .nbody_explicit_unroll import run_nbody as run_unroll
 
 def benchmark(nIters = 21):
     nBodies = 128
