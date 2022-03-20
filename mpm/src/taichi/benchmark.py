@@ -1,18 +1,18 @@
-import mpm
+import numpy as np
+from mpm2d import run_mpm as rum_mpm_2d
+from mpm3d import run_mpm as rum_mpm_3d
 
 def benchmark(nIters = 2048):
-    configs = [(16, 20), (32, 20), (48, 20), (64, 20), 
-               (80, 20), (96, 20), (112, 20), (128, 20), 
-               (144, 32), (160, 32), (176, 32), (192, 32), 
-               (208, 32), (224, 32), (240, 32), (256, 32)]
-    # Taichi does not allow power of two
-    #configs = [(16, 20), (32, 20), (64, 20), 
-    #           (128, 20), (256, 32)]
-    baseline_results = []
-    for n_grid, step in configs:
-        print("Baseline running", "n_grid", n_grid, "step", step)
-        baseline_results.append(mpm.run_mpm(n_grid, step))
+    n_grids = np.arange(16, 256+16, 16).tolist()
+    mpm_2d_results = []
+    mpm_3d_results = []
+    for n_grid in n_grids:
+        print("MPM 2D running", "n_grid", n_grid)
+        mpm_2d_results.append(rum_mpm_2d(n_grid))
         print("Done.")
-    return {"taichi_baseline": baseline_results}
+        print("MPM 3D running", "n_grid", n_grid)
+        mpm_3d_results.append(rum_mpm_3d(n_grid))
+        print("Done.")
+    return {"taichi_2d": mpm_2d_results, "taichi_3d": mpm_3d_results}
 if __name__ == "__main__":
     print(benchmark())

@@ -1,0 +1,3 @@
+[submodule "mpm/src/cuda/src/eigen"]
+	path = mpm/src/cuda/src/eigen
+	url = https://gitlab.com/libeigen/eigen.git
