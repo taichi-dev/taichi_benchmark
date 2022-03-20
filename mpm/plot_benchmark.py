@@ -25,21 +25,21 @@ def extract_particles(results):
 
 def plot(cuda_results, taichi_results):
     plt.figure()
-    #x_2d = extract_particles(cuda_results["cuda_2d"])
-    x_3d = extract_particles(cuda_results["cuda_3d"])
-    #plt.plot(x_2d, extract_perf(cuda_results["cuda_2d"]), marker='s')
-    #plt.plot(x_2d, extract_perf(taichi_results["taichi_2d"]), marker='o')
-    plt.plot(x_3d, extract_perf(cuda_results["cuda_3d"]), marker='s')
-    plt.plot(x_3d, extract_perf(taichi_results["taichi_3d"]), marker='o')
+    x_2d = extract_particles(cuda_results["cuda_2d"])
+    #x_3d = extract_particles(cuda_results["cuda_3d"])
+    plt.plot(x_2d, extract_perf(cuda_results["cuda_2d"]), marker='s')
+    plt.plot(x_2d, extract_perf(taichi_results["taichi_2d"]), marker='o')
+    #plt.plot(x_3d, extract_perf(cuda_results["cuda_3d"]), marker='s')
+    #plt.plot(x_3d, extract_perf(taichi_results["taichi_3d"]), marker='o')
 
     plt.xscale('log')
     plt.grid('minor')
     plt.xlabel("#Particles")
     plt.ylabel("Frames per Second")
-    plt.legend(["CUDA 2D", "Taichi 2D", "CUDA 3D", "Taichi 3D"], loc='upper right')
+    plt.legend(["CUDA", "Taichi"], loc='upper right')
     plt.title("MPM benchmark")
-    #plt.savefig("fig/bench_2d.png", dpi=150)
-    plt.savefig("fig/bench_3d.png", dpi=150)
+    plt.savefig("fig/bench_2d.png", dpi=150)
+    #plt.savefig("fig/bench_3d.png", dpi=150)
 
 if __name__ == '__main__':
     try:
