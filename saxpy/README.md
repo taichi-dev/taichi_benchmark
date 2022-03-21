@@ -7,7 +7,7 @@ SAXPY (Single-precision AX Plus Y) implements the formula of `Y = aX + Y`, where
 It is a standard algorithm implemented in almost all BLAS libraries. 
 
 The algorithm is generally recognized as a "memory-bound" problem which frequently traverses memory other than utlizing arithmetic units. 
-To be more specific, 2 floating-point arithmetic operations and 2 reads and 1 write memory operations are conducted on each element. 
+To be more specific, 2 floating-point arithmetic operations and 3 memory operations (2 reads and 1 write) are conducted on each element. 
 The overall compute load is `N * 2` and memory access footprint is `N * 3 * sizeof(float) = 12 * N`. The arithmetic intensity is `1/6` (floating-point operations per byte). 
 We will use these formulas to assess compute and memory throughput in the subsequent sections.
 
