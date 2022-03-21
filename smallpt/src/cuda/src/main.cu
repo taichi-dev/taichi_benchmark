@@ -3,15 +3,19 @@
 #include <iostream>
 #include <math.h>
 
-#include <core/sTimer.h>
-#include <core/sRandom.h>
-#include <core/helper_math.h>
-#include <image/svpng.inc>
+#include <sTimer.h>
+#include <sRandom.h>
+#include <helper_math.h>
+#include <svpng.inc>
 
 #define PI 3.14159265359f
 
 // -----------------------------------GPU Func-----------------------------------
 // From [smallpt](http://www.kevinbeason.com/smallpt/)
+
+// Rendering parameters
+// max_depth = 10, sphere, image size 1024x768
+
 enum materialType
 { 
     DIFFUSE = 0, 
@@ -270,7 +274,8 @@ int main(int argc, char *argv[])
 {
     // Image Size
     int width = 1024, height = 768;
-    int spp = argc==2 ? atoi(argv[1])/4 : 512/4;
+    int spp_in = argc==2 ? atoi(argv[1]) : 512;
+    int spp = spp_in / 4;
 
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -285,15 +290,10 @@ int main(int argc, char *argv[])
     dim3 blockSize(128, 1, 1);
     dim3 gridSize(width / blockSize.x, height / blockSize.y, 1);
 
-    //t.start();
     cudaEventRecord(start);
 
-    // Render on GPU
     render <<<gridSize, blockSize>>>(spp, width, height, outputGPU);
-
     cudaDeviceSynchronize();
-    //t.end();
-
     // Copy Mem from GPU to CPU
     cudaMemcpy(outputCPU, outputGPU, width * height * sizeof(float3), cudaMemcpyDeviceToHost);
 
@@ -306,8 +306,9 @@ int main(int argc, char *argv[])
     float milliseconds = 0;
 
     cudaEventElapsedTime(&milliseconds, start, stop);
-    printf("Cost time: %f milliseconds\n", milliseconds);
+    float fps = 1.0f / (milliseconds / 1000.0f);
 
+    printf("{\"spp\":%d, \"fps\": %d}\n", spp_in, static_cast<int>(fps));
     //save("test.png", width, height, outputCPU);
 
     //getchar();
