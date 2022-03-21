@@ -45,6 +45,12 @@ When `coeff` holds only one element, the implementation degrades to standard SAX
 
 We take two different CUDA-based approaches as baselines: Thrust and cuBLAS.  The details can be found in [Nvidia's official blog](https://developer.nvidia.com/blog/six-ways-saxpy/). For nested SAXPY, however, cuBLAS cannot efficiently leverage the increased arithmetic intensity as it is statically pre-compiled. Thrust is capable to nest by manually composing the formulas, a little troublesome though.
 
+```cuda
+// Thrust nested SAXPY with nesting factor of 8
+thrust::transform(d_x.begin(), d_x.end(), d_y.begin(), d_y.begin(), 2.0f * (2.0f * (2.0f * (2.0f * (2.0f * (2.0f * (2.0f * (2.0f * _1 + _2) + _2) + _2) + _2) + _2) + _2) + _2) + _2);
+
+```
+
 ## Evaluation
 ### Device Specification
 
