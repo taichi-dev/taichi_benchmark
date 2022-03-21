@@ -45,14 +45,14 @@ Device Specification
 We benchmark standard SAXPY on matrix shapes from `256x256` to `4096x4096`. 
 The cuBLAS reveals great results for small matrices. When matrix shapes grow larger than L2 cache capacity, all implementations perform similarly.
 
-![compute_bench](saxpy/fig/compute_bench.png)
+![compute_bench](fig/compute_bench.png)
 
 
 ### Nested SAXPY
 By nesting multiple SAXPY routines, we drastically increase arithmetic load with respect to the same memory footprint. Taichi significantly outperforms Thrust while keeping concise programming styles. By contrasting Taichi/Thrust and cuBLAS, we can conclude that flexibility sometimes delivers significant speedup, especially when dealing with complex problems.
 
-![nesting_bench_512](saxpy/fig/nesting_bench_512.png)
-![nesting_bench_4096](saxpy/fig/nesting_bench_4096.png)
+![nesting_bench_512](fig/nesting_bench_512.png)
+![nesting_bench_4096](fig/nesting_bench_4096.png)
 
 
 
