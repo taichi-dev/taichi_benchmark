@@ -1,4 +1,4 @@
-from saxpy import saxpy as taichi_saxpy
+from .saxpy import saxpy as taichi_saxpy
 
 def benchmark(max_nesting=512, print_res=True):
     rd_arr = []
