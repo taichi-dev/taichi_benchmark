@@ -15,7 +15,7 @@ We will use these formulas to assess compute and memory throughput in the subseq
 
 For benchmark purpose, it is meaningful to add more computation load to see how the program performs compared to a standard SAXPY.
 We replay multiple SAXPY calculations for each element to distil arithmetic intensity.
-That is to say, nesting multiple SAXPY calculations with the following fomula:
+That is to say, nesting multiple SAXPY calculations with the following formula:
 
 ```
 Y = a_m * (a_{m-1} * ( ... (a_1 * (a_0*X + Y) + Y) ... + Y) + Y
