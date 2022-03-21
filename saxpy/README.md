@@ -45,14 +45,18 @@ Device Specification
 We benchmark standard SAXPY on matrix shapes from `256x256` to `4096x4096`. 
 The cuBLAS reveals great results for small matrices. When matrix shapes grow larger than L2 cache capacity, all implementations perform similarly.
 
-![compute_bench](fig/compute_bench.png)
+<p align="center">
+<img src="fig/compute_bench.png" width="560">
+</p>
 
 
 ### Nested SAXPY
 By nesting multiple SAXPY routines, we drastically increase arithmetic load with respect to the same memory footprint. Taichi significantly outperforms Thrust while keeping concise programming styles. By contrasting Taichi/Thrust and cuBLAS, we can conclude that flexibility sometimes delivers significant speedup, especially when dealing with complex problems.
 
-![nesting_bench](fig/nesting_bench_all.png)
-
+<p align="center">
+    <img src="fig/nesting_bench_512.png" width="560">
+    <img src="fig/nesting_bench_4096.png" width="560">
+</p>
 
 
 ### Roofline
@@ -63,7 +67,9 @@ We have two conclusions:
 * As nesting factor increases, the problem transists from bandwidth-bound type to compute-bound type.
 * In either case, Taichi can fully unleash the GPU's computing power.
 
-![roofline_log_scale](fig/roofline_log_scale.png)
+<p align="center">
+<img src="fig/roofline_log_scale.png" width="560">
+</p>
 
 ## Reproduction steps
 -
