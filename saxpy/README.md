@@ -64,7 +64,7 @@ thrust::transform(d_x.begin(), d_x.end(), d_y.begin(), d_y.begin(), 2.0f * (2.0f
 
 We benchmark standard SAXPY on array shapes ranging from `256x256` to `4096x4096`. 
 
-From the performance chart, we have witnessed great performance of cuBLAS on small matrices. The Taichi kernels suffer from the Python-side launch overhead as the computation time is quite short (less than 1ms). 
+From the performance chart, we have witnessed great performance of cuBLAS on small arrays. The Taichi kernels suffer from the Python-side launch overhead as the computation time is quite short (less than 1ms). 
 When array shapes grow larger than L2 cache capacity, Taichi, cuBLAS and Thrust all exhibits clost-to-peak performance. The utilization rate of memory bandwidth exceeds 90\%.
 
 <p align="center">
