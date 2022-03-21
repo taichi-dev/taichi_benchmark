@@ -87,7 +87,7 @@ The enlightenment is, flexibility in coding styles can sometimes benefit compute
 
 The nested SAXPY evaluation reveals great performance of Taichi in terms of utilizing the compute capability. How far can we push to the boundry of devices's compute capablility? In this section, we use the [Roofline Model](https://en.wikipedia.org/wiki/Roofline_model) to evaluate Taichi's performance on the `4096x4096` arrays. 
 
-From RTX3080's specification table, we've known that the ridge point of arithmetic intensity that computation and memory bandwith all comes at peak is `29700 / 760 = 39.08`. As the nested SAXPY's arithmetic intensity is `m / 6.0`, the corresponding nesting factor is `234.47`. In other words, the nested SAXPY is memory-bandwith-bound when nesting factor `m` ranges from 1 to 256, and compute-bound for higher factors. 
+From RTX3080's specification table, we've learnt that the ridge point of arithmetic intensity is `29700 / 760 = 39.08`. As the nested SAXPY's arithmetic intensity is `m / 6.0`, the corresponding nesting factor is `234.47`. In other words, the nested SAXPY is memory-bandwith-bound when nesting factor `m` ranges from 1 to 256, and compute-bound for higher factors. 
 
 <p align="center">
 <img src="fig/roofline_log_scale.png" width="560">
