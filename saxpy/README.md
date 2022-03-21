@@ -23,7 +23,8 @@ Y = a_m * (a_{m-1} * ( ... (a_1 * (a_0*X + Y) + Y) ... + Y) + Y
 
 Given the nesting factor `m`, the computing load becomes `m * N * 2` while the memory footprint remains `12 * N`. 
 The arithmetic intensity becomes `m / 6`. 
-We can obtain a kernel function with desired arithmetic intensity by controlling the nesting factor.
+We can obtain a kernel function with desired arithmetic intensity by adjusting the nesting factor. 
+This is useful for benchmarks as arithmetic intensity is hard to evaluate in many applications.
 
 ## Implementation
 
