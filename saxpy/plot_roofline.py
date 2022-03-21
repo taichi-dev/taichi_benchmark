@@ -13,6 +13,9 @@ def plot_roofline_log_scale(ax):
     ax.set_yscale('log', base=10)
     ax.set_xlim([2**-3, xlimit])
     ax.set_ylim([1, cc * 2])
+    ax.set_xlabel("Arithmetic Intensity")
+    ax.set_ylabel("Performance (GFLOPS)")
+    ax.set_title("Taichi nested SAXPY roofline plot on 4096x4096 arrays")
     ax.grid(True, "minor")
     membound_str = "DRAM bandwidth=760 GB/s"
     compbound_str = "FP32 peak={} GFLOPs".format(cc)
