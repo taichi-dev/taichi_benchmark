@@ -64,7 +64,7 @@ We have two conclusions:
 * As nesting factor increases, the problem transists from bandwidth-bound type to compute-bound type.
 * In either case, Taichi can fully unleash the GPU's computing power.
 
-![roofline_log_scale](saxpy/fig/roofline_log_scale.png)
+![roofline_log_scale](fig/roofline_log_scale.png)
 
 ## Reproduction steps
 -
