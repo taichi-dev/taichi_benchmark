@@ -93,7 +93,7 @@ From RTX3080's specification table, we've known that the ridge point of arithmet
 <img src="fig/roofline_log_scale.png" width="560">
 </p>
 
-The plot demonstrates that Taichi achieves very close-to-peak performance in both memory-bound and compute-bound areas. 
+The plot demonstrates that Taichi achieves very close-to-peak performance in both memory-bound and compute-bound areas. It is even possible to profile an unfamiliar GPU's achieved performance with Taichi, as long as it supports one of the Taichi's backends.
 
 ## Reproduction steps
 * Pre-requisites
