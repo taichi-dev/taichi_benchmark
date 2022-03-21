@@ -27,7 +27,7 @@ We can obtain a kernel function with desired arithmetic intensity by controlling
 
 ## Implementation
 
-The Taichi's SAXPY kernel implementation is brief as follows:
+The Taichi's SAXPY function has a concise implementation:
 ```python
 coeff=[1.0, 2.0, 3.0, 4.0]
 @ti.kernel
@@ -69,27 +69,38 @@ When array shapes grow larger than L2 cache capacity, Taichi, cuBLAS and Thrust 
 
 By nesting multiple SAXPY routines, we drastically increase arithmetic load within the same memory footprint. Taichi significantly outperforms Thrust while keeping concise programming styles. The results for cuBLAS, however, has no improvements as we cannot feed more computation loads into its SAXPY kernel. It needs a specilized kernel to efficiently cover such scenarios.
 
-The enlightenment is, flexibility in coding styles can sometimes benefit compute performance, especially when computation is complex. For instance, an image processing pipeline might have multiple element-wise stages. With Taichi you can elegantly describe the computations and rapidly run the kernels on GPUs.
-
 <p align="center">
     <img src="fig/nesting_bench_512.png" width="560">
     <img src="fig/nesting_bench_4096.png" width="560">
 </p>
 
+The enlightenment is, flexibility in coding styles can sometimes benefit compute performance, especially when computation is complex. For instance, an image processing pipeline might have multiple element-wise stages. With Taichi you can elegantly describe the computations and rapidly run the kernels on GPUs.
 
 ### Roofline
-In the previous section, we have greatly increased computing performance by nesting multiple SAXPY together. A question arises here: if we keep on increasing the nesting factor, how good can Taichi perform on the GPU?
-Below is the roofline plot of benchmark results on `4096x4096` arrays. 
-The points represent varying nesting factors. 
-We have two conclusions: 
-* As nesting factor increases, the problem transists from bandwidth-bound type to compute-bound type.
-* In either case, Taichi can fully unleash the GPU's computing power.
+
+The nested SAXPY evaluation reveals great performance of Taichi in terms of utilizing the compute capability. How far can we push to the boundry of devices's compute capablility? In this section, we use the [Roofline Model](https://en.wikipedia.org/wiki/Roofline_model) to evaluate Taichi's performance on the `4096x4096` arrays. 
+
+From RTX3080's specification table, we've known that the ridge point of arithmetic intensity that computation and memory bandwith all comes at peak is `29700 / 760 = 39.08`. As the nested SAXPY's arithmetic intensity is `m / 6.0`, the corresponding nesting factor is `234.47`. In other words, the nested SAXPY is memory-bandwith-bound when nesting factor `m` ranges from 1 to 256, and compute-bound for higher factors. 
 
 <p align="center">
 <img src="fig/roofline_log_scale.png" width="560">
 </p>
 
+The plot demonstrates that Taichi achieves very close-to-peak performance in both memory-bound and compute-bound areas. 
+
 ## Reproduction steps
--
-## Conclusion
--
+* Pre-requisites
+```shell
+python3 -m pip install --upgrade taichi
+python3 -m pip install matplotlib
+```
+If you want to compare with CUDA, make sure you have `nvcc` properly installed.
+
+* Run the benchmark and draw the plots
+```shell
+cd saxpy
+# Reproduce benchmark comparison with CDUA
+python3 plot_benchmark.py
+# Reproduce taichi roofline benchmarks.
+python3 plot_roofline.py
+```
