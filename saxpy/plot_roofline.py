@@ -56,6 +56,8 @@ def plot_results(ax, results):
         x.append(gflops / gbs)
         y.append(gflops)
         color = get_color_marker(rd["N"])
+        if rd["N"] != 4096:
+            continue
         ax.plot([gflops / gbs], [gflops], marker="+", color=color, markersize=6, mew=2)
 
 if __name__ == '__main__':
