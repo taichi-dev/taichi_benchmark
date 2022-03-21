@@ -4,11 +4,7 @@ import math
 import os
 
 def plot_nesting_factor_lines(ax, ylimit, nesting_factors=[]):
-    print(nesting_factors)
     for nf in nesting_factors:
-        print(nf)
-        print(nf / 6.0 * 760)
-        #ax.vlines(x=[f / 6.0 for f in nesting_factors], ymin=0, ymax=nf / 6.0  * 760)
         ax.vlines(x=[nf/6.0] , ymin=0, ymax=min(nf / 6.0  * 760, 29700), label="TEST", color='grey', linestyle='dashed')
         ax.text(nf / 6.0, 40, "Nest={}".format(nf), rotation=270, verticalalignment='top')
 
