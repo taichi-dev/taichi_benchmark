@@ -45,7 +45,6 @@ def extract_nested(result_dict, N=4096):
 
 
 def plot_compute(results):
-    plt.figure(figsize=(8, 4.5))
     fig, ax = plt.subplots()
 
     dims, y = extract_gflops(results['taichi'])
@@ -75,13 +74,10 @@ def plot_compute(results):
     plt.axhline(y = 760 / 6.0, color='grey', linestyle = 'dashed')
     plt.text(11, 770/6.0, 'DRAM Bandwidth=760GB/s')
     ax.set_title("SAXPY benchmark on 2D arrays")
-    plt.savefig("fig/compute_bench.png", dpi=100)
+    plt.savefig("fig/compute_bench.png", dpi=150)
 
 def plot_nested(results, N=4096):
-    plt.figure(figsize=(7,4.5))
-    fig, ax_arr = plt.subplots(2, 1)
-
-
+    plt.figure()
     _, y = extract_nested(results['taichi'], N)
     bar_pos = [i*4 for i in range(len(y))]
     plt.bar(bar_pos, y)
@@ -102,7 +98,7 @@ def plot_nested(results, N=4096):
     plt.xlabel("Nesting factor")
     plt.ylabel("Performance (GFLOPS)")
     plt.title("Nested saxpy compute benchmark on {}x{} arrays".format(N, N))
-    plt.savefig("fig/nesting_bench_{}.png".format(N), dpi=100)
+    plt.savefig("fig/nesting_bench_{}.png".format(N), dpi=150)
 
 def plot_nested_all_in_one(results, N_arr=[512, 4096]):
     fig, ax_arr = plt.subplots(1, len(N_arr), figsize=(14, 4.5))
@@ -129,7 +125,7 @@ def plot_nested_all_in_one(results, N_arr=[512, 4096]):
         ax.set_xlabel("Nesting factor")
         ax.set_ylabel("Performance (GFLOPS)")
         ax.title.set_text("Nested SAXPY benchmark on {}x{} arrays".format(N, N))
-    plt.savefig("fig/nesting_bench_all.png", dpi=100)
+    plt.savefig("fig/nesting_bench_all.png", dpi=150)
 
 if __name__ == '__main__':
     try:
