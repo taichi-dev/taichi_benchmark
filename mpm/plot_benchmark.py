@@ -2,19 +2,15 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
-cuda_sample_results = {'cuda_2d': [{'n_particles': 128, 'fps': 995}, {'n_particles': 512, 'fps': 970}, {'n_particles': 1152, 'fps': 961}, {'n_particles': 2048, 'fps': 963}, {'n_particles': 3200, 'fps': 943}, {'n_particles': 4608, 'fps': 877}, {'n_particles': 6272, 'fps': 863}, {'n_particles': 8192, 'fps': 803}, {'n_particles': 10368, 'fps': 752}, {'n_particles': 12800, 'fps': 703}, {'n_particles': 15488, 'fps': 620}, {'n_particles': 18432, 'fps': 560}, {'n_particles': 21632, 'fps': 547}, {'n_particles': 25088, 'fps': 475}, {'n_particles': 28800, 'fps': 452}, {'n_particles': 32768, 'fps': 417}], 'cuda_3d': [{'n_particles': 1024, 'fps': 446}, {'n_particles': 8192, 'fps': 368}, {'n_particles': 27648, 'fps': 200}, {'n_particles': 65536, 'fps': 117}, {'n_particles': 128000, 'fps': 55}, {'n_particles': 221184, 'fps': 27}, {'n_particles': 351232, 'fps': 12}, {'n_particles': 524288, 'fps': 5}, {'n_particles': 746496, 'fps': 3}, {'n_particles': 1024000, 'fps': 1}, {'n_particles': 1362944, 'fps': 1}, {'n_particles': 1769472, 'fps': 0}, {'n_particles': 2249728, 'fps': 0}, {'n_particles': 2809856, 'fps': 0}, {'n_particles': 3456000, 'fps': 0}, {'n_particles': 4194304, 'fps': 0}]}
+cuda_sample_results = {'cuda_2d': [{'n_particles': 128, 'time_ms': 0.989771}, {'n_particles': 1152, 'time_ms': 1.019925}, {'n_particles': 3200, 'time_ms': 1.043498}, {'n_particles': 6272, 'time_ms': 1.144777}, {'n_particles': 10368, 'time_ms': 1.325348}, {'n_particles': 15488, 'time_ms': 1.604376}, {'n_particles': 21632, 'time_ms': 1.780423}, {'n_particles': 28800, 'time_ms': 2.219935}, {'n_particles': 36992, 'time_ms': 2.624425}], 'cuda_3d': [{'n_particles': 1024, 'time_ms': 2.175864}, {'n_particles': 27648, 'time_ms': 4.838743}, {'n_particles': 128000, 'time_ms': 17.925041}, {'n_particles': 351232, 'time_ms': 82.931763}, {'n_particles': 746496, 'time_ms': 332.263519}, {'n_particles': 1362944, 'time_ms': 900.967163}, {'n_particles': 2249728, 'time_ms': 2020.989258}, {'n_particles': 3456000, 'time_ms': 2922.075928}, {'n_particles': 5030912, 'time_ms': 4490.73584}]}
 
+taichi_sample_results = {'taichi_2d': [{'n_particles': 128, 'time_ms': 0.48161188865947224}, {'n_particles': 1152, 'time_ms': 0.4853399545936554}, {'n_particles': 3200, 'time_ms': 0.49222280321714607}, {'n_particles': 6272, 'time_ms': 0.5224119828994844}, {'n_particles': 10368, 'time_ms': 0.6324768173726625}, {'n_particles': 15488, 'time_ms': 0.758077704574589}, {'n_particles': 21632, 'time_ms': 0.9206238256922461}, {'n_particles': 28800, 'time_ms': 1.1050803203147552}, {'n_particles': 36992, 'time_ms': 1.347265234386441}], 'taichi_3d': [{'n_particles': 1024, 'time_ms': 0.870358452147002}, {'n_particles': 27648, 'time_ms': 5.206501572274647}, {'n_particles': 128000, 'time_ms': 21.61489226222102}, {'n_particles': 351232, 'time_ms': 65.09008040575281}, {'n_particles': 746496, 'time_ms': 337.4440998095736}, {'n_particles': 1362944, 'time_ms': 863.3175398461788}, {'n_particles': 2249728, 'time_ms': 1877.4295391049804}, {'n_particles': 3456000, 'time_ms': 3140.0475489834034}, {'n_particles': 5030912, 'time_ms': 5052.8972775903185}]}
 
-#cuda_sample_results = {'cuda_baseline': [{'n_particles': 128, 'fps': 997}, {'n_particles': 512, 'fps': 981}, {'n_particles': 1152, 'fps': 976}, {'n_particles': 2048, 'fps': 972}, {'n_particles': 3200, 'fps': 951}, {'n_particles': 4608, 'fps': 893}, {'n_particles': 6272, 'fps': 878}, {'n_particles': 8192, 'fps': 819}, {'n_particles': 10368, 'fps': 748}, {'n_particles': 12800, 'fps': 683}, {'n_particles': 15488, 'fps': 634}, {'n_particles': 18432, 'fps': 569}, {'n_particles': 21632, 'fps': 554}, {'n_particles': 25088, 'fps': 481}, {'n_particles': 28800, 'fps': 447}, {'n_particles': 32768, 'fps': 422}]}
-
-#taichi_sample_results = {'taichi_baseline': [{'n_particles': 128, 'fps': 2126}, {'n_particles': 512, 'fps': 2135}, {'n_particles': 1152, 'fps': 2134}, {'n_particles': 2048, 'fps': 2116}, {'n_particles': 3200, 'fps': 2078}, {'n_particles': 4608, 'fps': 2005}, {'n_particles': 6272, 'fps': 1951}, {'n_particles': 8192, 'fps': 1800}, {'n_particles': 10368, 'fps': 1677}, {'n_particles': 12800, 'fps': 1607}, {'n_particles': 15488, 'fps': 1417}, {'n_particles': 18432, 'fps': 1138}, {'n_particles': 21632, 'fps': 1044}, {'n_particles': 25088, 'fps': 970}, {'n_particles': 28800, 'fps': 891}, {'n_particles': 32768, 'fps': 828}]}
-
-taichi_sample_results = {'taichi_2d': [{'n_particles': 128, 'fps': 2105}, {'n_particles': 512, 'fps': 2088}, {'n_particles': 1152, 'fps': 2083}, {'n_particles': 2048, 'fps': 2083}, {'n_particles': 3200, 'fps': 2027}, {'n_particles': 4608, 'fps': 1959}, {'n_particles': 6272, 'fps': 1902}, {'n_particles': 8192, 'fps': 1755}, {'n_particles': 10368, 'fps': 1579}, {'n_particles': 12800, 'fps': 1462}, {'n_particles': 15488, 'fps': 1318}, {'n_particles': 18432, 'fps': 1178}, {'n_particles': 21632, 'fps': 1088}, {'n_particles': 25088, 'fps': 1004}, {'n_particles': 28800, 'fps': 904}, {'n_particles': 32768, 'fps': 816}], 'taichi_3d': [{'n_particles': 1024, 'fps': 1163}, {'n_particles': 8192, 'fps': 523}, {'n_particles': 27648, 'fps': 194}, {'n_particles': 65536, 'fps': 95}, {'n_particles': 128000, 'fps': 46}, {'n_particles': 221184, 'fps': 29}, {'n_particles': 351232, 'fps': 15}, {'n_particles': 524288, 'fps': 7}, {'n_particles': 746496, 'fps': 3}, {'n_particles': 1024000, 'fps': 2}, {'n_particles': 1362944, 'fps': 1}, {'n_particles': 1769472, 'fps': 1}, {'n_particles': 2249728, 'fps': 1}, {'n_particles': 2809856, 'fps': 0}, {'n_particles': 3456000, 'fps': 0}, {'n_particles': 4194304, 'fps': 0}]}
 
 def extract_perf(results):
     perf = []
     for record in results:
-        perf.append(record["fps"])
+        perf.append(record["time_ms"])
     return perf
 
 def extract_particles(results):
@@ -23,23 +19,31 @@ def extract_particles(results):
         particles.append(record["n_particles"])
     return particles 
 
-def plot(cuda_results, taichi_results):
-    plt.figure()
-    x_2d = extract_particles(cuda_results["cuda_2d"])
-    #x_3d = extract_particles(cuda_results["cuda_3d"])
-    plt.plot(x_2d, extract_perf(cuda_results["cuda_2d"]), marker='s')
-    plt.plot(x_2d, extract_perf(taichi_results["taichi_2d"]), marker='o')
-    #plt.plot(x_3d, extract_perf(cuda_results["cuda_3d"]), marker='s')
-    #plt.plot(x_3d, extract_perf(taichi_results["taichi_3d"]), marker='o')
+def plot_bar(cuda_results, taichi_results):
+    fig, ax = plt.subplots(figsize=(12,9))
+    plot_series = "2d"
 
-    plt.xscale('log')
-    plt.grid('minor')
+    x_cuda = extract_particles(cuda_results["cuda_" + plot_series])
+    y_cuda = extract_perf(cuda_results["cuda_" + plot_series])
+    bar_pos = [i*3 for i in range(len(x_cuda))]
+    ax.bar(bar_pos, y_cuda)
+
+    x_taichi = extract_particles(taichi_results["taichi_" + plot_series])
+    y_taichi = extract_perf(taichi_results["taichi_" + plot_series])
+    bar_pos = [i*3+1 for i in range(len(x_taichi))]
+    ax.bar(bar_pos, y_taichi)
+
+    labels = ["{}".format(i) for i in x_cuda]
+    ax.set_xticks(bar_pos, labels, rotation = 30)
+    
+    if plot_series == "3d":
+        plt.yscale("log")  
+    plt.grid('minor', axis='y')
     plt.xlabel("#Particles")
-    plt.ylabel("Frames per Second")
-    plt.legend(["CUDA", "Taichi"], loc='upper right')
+    plt.ylabel("Time per Frame (ms)")
+    plt.legend(["CUDA", "Taichi"], loc='upper left')
     plt.title("MPM benchmark")
-    plt.savefig("fig/bench_2d.png", dpi=150)
-    #plt.savefig("fig/bench_3d.png", dpi=150)
+    plt.savefig("fig/bench_" + plot_series + ".png", dpi=150)
 
 if __name__ == '__main__':
     try:
@@ -48,4 +52,4 @@ if __name__ == '__main__':
         pass
     cuda_results = cuda_sample_results
     taichi_results = taichi_sample_results
-    plot(cuda_results, taichi_results)
+    plot_bar(cuda_results, taichi_results)

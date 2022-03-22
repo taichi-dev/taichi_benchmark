@@ -6,7 +6,7 @@ from time import perf_counter
 # dim, steps, dt = 2, 32, 1e-4
 
 def run_mpm(n_grid=32, nIters=2048):
-    ti.init(arch=ti.gpu)
+    ti.init(arch=ti.gpu, device_memory_GB=4)
 
     dim, steps, dt = 2, 32, 1e-4
 
@@ -115,8 +115,7 @@ def run_mpm(n_grid=32, nIters=2048):
             pos = x.to_numpy()
             ti.sync()
         t_stop = perf_counter()
-        fps = nIters / (t_stop - t_start)
-        return {'n_particles': n_particles, 'fps': round(fps)}
+        return {'n_particles': n_particles, 'time_ms': (t_stop - t_start)*1000/nIters}
     return run()
 
 if __name__ == '__main__':
@@ -124,6 +123,6 @@ if __name__ == '__main__':
     for _ in range(5):
         result = run_mpm(n_grid)
         n_particles = result['n_particles']
-        fps = result['fps']
-        print("{} particles run {:.3f} fps".format(n_particles, fps))
+        time_ms = result['time_ms']
+        print("{} particles run {:.3f} ms".format(n_particles, time_ms))
 

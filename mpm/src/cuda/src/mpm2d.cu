@@ -274,9 +274,9 @@ int main(const int argc, const char **argv) {
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> diff = end_time - start_time;
 
-  float fps = num_frames / diff.count();
+  float time_ms = diff.count() * 1000 / num_frames;
 
-  printf("{\"n_particles\":%d, \"fps\": %d}\n", mpm->get_n_particles(), static_cast<int>(fps));
+  printf("{\"n_particles\":%d, \"time_ms\": %f}\n", mpm->get_n_particles(), time_ms);
 
   return 0;
 }
