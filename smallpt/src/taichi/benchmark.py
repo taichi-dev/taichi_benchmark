@@ -2,7 +2,7 @@ import numpy as np
 from path_tracing import run_smallpt as run_pt
 
 def benchmark():
-    spps_gpu = np.arange(16, 256+16, 16).tolist()
+    spps_gpu = np.arange(32, 256+32, 32).tolist()
     results = []
     for spp in spps_gpu:
         print("SmallPT running", "spp", spp)

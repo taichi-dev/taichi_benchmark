@@ -129,10 +129,13 @@ def run_smallpt(samples_per_pixel = 128, nIters = 20):
             render()
         ti.sync()
         t1_stop = perf_counter()
-        time_in_s = (t1_stop-t1_start)/nIters
-        print("time in s", time_in_s)
-        fps = 1.0 / time_in_s
-        return {'spp': samples_per_pixel, 'fps': round(fps)}
+
+        #time_in_s = (t1_stop-t1_start)/nIters
+        #fps = 1.0 / time_in_s
+        #return {'spp': samples_per_pixel, 'fps': round(fps)}
+
+        time_in_ms = (t1_stop-t1_start)*1000/nIters
+        return {'spp': samples_per_pixel, 'time_ms': time_in_ms}
     return run()
 
 
@@ -141,6 +144,9 @@ if __name__ == '__main__':
     for _ in range(1):
         result = run_smallpt(samples_per_pixel)
         spp = result['spp']
-        fps = result['fps']
-        print("{} spp run {:.3f} fps".format(spp, fps))
+        time_ms = result['time_ms']
+        print("{} spp run {:.3f} time_ms".format(spp, time_ms))
+        
+        #fps = result['fps']
+        #print("{} spp run {:.3f} fps".format(spp, fps))
 

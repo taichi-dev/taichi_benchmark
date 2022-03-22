@@ -52,7 +52,7 @@ def run_benchmark(output_binary_name, flags=[]):
     with pushd(workdir):
         # Run Benchmark
         results = []
-        spps_gpu = np.arange(16, 256+16, 16).tolist()
+        spps_gpu = np.arange(32, 256+32, 32).tolist()
         for spp in spps_gpu:
             print("running", output_binary_name, "spp", spp)
             argv = ["{}".format(spp)]
