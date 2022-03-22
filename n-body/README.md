@@ -4,8 +4,6 @@
 
 The [N-Body simulation](ihttps://en.wikipedia.org/wiki/N-body_simulation) is an interesting problem in physical cosmology. 
 In this benchmark, we take the most easily understandable direct method with O(N * N) complexity, which computes every pair of the body interactions.
-Performance is measured with "Billion body interactions per second" to indicate the compute throughtput.
-
 
 ## Implementation
 
@@ -140,7 +138,7 @@ We conduct performance evaluation on the following device.
 |L2 cache capacity| 4MB|
 
 
-The performance of different Taichi and CUDA implementations is illustrated in the following figure.
+Performance is measured with "Billion body interactions per second" to indicate compute throughtput. The performance of different Taichi and CUDA implementations is illustrated in the following figure.
 
 <p align="center">
 <img src="fig/bench_roofline.png" width="560">
