@@ -3,12 +3,14 @@
 ## Introduction
 
 The [N-Body simulation](ihttps://en.wikipedia.org/wiki/N-body_simulation) is an interesting problem in physical cosmology. 
-In this benchmark, we take the most easily understandable direct method with O(N * N) complexity, as we only care about compute performance.
+In this benchmark, we take the most easily understandable direct method with O(N * N) complexity, which computes every pair of the body interactions.
+Performance is measured with "Billion body interactions per second" to indicate the compute throughtput.
+
 
 ## Implementation
 
-The CUDA code should credit to Mark Harris's intuitive stepwise n-body optimization tutorial [mini-nbody](https://github.com/harrism/mini-nbody). 
-We made minor changes to make it runnable in our code repository.
+The CUDA codes credit to Mark Harris's intuitive stepwise n-body optimization tutorial [mini-nbody](https://github.com/harrism/mini-nbody). 
+We made minor changes to make it runnable in our code repository. 
 
 Taichi's implementation is translated from the [C prototype](https://github.com/harrism/mini-nbody/blob/master/nbody.c), you can find direct mappings of the two code snippets. The C version of force calculation function looks like this:
 
@@ -54,11 +56,11 @@ def bodyForce():
             Fx += dx * invDist3
             Fy += dy * invDist3
             Fz += dz * invDist3
-        velocities[i, 0] += dt * Fx;
-        velocities[i, 1] += dt * Fy;
-        velocities[i, 2] += dt * Fz;
+        velocities[i, 0] += dt * Fx
+        velocities[i, 1] += dt * Fy
+        velocities[i, 2] += dt * Fz
 ```
-The CUDA equivalent verion is a bit confusing if you have no prior knowlege about SIMT parallel programming. The outermost parallel loop is implicitly replaced by parallelizaiton. Even though, it is still an intuitive implementation.
+The CUDA equivalent verion is a bit confusing if you have no prior knowlege about SIMT parallel programming. The outermost parallel loop is implicitly replaced by parallelizaiton. 
 ```cuda
 __global__
 void bodyForce(Body *p, float dt, int n) {
@@ -85,9 +87,9 @@ void bodyForce(Body *p, float dt, int n) {
 }
 ```
 
-### Blocked Access
+#### Block Access
 
-By repeatively loading a small block of data, it is possible to leverage the L1 data cache to improve performance.
+By repeatedly loading a small block of data, it is possible to leverage the GPU's L1 data cache to improve performance.
 In CUDA programming, we explicitly decompose the loop and access by blocks. 
 ```cuda
 __global__
@@ -106,28 +108,40 @@ void bodyForce(Body *p, Body *v, float dt, int n) {
 }
 ```
 
-In Taichi, only the definition of fileds is changed to enable block-wise memory access.
+In Taichi, we only change the definition of fileds in order to enable block-wise memory access.
 
 ```python
 ti.root.dense(ti.ij, (nBodies // block_size, 4)).dense(ti.i, block_size).place(bodies)
 ```
 
-### Explicit Unrolling
+Taichi internally handles the loop decompositions and index permutations according to the block statements in field definitions.
+There are no changes in the main blocks of the `bodyForce` function. If you are unformaliar with the usage, please refer to our document [Fields (Advanced)](https://docs.taichi.graphics/lang/articles/advanced/layout).
 
-We further improve Tachi's performance by explicitly unroll a dimension by a factor of 2 or four. 
-The code is a little complex. 
-We won't dive into details here as we will improve the compiler to implicitly implement this behavior. Stay tuned! 
+#### Explicit Unrolling
 
-### Others
+We further improve Tachi's performance by explicitly unrolling a dimension by a factor of 2 or 4.
+The current code is a little hard to understand. We will improve the compiler to elegantly implement this behavior. Stay tuned! 
+
+#### Other Optimizations
 
 There are other optimization techniques used with CUDA, including the `float4` vector type, better shared memory support and others. Please refer to the source code for details.
 
 ## Evaluation
 
-We illustrate performance of different Taichi and CUDA implementations.
+We conduct performance evaluation on the following device.
+|Device| Nvidia RTX 3080 (10GB)|
+|-----|-----------------------|
+|FP32 performance| 29700 GFLOPS|
+|Memory bandwidth| 760 GB/s|
+|L2 cache capacity| 4MB|
+
+
+The performance of different Taichi and CUDA implementations is illustrated in the following figure.
 
 <p align="center">
 <img src="fig/bench_roofline.png" width="560">
 </p>
+
+In this figure, "Taichi/Baseline" and "CUDA/Baseline" refer to the very original implementation without any optimizations. "Taichi/Block" and "CUDA/Block" optimizes block-wise memory access. "Taichi/Unroll" explicitly unrolls the compute loop. "CUDA/Optimized" enables all optimization methods.
 
 ## Reproduction Steps
