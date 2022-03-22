@@ -60,7 +60,9 @@ def bodyForce():
         velocities[i, 1] += dt * Fy
         velocities[i, 2] += dt * Fz
 ```
-The CUDA equivalent verion is a bit confusing if you have no prior knowlege about SIMT parallel programming. The outermost parallel loop is implicitly replaced by parallelizaiton. 
+Quite similar, right?
+
+The CUDA equivalent version is a bit confusing if you have no prior knowlege about SIMT parallel programming. The outermost loop is implicitly replaced by parallelizaiton. 
 ```cuda
 __global__
 void bodyForce(Body *p, float dt, int n) {
@@ -90,7 +92,7 @@ void bodyForce(Body *p, float dt, int n) {
 #### Block Access
 
 By repeatedly loading a small block of data, it is possible to leverage the GPU's L1 data cache to improve performance.
-In CUDA programming, we explicitly decompose the loop and access by blocks. 
+In CUDA, we explicitly decompose the loop and access by blocks. 
 ```cuda
 __global__
 void bodyForce(Body *p, Body *v, float dt, int n) {
@@ -115,11 +117,12 @@ ti.root.dense(ti.ij, (nBodies // block_size, 4)).dense(ti.i, block_size).place(b
 ```
 
 Taichi internally handles the loop decompositions and index permutations according to the block statements in field definitions.
-There are no changes in the main blocks of the `bodyForce` function. If you are unformaliar with the usage, please refer to our document [Fields (Advanced)](https://docs.taichi.graphics/lang/articles/advanced/layout).
+There are no changes in the `bodyForce` function. If you are unformaliar with the usage, please refer to our document [Fields (Advanced)](https://docs.taichi.graphics/lang/articles/advanced/layout).
 
-#### Explicit Unrolling
+#### Partial Unrolling
 
-We further improve Tachi's performance by explicitly unrolling a dimension by a factor of 2 or 4.
+We notice that the `nvcc` implicitly improves performance by unroll the inner loop by a factor of 4.
+Taichi haven't integrate this optmization yet so we provide a version that unrolls explicitly.
 The current code is a little hard to understand. We will improve the compiler to elegantly implement this behavior. Stay tuned! 
 
 #### Other Optimizations
@@ -129,6 +132,7 @@ There are other optimization techniques used with CUDA, including the `float4` v
 ## Evaluation
 
 We conduct performance evaluation on the following device.
+
 |Device| Nvidia RTX 3080 (10GB)|
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
@@ -142,6 +146,11 @@ The performance of different Taichi and CUDA implementations is illustrated in t
 <img src="fig/bench_roofline.png" width="560">
 </p>
 
-In this figure, "Taichi/Baseline" and "CUDA/Baseline" refer to the very original implementation without any optimizations. "Taichi/Block" and "CUDA/Block" optimizes block-wise memory access. "Taichi/Unroll" explicitly unrolls the compute loop. "CUDA/Optimized" enables all optimization methods.
+In this figure, `Taichi/Baseline` and `CUDA/Baseline` refer to the very original implementation without any optimizations. `Taichi/Block` and `CUDA/Block` optimizes block-wise memory access. `Taichi/Unroll` explicitly unrolls the compute loop. `CUDA/Optimized` enables all optimization methods.
+
+We observe that with the same level of optimizations, Taichi and CUDA can achieve similar performance:
+* `Taichi/Baseline` slightly lags behind `CUDA/Baseline` due to `nvcc`'s partial unrolling optimiztion.
+* `Taichi/Unroll` achieves comparable performance with `CUDA/Block` where they share same set of optimization techniques.
+* `CUDA/Optimized` reveals overwhelming good performance for large body count. Taichi will achieve this level of performance by improving the compiler -- the user need not manually improve performance by themselfves!
 
 ## Reproduction Steps
