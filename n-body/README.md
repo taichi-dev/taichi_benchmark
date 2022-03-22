@@ -154,3 +154,16 @@ We observe that with the same level of optimizations, Taichi and CUDA can achiev
 * `CUDA/Optimized` reveals overwhelming good performance for large body count. Taichi will achieve this level of performance by improving the compiler -- the user need not manually improve performance by themselfves!
 
 ## Reproduction Steps
+
+* Pre-requisites
+```shell
+python3 -m pip install --upgrade taichi
+python3 -m pip install matplotlib
+```
+If you want to compare with CUDA, make sure you have `nvcc` properly installed.
+
+* Run the benchmark and draw the plots
+```shell
+cd n-body
+python3 plot_benchmark.py
+```
