@@ -94,26 +94,14 @@ __global__
 void bodyForce(Body *p, Body *v, float dt, int n) {
   int i = blockDim.x * blockIdx.x + threadIdx.x;
   if (i < n) {
-    float Fx = 0.0f; 
-    float Fy = 0.0f; 
-    float Fz = 0.0f;
+    ...
     for (int tile = 0; tile < gridDim.x; tile++) {
       for (int j = 0; j < BLOCK_SIZE; j++) {
-        float dx = p[j].x - p[i].x;
-        float dy = p[j].y - p[i].y;
-        float dz = p[j].z - p[i].z;
-        float distSqr = dx*dx + dy*dy + dz*dz + SOFTENING;
-        float invDist = rsqrtf(distSqr);
-        float invDist3 = invDist * invDist * invDist;
-        Fx += dx * invDist3;
-        Fy += dy * invDist3;
-        Fz += dz * invDist3;
+          ...
       }
       __syncthreads();
     }
-    v[i].x += dt*Fx;
-    v[i].y += dt*Fy;
-    v[i].z += dt*Fz;
+    ...
   }
 }
 ```
