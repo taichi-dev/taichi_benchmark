@@ -52,7 +52,7 @@ def run_benchmark(output_binary_name, flags=[]):
     with pushd(workdir):
         # Run Benchmark
         results = []
-        n_grids = np.arange(16, 256+32, 32).tolist()
+        n_grids = np.arange(32, 256+32, 32).tolist()
         for n_grid in n_grids:
             print("running", output_binary_name, "n_grid", n_grid)
             argv = ["{}".format(n_grid)]
