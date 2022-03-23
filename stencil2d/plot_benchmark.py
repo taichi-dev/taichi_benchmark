@@ -37,8 +37,8 @@ def plot(cuda_results, taichi_results):
     plt.title("Stencil benchmark")
     plt.axhline(y = 760, color='grey', linestyle = 'dashed')
     plt.text(80, 730, 'DRAM Bandwidth=760GB/s')
-    plt.axvline(x = 723, color='grey', linestyle = 'dashed')
-    plt.text(723, 200, 'L2 Cache=4MB', rotation=270)
+    plt.axvline(x = 809, color='grey', linestyle = 'dashed')
+    plt.text(809, 200, 'L2 Cache=5MB', rotation=270)
     plt.savefig("fig/bench.png", dpi=150)
 
 if __name__ == '__main__':

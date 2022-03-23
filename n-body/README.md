@@ -135,7 +135,7 @@ We conduct performance evaluation on the following device.
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
-|L2 cache capacity| 4MB|
+|L2 cache capacity| 5 MB|
 
 
 Performance is measured with "Billion body interactions per second" to indicate compute throughtput. The performance of different Taichi and CUDA implementations is illustrated in the following figure.

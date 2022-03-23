@@ -58,7 +58,7 @@ thrust::transform(d_x.begin(), d_x.end(), d_y.begin(), d_y.begin(), 2.0f * (2.0f
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
-|L2 cache capacity| 4MB|
+|L2 cache capacity| 5 MB|
 
 ### Standard SAXPY
 
