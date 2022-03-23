@@ -17,11 +17,15 @@ We conduct performance evaluation on the following device.
 |L2 cache capacity| 5 MB|
 
 
-The performance of different Taichi and CUDA implementations is illustrated in the figure.
+Perfomrmance is measured with the achieved memory access bandwidth, as stencil computation appears to be memory-bound.
+The bandwidth is calculated by `1e-9 * 2 * N * N * sizeof(float) / t`, where `t` is the compute time measured in seconds, `NxN` stands for matrix shape.
+The performance data of different Taichi and CUDA implementations are illustrated as follows.
 
 <p align="center">
-<img src="fig/bench.png" width="560">
+<img src="fig/bench.png" width="600">
 </p>
+
+In this Figure, we notice that CUDA and Taichi implementations reveal similar performance. For small matrices, Taichi is slightly bothered by kernel launch overhead from Python side. For large matrices, the two implementations are neck-to-neck.
 
 
 ## Reproduction Steps
