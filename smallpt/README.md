@@ -7,10 +7,10 @@ C++](https://www.kevinbeason.com/smallpt/).
 In this benchmark, we compare the performance of Taichi with a CUDA implementation.
 
 ## Implementation
-The measured CUDA implementation is based on an
-[open-source implementation named smallptCuda](https://github.com/BentleyBlanks/smallptCuda) 
+The measured CUDA implementation is based on an open-source implementation named
+[smallptCuda](https://github.com/BentleyBlanks/smallptCuda).
 The Taichi version is from one of our Taichi developers' implementation
-[path tracing](https://github.com/erizmr/taichi_ray_tracing/blob/master/4_0_path_tracing.py)
+[path tracing](https://github.com/erizmr/taichi_ray_tracing/blob/master/4_0_path_tracing.py).
 
 ## Evaluation
 We conduct performance evaluation on the following device.
@@ -19,9 +19,9 @@ We conduct performance evaluation on the following device.
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
-|L2 cache capacity| 4MB|
+|L2 cache capacity| 5MB|
 
-Performance is measured in frames per second, with different number of 
+Performance is measured in frames per second, with different 
 samples per pixel.
 
 <p align="center">

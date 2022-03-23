@@ -2,20 +2,20 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
-#cuda_sample_results = {'cuda_baseline': [{'spp': 16, 'fps': 73}, {'spp': 32, 'fps': 41}, {'spp': 48, 'fps': 28}, {'spp': 64, 'fps': 21}, {'spp': 80, 'fps': 17}, {'spp': 96, 'fps': 15}, {'spp': 112, 'fps': 13}, {'spp': 128, 'fps': 11}, {'spp': 144, 'fps': 10}, {'spp': 160, 'fps': 9}, {'spp': 176, 'fps': 8}, {'spp': 192, 'fps': 7}, {'spp': 208, 'fps': 7}, {'spp': 224, 'fps': 6}, {'spp': 240, 'fps': 6}, {'spp': 256, 'fps': 6}]}
+cuda_sample_results = {'cuda_baseline': [{'spp': 16, 'fps': 73}, {'spp': 32, 'fps': 41}, {'spp': 48, 'fps': 28}, {'spp': 64, 'fps': 21}, {'spp': 80, 'fps': 17}, {'spp': 96, 'fps': 15}, {'spp': 112, 'fps': 13}, {'spp': 128, 'fps': 11}, {'spp': 144, 'fps': 10}, {'spp': 160, 'fps': 9}, {'spp': 176, 'fps': 8}, {'spp': 192, 'fps': 7}, {'spp': 208, 'fps': 7}, {'spp': 224, 'fps': 6}, {'spp': 240, 'fps': 6}, {'spp': 256, 'fps': 6}]}
 
-cuda_sample_results = {'cuda_baseline': [{'spp': 32, 'time_ms': 24.336449}, {'spp': 64, 'time_ms': 46.224194}, {'spp': 96, 'time_ms': 68.754845}, {'spp': 128, 'time_ms': 84.639229}, {'spp': 160, 'time_ms': 105.246147}, {'spp': 192, 'time_ms': 127.489891}, {'spp': 224, 'time_ms': 146.096603}, {'spp': 256, 'time_ms': 166.291687}]}
+#cuda_sample_results = {'cuda_baseline': [{'spp': 32, 'time_ms': 24.336449}, {'spp': 64, 'time_ms': 46.224194}, {'spp': 96, 'time_ms': 68.754845}, {'spp': 128, 'time_ms': 84.639229}, {'spp': 160, 'time_ms': 105.246147}, {'spp': 192, 'time_ms': 127.489891}, {'spp': 224, 'time_ms': 146.096603}, {'spp': 256, 'time_ms': 166.291687}]}
 
-#taichi_sample_results = {'taichi_baseline': [{'spp': 16, 'fps': 81}, {'spp': 32, 'fps': 42}, {'spp': 48, 'fps': 27}, {'spp': 64, 'fps': 21}, {'spp': 80, 'fps': 16}, {'spp': 96, 'fps': 14}, {'spp': 112, 'fps': 12}, {'spp': 128, 'fps': 10}, {'spp': 144, 'fps': 9}, {'spp': 160, 'fps': 8}, {'spp': 176, 'fps': 7}, {'spp': 192, 'fps': 7}, {'spp': 208, 'fps': 6}, {'spp': 224, 'fps': 6}, {'spp': 240, 'fps': 5}, {'spp': 256, 'fps': 5}]}
+taichi_sample_results = {'taichi_baseline': [{'spp': 16, 'fps': 81}, {'spp': 32, 'fps': 42}, {'spp': 48, 'fps': 27}, {'spp': 64, 'fps': 21}, {'spp': 80, 'fps': 16}, {'spp': 96, 'fps': 14}, {'spp': 112, 'fps': 12}, {'spp': 128, 'fps': 10}, {'spp': 144, 'fps': 9}, {'spp': 160, 'fps': 8}, {'spp': 176, 'fps': 7}, {'spp': 192, 'fps': 7}, {'spp': 208, 'fps': 6}, {'spp': 224, 'fps': 6}, {'spp': 240, 'fps': 5}, {'spp': 256, 'fps': 5}]}
 
-taichi_sample_results = {'taichi_baseline': [{'spp': 32, 'time_ms': 24.63049694779329}, {'spp': 64, 'time_ms': 49.856646699481644}, {'spp': 96, 'time_ms': 78.17163055005949}, {'spp': 128, 'time_ms': 99.65819650096819}, {'spp': 160, 'time_ms': 125.85285250097513}, {'spp': 192, 'time_ms': 149.39746184973046}, {'spp': 224, 'time_ms': 175.58412284997758}, {'spp': 256, 'time_ms': 201.95406079874374}]}
+#taichi_sample_results = {'taichi_baseline': [{'spp': 32, 'time_ms': 24.63049694779329}, {'spp': 64, 'time_ms': 49.856646699481644}, {'spp': 96, 'time_ms': 78.17163055005949}, {'spp': 128, 'time_ms': 99.65819650096819}, {'spp': 160, 'time_ms': 125.85285250097513}, {'spp': 192, 'time_ms': 149.39746184973046}, {'spp': 224, 'time_ms': 175.58412284997758}, {'spp': 256, 'time_ms': 201.95406079874374}]}
 
 
 def extract_perf(results):
     perf = []
     for record in results:
-        #perf.append(record["fps"])
-        perf.append(record["time_ms"])
+        perf.append(record["fps"])
+        #perf.append(record["time_ms"])
     return perf
 
 def extract_particles(results):
