@@ -45,7 +45,7 @@ def plot_bar(cuda_results, taichi_results):
     plt.xlabel("#Particles")
     plt.ylabel("Time per Frame (ms)")
     plt.legend(["CUDA", "Taichi"], loc='upper left')
-    plt.title("MPM benchmark")
+    plt.title("MPM(" + plot_series.upper() + ") benchmark")
     plt.savefig("fig/bench_" + plot_series + ".png", dpi=150)
 
 if __name__ == '__main__':
