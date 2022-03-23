@@ -149,7 +149,11 @@ In this figure, `Taichi/Baseline` and `CUDA/Baseline` refer to the very original
 We observe that with the same level of optimizations, Taichi and CUDA can achieve similar performance:
 * `Taichi/Baseline` slightly lags behind `CUDA/Baseline` due to `nvcc`'s partial unrolling optimiztion.
 * `Taichi/Unroll` achieves comparable performance with `CUDA/Block` where they share same set of optimization techniques.
-* `CUDA/Optimized` reveals overwhelming good performance for large body count. Taichi will achieve this level of performance by improving the compiler -- the user need not manually improve performance by themselfves!
+* `CUDA/Optimized` reveals overwhelming good performance for large body count. 
+
+Given the first two positive results, we are confident that Taichi can match the best CUDA implementation by upgrading the compiler. 
+
+<!-- issue tracker to call for contrib? -->
 
 ## Reproduction Steps
 
