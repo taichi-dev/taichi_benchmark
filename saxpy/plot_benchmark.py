@@ -70,7 +70,7 @@ def plot_compute(results):
         return x / 6.0
     ax2 = ax.secondary_yaxis('right', functions=(comp2mem, mem2comp))
     ax2.set_ylabel("Bandwidth (GB/s)")
-    ax.text(7, 120, 'L2 Cache=4MB', rotation=270)
+    ax.text(7, 120, 'L2 Cache=5MB', rotation=270)
     plt.axhline(y = 760 / 6.0, color='grey', linestyle = 'dashed')
     plt.text(11, 770/6.0, 'DRAM Bandwidth=760GB/s')
     ax.set_title("SAXPY benchmark on 2D arrays")
