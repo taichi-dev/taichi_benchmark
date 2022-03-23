@@ -2,9 +2,7 @@
 
 ## Introduction
 
-Stencil computation is widely employed in engineering simulations. In this benchmark, we employ the most simple 5-point [iterative stencil algorithm](https://en.wikipedia.org/wiki/Iterative_Stencil_Loops).
-
-## Implementation
+Stencil computation is widely employed in engineering simulations. In this benchmark, we employ the 5-point [iterative stencil algorithm](https://en.wikipedia.org/wiki/Iterative_Stencil_Loops). As the algorithm is simple, we develop our own CUDA and Taichi implementations for benchmark, respectively. 
 
 ## Evaluation
 
@@ -25,7 +23,7 @@ The performance data of different Taichi and CUDA implementations are illustrate
 <img src="fig/bench.png" width="600">
 </p>
 
-In this Figure, we notice that CUDA and Taichi implementations reveal similar performance. For small matrices, Taichi is slightly bothered by kernel launch overhead from Python side. For large matrices, the two implementations are neck-to-neck.
+In this Figure, we notice that CUDA and Taichi implementations reveal similar performance. For small matrices, Taichi is slightly bothered by kernel launch overhead from Python side. For large matrices, the two implementations are neck-to-neck and approach the roofline of GPU bandwidth. Therefore, we can conclude that both implementations are high-performance that can fully leverage GPU's capability.
 
 
 ## Reproduction Steps
