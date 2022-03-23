@@ -276,7 +276,8 @@ int main(const int argc, const char **argv) {
 
   float time_ms = diff.count() * 1000 / num_frames;
 
-  printf("{\"n_particles\":%d, \"time_ms\": %f}\n", mpm->get_n_particles(), time_ms);
+  printf("{\"n_particles\":%d, \"time_ms\": %f}\n", mpm->get_n_particles(),
+         time_ms);
 
   return 0;
 }
