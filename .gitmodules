@@ -4,3 +4,6 @@
 [submodule "p2g/cuda/eigen"]
 	path = p2g/cuda/eigen
 	url = https://gitlab.com/libeigen/eigen.git
+[submodule "p2g/src/cuda/src/eigen"]
+	path = p2g/src/cuda/src/eigen
+	url = https://gitlab.com/libeigen/eigen.git
