@@ -3,8 +3,6 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 
-//#define USE_MEMSET
-
 __global__ void FillByKernel(float *arr, float c, int numElements) {
   int i = blockDim.x * blockIdx.x + threadIdx.x;
   if (i < numElements) {
@@ -36,9 +34,9 @@ int main(int argc, char** argv)
   int threadsPerBlock = 128;
   int blocksPerGrid = std::ceil(double(numElements)/double(threadsPerBlock));
 
+#ifdef USE_MEMSET
   // dry run
   float v = 0.5;
-#ifdef USE_MEMSET
   cuMemsetD32(d_buf, reinterpret_cast<uint32_t &>(v), numElements);
 #else
   FillByKernel<<<blocksPerGrid, threadsPerBlock>>>(d_buf, 0.5, numElements);
@@ -60,7 +58,12 @@ int main(int argc, char** argv)
   float milliseconds = 0;
   cudaEventElapsedTime(&milliseconds, start, stop);
 
+#ifdef JSON_OUTPUT
+  double GBs = 1e-6 * numElements * sizeof(float) / milliseconds * num_runs;
+  printf("{\"N\":%d,\"time\":%.3lf,\"gbs\":%.3lf}\n", numElements, milliseconds/num_runs, GBs);
+#else
   printf("fill %i elements takes %f ms\n", numElements, milliseconds/num_runs);
+#endif
   
 #ifdef USE_MEMSET
   cuMemFree(d_buf);
