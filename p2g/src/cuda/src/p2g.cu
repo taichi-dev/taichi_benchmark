@@ -77,8 +77,11 @@ __global__ void particle_to_grid_kernel(Vector *x, Vector *v, Matrix *C,
   std::array<Vector, 3> w{0.5 * (1.5 - fx.array()).pow(2),
                           0.75 - (fx.array() - 1.0).pow(2),
                           0.5 * (fx.array() - 0.5).pow(2)};
-  Vector new_v = Vector::Zero();
-  Matrix new_C = Matrix::Zero();
+  auto stress = -dt * 4 * E * p_vol * (J[idx] - 1) / std::pow(dx, 2);
+  Matrix affine = Matrix::Identity() * stress + p_mass * C[idx];
+
+  //Vector new_v = Vector::Zero();
+  //Matrix new_C = Matrix::Zero();
   for (auto offset_idx = 0; offset_idx < neighbour; offset_idx++) {
     Vectori offset = get_offset(offset_idx);
     Vector dpos = (offset.cast<Real>() - fx) * dx;
@@ -86,18 +89,34 @@ __global__ void particle_to_grid_kernel(Vector *x, Vector *v, Matrix *C,
     for (auto i = 0; i < dim; i++) {
       weight *= w[offset[i]][i];
     }
+    //Vectori grid_idx_vector = base + offset;
+    //auto grid_idx = 0;
+    //for (auto i = 0; i < dim; i++) {
+    //  grid_idx = grid_idx * n_grid + grid_idx_vector[i];
+    //}
+    //new_v += weight * grid_v[grid_idx];
+    //new_C += 4.0 * weight * grid_v[grid_idx] * dpos.transpose() / pow(dx, 2);
+
     Vectori grid_idx_vector = base + offset;
     auto grid_idx = 0;
     for (auto i = 0; i < dim; i++) {
       grid_idx = grid_idx * n_grid + grid_idx_vector[i];
     }
-    new_v += weight * grid_v[grid_idx];
-    new_C += 4.0 * weight * grid_v[grid_idx] * dpos.transpose() / pow(dx, 2);
+
+    // update grid_v
+    Vector grid_v_add = weight * (p_mass * v[idx] + affine * dpos);
+    for (auto i = 0; i < dim; i++) {
+      atomicAdd(&(grid_v[grid_idx][i]), grid_v_add[i]);
+    }
+
+    // update grid_m
+    auto grid_m_add = weight * p_mass;
+    atomicAdd(&(grid_m[grid_idx]), grid_m_add);
   }
-  v[idx] = new_v;
-  x[idx] += dt * v[idx];
-  J[idx] *= Real(1.0) + dt * new_C.trace();
-  C[idx] = new_C;
+  //v[idx] = new_v;
+  //x[idx] += dt * v[idx];
+  //J[idx] *= Real(1.0) + dt * new_C.trace();
+  //C[idx] = new_C;
 }
 
 
