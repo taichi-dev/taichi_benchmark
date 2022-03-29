@@ -30,7 +30,7 @@ def run_p2g(n_grid = 128):
             w = [0.5 * (1.5 - fx)**2, 0.75 - (fx - 1)**2, 0.5 * (fx - 0.5)**2]
             stress = -dt * 4 * E * p_vol * (J[p] - 1) / dx**2
             affine = ti.Matrix([[stress, 0], [0, stress]]) + p_mass * C[p]
-            for i, j in ti.static(ti.ndrange(1, 1)):
+            for i, j in ti.static(ti.ndrange(3, 3)):
                 offset = ti.Vector([i, j])
                 dpos = (offset - fx) * dx
                 weight = w[i].x * w[j].y

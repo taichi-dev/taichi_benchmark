@@ -4,7 +4,7 @@ import os
 
 cuda_sample_results = {'cuda_baseline': [{'n_particles': 512, 'time_ms': 0.444458}, {'n_particles': 2048, 'time_ms': 0.44377}, {'n_particles': 4608, 'time_ms': 0.481411}, {'n_particles': 8192, 'time_ms': 0.487567}, {'n_particles': 12800, 'time_ms': 0.551323}, {'n_particles': 18432, 'time_ms': 0.673213}, {'n_particles': 25088, 'time_ms': 0.746727}, {'n_particles': 32768, 'time_ms': 0.871354}]}
 
-taichi_sample_results = {'taichi_baseline': [{'n_particles': 512, 'time_ms': 0.3269685341784623}, {'n_particles': 2048, 'time_ms': 0.32648004296831346}, {'n_particles': 4608, 'time_ms': 0.3284883232410607}, {'n_particles': 8192, 'time_ms': 0.33818339550961696}, {'n_particles': 12800, 'time_ms': 0.33936923242094963}, {'n_particles': 18432, 'time_ms': 0.36472302343426577}, {'n_particles': 25088, 'time_ms': 0.3777477568362997}, {'n_particles': 32768, 'time_ms': 0.38578442383041534}]}
+taichi_sample_results = {'taichi_baseline': [{'n_particles': 512, 'time_ms': 0.5216462373027753}, {'n_particles': 2048, 'time_ms': 0.5243271660049231}, {'n_particles': 4608, 'time_ms': 0.546237979492048}, {'n_particles': 8192, 'time_ms': 0.5765281875085293}, {'n_particles': 12800, 'time_ms': 0.621946640620763}, {'n_particles': 18432, 'time_ms': 0.8157364931662414}, {'n_particles': 25088, 'time_ms': 0.9429942363254895}, {'n_particles': 32768, 'time_ms': 1.0296167158259095}]}
 
 def extract_perf(results):
     perf = []
