@@ -31,12 +31,10 @@ We conduct performance evaluation on the following device.
 Performance is measured in milliseconds per frame (ms), we run over different
 number of particles, for 2- and 3-dimensions, respectively.
 
-2D
 <p align="center">
 <img src="fig/bench_2d.png" width="560">
 </p>
 
-3D
 <p align="center">
 <img src="fig/bench_3d.png" width="560">
 </p>
