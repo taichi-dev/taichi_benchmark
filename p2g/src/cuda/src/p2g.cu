@@ -67,9 +67,9 @@ __device__ Vectori get_indices(size_t idx, int n_grid) {
 }
 
 __global__ void particle_to_grid_kernel(Vector *x, Vector *v, Matrix *C,
-                                        Real *J, Vector *grid_v,
-                                        Real *grid_m, Real dx, Real p_vol,
-                                        Real p_mass, int n_grid) {
+                                        Real *J, Vector *grid_v, Real *grid_m,
+                                        Real dx, Real p_vol, Real p_mass,
+                                        int n_grid) {
   auto idx = blockIdx.x * blockDim.x + threadIdx.x;
   Vector Xp = x[idx] / dx;
   Vectori base = (Xp.array() - 0.5).cast<int>();
@@ -80,8 +80,8 @@ __global__ void particle_to_grid_kernel(Vector *x, Vector *v, Matrix *C,
   auto stress = -dt * 4 * E * p_vol * (J[idx] - 1) / std::pow(dx, 2);
   Matrix affine = Matrix::Identity() * stress + p_mass * C[idx];
 
-  //Vector new_v = Vector::Zero();
-  //Matrix new_C = Matrix::Zero();
+  // Vector new_v = Vector::Zero();
+  // Matrix new_C = Matrix::Zero();
   for (auto offset_idx = 0; offset_idx < neighbour; offset_idx++) {
     Vectori offset = get_offset(offset_idx);
     Vector dpos = (offset.cast<Real>() - fx) * dx;
@@ -89,13 +89,13 @@ __global__ void particle_to_grid_kernel(Vector *x, Vector *v, Matrix *C,
     for (auto i = 0; i < dim; i++) {
       weight *= w[offset[i]][i];
     }
-    //Vectori grid_idx_vector = base + offset;
-    //auto grid_idx = 0;
-    //for (auto i = 0; i < dim; i++) {
+    // Vectori grid_idx_vector = base + offset;
+    // auto grid_idx = 0;
+    // for (auto i = 0; i < dim; i++) {
     //  grid_idx = grid_idx * n_grid + grid_idx_vector[i];
     //}
-    //new_v += weight * grid_v[grid_idx];
-    //new_C += 4.0 * weight * grid_v[grid_idx] * dpos.transpose() / pow(dx, 2);
+    // new_v += weight * grid_v[grid_idx];
+    // new_C += 4.0 * weight * grid_v[grid_idx] * dpos.transpose() / pow(dx, 2);
 
     Vectori grid_idx_vector = base + offset;
     auto grid_idx = 0;
@@ -113,12 +113,11 @@ __global__ void particle_to_grid_kernel(Vector *x, Vector *v, Matrix *C,
     auto grid_m_add = weight * p_mass;
     atomicAdd(&(grid_m[grid_idx]), grid_m_add);
   }
-  //v[idx] = new_v;
-  //x[idx] += dt * v[idx];
-  //J[idx] *= Real(1.0) + dt * new_C.trace();
-  //C[idx] = new_C;
+  // v[idx] = new_v;
+  // x[idx] += dt * v[idx];
+  // J[idx] *= Real(1.0) + dt * new_C.trace();
+  // C[idx] = new_C;
 }
-
 
 class MPM {
 public:
@@ -173,16 +172,19 @@ public:
   }
 
   void reset() {
-    auto particle_block_num = utils::get_block_num(n_particles, threads_per_block);
-    auto grid_block_num = utils::get_block_num(utils::power(n_grid, dim), threads_per_block);
-    reset_kernel<<<grid_block_num, threads_per_block>>>(grid_v_dev,
-                                                          grid_m_dev);
+    auto particle_block_num =
+        utils::get_block_num(n_particles, threads_per_block);
+    auto grid_block_num =
+        utils::get_block_num(utils::power(n_grid, dim), threads_per_block);
+    reset_kernel<<<grid_block_num, threads_per_block>>>(grid_v_dev, grid_m_dev);
   }
 
   void advance() {
     auto T = steps;
-    auto particle_block_num = utils::get_block_num(n_particles, threads_per_block);
-    auto grid_block_num = utils::get_block_num(utils::power(n_grid, dim), threads_per_block);
+    auto particle_block_num =
+        utils::get_block_num(n_particles, threads_per_block);
+    auto grid_block_num =
+        utils::get_block_num(utils::power(n_grid, dim), threads_per_block);
     while (T--) {
       particle_to_grid_kernel<<<particle_block_num, threads_per_block>>>(
           x_dev, v_dev, C_dev, J_dev, grid_v_dev, grid_m_dev, dx, p_vol, p_mass,
@@ -215,7 +217,6 @@ public:
   Real E = 400;
   int threads_per_block;
 };
-
 
 int main(const int argc, const char **argv) {
   int n_grid = 128;
