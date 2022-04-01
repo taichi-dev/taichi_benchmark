@@ -46,13 +46,14 @@ Jacobi pressure projections.
 The employed Taichi version 
 is [0.9.2](https://github.com/taichi-dev/taichi/releases/tag/v0.9.2), and
 the JAX
-package is 0.3.4 with jaxlib-0.3.2+cuda11.cudnn82 and python version 3.9.
+package is 0.3.4 (jaxlib-0.3.2+cuda11.cudnn82) and python version 3.9.
 
 ## Reproduction Steps
 
 * Pre-requisites
 ```shell
-python3 -m pip install --upgrade taichi
+python3 -m pip install jax==0.3.4 jax[cuda11_cudnn82] -f https://storage.googleapis.com/jax-releases/jax_releases.html
+python3 -m pip install taichi==0.9.2 
 python3 -m pip install matplotlib
 ```
 If you want to compare with CUDA, make sure you have `nvcc` properly installed.
