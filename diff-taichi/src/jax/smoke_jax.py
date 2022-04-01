@@ -179,7 +179,7 @@ def run_smoke(num_time_steps=25):
     
         times = []
         import time
-        for i in range(50):
+        for i in range(10):
             #t = time.perf_counter()
             r = objective(init_dx_and_dy)
             #print('forward time', (time.perf_counter() - t) * 1000, 'ms/iter')

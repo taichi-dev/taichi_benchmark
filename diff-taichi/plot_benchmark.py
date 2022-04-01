@@ -2,12 +2,12 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
-jax_cpu_results = {'jax_cpu': [{'steps': 25, 'time_ms': 65.24398803710938}, {'steps': 50, 'time_ms': 130.02352905273438}, {'steps': 75, 'time_ms': 194.32464599609375}, {'steps': 100, 'time_ms': 259.0186767578125}, {'steps': 125, 'time_ms': 323.78143310546875}, {'steps': 150, 'time_ms': 388.3748779296875}, {'steps': 175, 'time_ms': 452.9609680175781}, {'steps': 200, 'time_ms': 516.94384765625}]}
+jax_cpu_results = {'jax_cpu': [{'steps': 25, 'time_ms': 65.91094207763672}, {'steps': 50, 'time_ms': 131.53125}, {'steps': 75, 'time_ms': 196.27066040039062}, {'steps': 100, 'time_ms': 261.52276611328125}, {'steps': 125, 'time_ms': 326.4784240722656}, {'steps': 150, 'time_ms': 391.44482421875}, {'steps': 175, 'time_ms': 456.5045166015625}, {'steps': 200, 'time_ms': 522.333251953125}]}
 
-jax_gpu_results = {'jax_gpu': [{'steps': 25, 'time_ms': 10.312166213989258}, {'steps': 50, 'time_ms': 18.36493682861328}, {'steps': 75, 'time_ms': 28.193653106689453}, {'steps': 100, 'time_ms': 35.162445068359375}, {'steps': 125, 'time_ms': 43.2327995300293}, {'steps': 150, 'time_ms': 52.01408386230469}, {'steps': 175, 'time_ms': 59.739013671875}, {'steps': 200, 'time_ms': 68.09099578857422}]}
+jax_gpu_results = {'jax_gpu': [{'steps': 25, 'time_ms': 10.054882049560547}, {'steps': 50, 'time_ms': 20.362703323364258}, {'steps': 75, 'time_ms': 28.36370849609375}, {'steps': 100, 'time_ms': 37.734405517578125}, {'steps': 125, 'time_ms': 49.2039909362793}, {'steps': 150, 'time_ms': 53.763267517089844}, {'steps': 175, 'time_ms': 66.99272918701172}, {'steps': 200, 'time_ms': 71.54842376708984}]}
 
-taichi_results = {'taichi_cpu': [{'steps': 25, 'time_ms': 51.112630011630245}, {'steps': 50, 'time_ms': 104.13628999958746}, {'steps': 75, 'time_ms': 159.63488050329033}, {'steps': 100, 'time_ms': 210.41491949290503}, {'steps': 125, 'time_ms': 261.4528949925443}, {'steps': 150, 'time_ms': 319.54752300225664}, {'steps': 175, 'time_ms': 371.35305399715435}, {'steps': 200, 'time_ms': 422.6975054916693}], 'taichi_gpu': [{'steps': 25, 'time_ms': 14.285370503785089}, {'steps': 50, 'time_ms': 28.69464700052049}, {'steps': 75, 'time_ms': 43.09935700439382}, {'steps': 100, 'time_ms': 57.2914744989248}, {'steps': 125, 'time_ms': 71.7793994845124}, {'steps': 150, 'time_ms': 86.17233450058848}, {'steps': 175, 'time_ms': 100.47039449273143}, {'steps': 200, 'time_ms': 113.97033199318685}]}
 
+taichi_results = {'taichi_cpu': [{'steps': 25, 'time_ms': 51.08319049759302}, {'steps': 50, 'time_ms': 103.85819099610671}, {'steps': 75, 'time_ms': 158.39250650606118}, {'steps': 100, 'time_ms': 209.04668950242922}, {'steps': 125, 'time_ms': 259.88954899366945}, {'steps': 150, 'time_ms': 318.44818698300514}, {'steps': 175, 'time_ms': 368.9125679957215}, {'steps': 200, 'time_ms': 418.57923500356264}], 'taichi_gpu': [{'steps': 25, 'time_ms': 4.84518900339026}, {'steps': 50, 'time_ms': 9.666016005212441}, {'steps': 75, 'time_ms': 14.41958149371203}, {'steps': 100, 'time_ms': 19.13971251633484}, {'steps': 125, 'time_ms': 23.946640998474322}, {'steps': 150, 'time_ms': 28.695989021798596}, {'steps': 175, 'time_ms': 33.55165199900512}, {'steps': 200, 'time_ms': 38.40553350164555}]}
 
 def extract_perf(results):
     perf = []
@@ -21,28 +21,33 @@ def extract_particles(results):
         particles.append(record["steps"])
     return particles 
 
-def plot_bar(cuda_results, taichi_results):
-    fig, ax = plt.subplots(figsize=(12,9))
+def plot_bar(jax_results, taichi_results):
+    fig, ax = plt.subplots(figsize=(6,4))
 
-    plot_series = "gpu"
-    x_cuda = extract_particles(cuda_results["jax_" + plot_series])
-    y_cuda = extract_perf(cuda_results["jax_" + plot_series])
-    bar_pos = [i*3 for i in range(len(x_cuda))]
-    ax.bar(bar_pos, y_cuda)
-
+    plot_series = "cpu"
+    
+    x_jax = extract_particles(jax_results["jax_" + plot_series])
+    y_jax = extract_perf(jax_results["jax_" + plot_series])
     x_taichi = extract_particles(taichi_results["taichi_" + plot_series])
     y_taichi = extract_perf(taichi_results["taichi_" + plot_series])
-    bar_pos = [i*3+1 for i in range(len(x_taichi))]
-    ax.bar(bar_pos, y_taichi)
 
-    labels = ["{}".format(i) for i in x_cuda]
-    ax.set_xticks(bar_pos, labels)
+    labels = ["{}".format(i) for i in x_jax]
+    
+    # series
+    bar_pos = [i*3 for i in range(len(x_jax))]
+    ax.bar(bar_pos, y_taichi, color='deepskyblue')
+
+    bar_pos = [i*3+1 for i in range(len(x_taichi))]
+    ax.bar(bar_pos, y_jax, color='orange')
+
+    bar_pos_ticks = [i*3+0.5 for i in range(len(x_taichi))]
+    ax.set_xticks(bar_pos_ticks, labels)
     
     plt.grid('minor', axis='y')
-    plt.xlabel("#Steps")
-    plt.ylabel("Time (ms)")
-    plt.legend(["CUDA", "Taichi"], loc='upper left')
-    plt.title("DiffTaichi benchmark")
+    plt.xlabel("Simulation steps")
+    plt.ylabel("Execution time in ms")
+    plt.legend(["Taichi ("+ plot_series.upper() + ")", "JAX ("+ plot_series.upper()+")"], loc='upper left')
+    plt.title("Differentiable Incompressible Fluid Simulator (Smoke)")
     plt.savefig("fig/bench_"+ plot_series + ".png", dpi=150)
 
 if __name__ == '__main__':
@@ -51,6 +56,6 @@ if __name__ == '__main__':
     except FileExistsError:
         pass
 
-    cuda_results = {**jax_cpu_results, **jax_gpu_results}
+    jax_results = {**jax_cpu_results, **jax_gpu_results}
     taichi_results = taichi_results 
-    plot_bar(cuda_results, taichi_results)
+    plot_bar(jax_results, taichi_results)

@@ -6,7 +6,7 @@ import os
 
 def run_smoke(steps=25):
     real = ti.f32
-    ti.init(default_fp=real, arch=ti.cuda, flatten_if=True, debug=True)
+    ti.init(default_fp=real, arch=ti.cuda, flatten_if=True, debug=False)
     
     num_iterations = 100
     n_grid = 110
