@@ -20,6 +20,12 @@
 #include "svd3_cuda.h"
 #include "timer.h"
 
+void randomizeInit(float *data, int n) {
+  for (int i = 0; i < n; i++) {
+    data[i] = 2.0f * (rand() / (float)RAND_MAX) - 1.0f;
+  }
+}
+
 __global__ void svd3_AOS(float* input, float* ouputdata, int testsize)
 {
 	int tid = blockDim.x * blockIdx.x + threadIdx.x;
@@ -81,19 +87,19 @@ __global__ void svd3_AOS_shared(float* input, float* ouputdata, int testsize)
 		ouputdata[blockDim.x * 21 * blockIdx.x + i * threadPerBlock + threadIdx.x] = sArray[i * threadPerBlock + threadIdx.x].f;
 }
 
-template<bool USE_SOA>
-void runCudaPart(float* input, float& output, int n)
+template<bool USE_SHARED>
+void runCudaPart(float* input, float& output, int N, int nIter)
 {
 	float* d_answer;
-	cudaMalloc(&d_answer, 21 * sizeof(float) * n);
+	cudaMalloc(&d_answer, 21 * sizeof(float) * N);
 
 	float* d_input;
-	cudaMalloc(&d_input, 9 * sizeof(float) * n);
+	cudaMalloc(&d_input, 9 * sizeof(float) * N);
 
-	cudaMemcpy(d_input, input, 9 * sizeof(float) * n, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_input, input, 9 * sizeof(float) * N, cudaMemcpyHostToDevice);
 
 	int threads = 504;
-	int pblks = int(n / threads) + 1;
+	int pblks = int(N / threads) + 1;
 
     Timer tmr;
     tmr.start();
@@ -103,20 +109,26 @@ void runCudaPart(float* input, float& output, int n)
 	cudaEventCreate(&start);
 	cudaEventRecord(start, 0);
 
-    if (USE_SOA) {
-        svd3_AOS << <pblks, threads >> >(d_input, d_answer, n);
-    } else {
-        svd3_AOS_shared << <pblks, threads >> >(d_input, d_answer, n);
+    for (int i = 0; i < nIter; ++i) {
+        if (USE_SHARED) {
+            svd3_AOS_shared << <pblks, threads >> >(d_input, d_answer, N);
+        } else {
+            svd3_AOS << <pblks, threads >> >(d_input, d_answer, N);
+        }
     }
 
 	cudaEventCreate(&stop);
 	cudaEventRecord(stop, 0);
 	cudaEventSynchronize(stop);
     tmr.stop();
-	cudaMemcpy(&output, d_answer, 21 * sizeof(float) * n, cudaMemcpyDeviceToHost);
-    printf("Tmr time : %lfms\n", tmr.getTimeMillisecond());
+	cudaMemcpy(&output, d_answer, 21 * sizeof(float) * N, cudaMemcpyDeviceToHost);
 	cudaEventElapsedTime(&elapsedTime, start, stop);
+#ifdef JSON_OUTPUT
+    printf("{\"N\": %d, \"kernel_time\":%lf}\n", N, elapsedTime / static_cast<double>(nIter));
+#else
+    printf("Tmr time : %lfms\n", tmr.getTimeMillisecond());
 	printf("Elapsed time : %f ms\n", elapsedTime);
+#endif
 
 	cudaFree(d_answer);
 	cudaDeviceSynchronize();
@@ -124,43 +136,24 @@ void runCudaPart(float* input, float& output, int n)
 
 int main(int argc, char* argv[])
 {
-	// Load data
-    std::string dataset_path = "Dataset_1M.txt";
-	int testsSize = 0;
+	// Randomized data
+	int N = 0;
+    int nIter = 10;
     if (argc == 2) {
-        testsSize = atoi(argv[1]);
+        N = atoi(argv[1]);
     } else if (argc == 3) {
-        testsSize = atoi(argv[1]);
-        dataset_path = std::string(argv[2]);
-    }
-	std::ifstream myfile;
-	myfile.open(dataset_path.c_str());
-	myfile >> testsSize;
-	//testsSize = testsSize;
-	std::cout << "dataset size: " << testsSize << std::endl;
+        N = atoi(argv[1]);
+        nIter = atoi(argv[2]);
+    } 
+	float* input = (float*)malloc(sizeof(float) * 9 * N);
+    randomizeInit(input, N * 9);
+	float* result = (float*)malloc(sizeof(float) * 21 * N);
 
-	float* input = (float*)malloc(sizeof(float) * 9 * testsSize);
-	int count = 0;
-	for (int i = 0; i < testsSize; i++)
-		for (int j = 0; j < 9; j++) 
-            myfile >> input[count++];
-	myfile.close();
-
-//	for (int k = 1; k < 4; k++)
-//	for (int i = 0; i < testsSize / 4; i++)
-//		for (int j = 0; j < 9; j++) 
-//            input[count++] = input[count % (testsSize / 4)];
-//
-	float* result = (float*)malloc(sizeof(float) * 21 * testsSize);
-
-	// CUDA SVD 3x3
-	runCudaPart<true>(input, *result, testsSize);
-
-	runCudaPart<true>(input, *result, testsSize);
-
-	//runCudaPart<false>(input, *result, testsSize);
-
-	std::cout << "Test is finished\n";
+#ifdef USE_SHARED
+	    runCudaPart<true>(input, *result, N, nIter);
+#else
+	    runCudaPart<false>(input, *result, N, nIter);
+#endif
 
 	free(result);
 
