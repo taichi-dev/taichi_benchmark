@@ -57,8 +57,9 @@ def benchmark():
     if not os.path.exists(incdir):
         raise ValueError("Include dir not found {}".format(incdir))
     print(incdir)
-    return {"cuda_baseline": compile_and_benchmark("benchmark.cu", "svd_cuda_baseline", flags=["-I"+incdir]),
-            "cuda_shared": compile_and_benchmark("benchmark.cu", "svd_cuda_shared", flags=["-I"+incdir, "-DUSE_SHARED"])}
+    return {"cuda_aos": compile_and_benchmark("benchmark.cu", "svd3_aos", flags=["-I"+incdir, "-DUSE_AOS"]),
+            "cuda_soa": compile_and_benchmark("benchmark.cu", "svd3_soa", flags=["-I"+incdir, "-DUSE_SOA"]),
+            "cuda_aos_shared": compile_and_benchmark("benchmark.cu", "svd3_aos_shared", flags=["-I"+incdir, "-DUSE_AOS_SHARED"])}
 
 if __name__ == '__main__':
     print(benchmark())
