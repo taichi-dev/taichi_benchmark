@@ -27,14 +27,14 @@ def extract_particles(results):
 
 def plot_line(cuda_results, taichi_results):
     plt.figure()
-    x = extract_particles(cuda_results["cuda_baseline"])
-    plt.plot(x, extract_perf(cuda_results["cuda_baseline"]), marker='s')
-    plt.plot(x, extract_perf(taichi_results["taichi_baseline"]), marker='o')
+    x = extract_particles(taichi_results["taichi_baseline"])
+    plt.plot(x, extract_perf(taichi_results["taichi_baseline"]), marker='o', color='blue')
+    plt.plot(x, extract_perf(cuda_results["cuda_baseline"]), marker='s', color='green')
 
     plt.grid('minor')
     plt.xlabel("Samples per pixel")
     plt.ylabel("Frames per Second")
-    plt.legend(["CUDA", "Taichi"], loc='upper right')
+    plt.legend(["Taichi", "CUDA"], loc='upper right')
     plt.title("Global Illumination Renderer (SmallPT)")
     plt.savefig("fig/bench.png", dpi=150)
 
