@@ -5,6 +5,7 @@ from contextlib import contextmanager
 
 from subprocess import Popen, PIPE
 
+
 @contextmanager
 def pushd(path):
     prev = os.getcwd()
@@ -13,6 +14,7 @@ def pushd(path):
         yield
     finally:
         os.chdir(prev)
+
 
 def run_binary(binary_file, argv):
     p = Popen(['./' + binary_file] + argv, stdout=PIPE)
@@ -30,6 +32,7 @@ def run_binary(binary_file, argv):
             results.append(res_dict)
     return results
 
+
 def compile_smallpt(flags=[]):
     workdir = os.path.dirname(os.path.abspath(__file__))
     with pushd(workdir):
@@ -38,21 +41,24 @@ def compile_smallpt(flags=[]):
         output, err = p.communicate()
         rc = p.returncode
         if rc != 0:
-            raise Exception("Cannot generate cmake{}".format(output_binary_name))
+            raise Exception(
+                "Cannot generate cmake{}".format(output_binary_name))
 
-        p = Popen(['cmake', '--build', 'build', '--target', 'SMALLPT'] + flags, stdout=PIPE)
+        p = Popen(['cmake', '--build', 'build', '--target', 'SMALLPT'] + flags,
+                  stdout=PIPE)
         output, err = p.communicate()
         rc = p.returncode
         if rc != 0:
             raise Exception("Cannot compile {}".format(output_binary_name))
         print("Successfully compiled SMALLPT")
 
+
 def run_benchmark(output_binary_name, flags=[]):
     workdir = os.path.dirname(os.path.abspath(__file__))
     with pushd(workdir):
         # Run Benchmark
         results = []
-        spps_gpu = np.arange(32, 256+32, 32).tolist()
+        spps_gpu = np.arange(32, 256 + 32, 32).tolist()
         for spp in spps_gpu:
             print("running", output_binary_name, "spp", spp)
             argv = ["{}".format(spp)]
@@ -60,10 +66,11 @@ def run_benchmark(output_binary_name, flags=[]):
         print("{} test finished.".format(output_binary_name))
         return results
 
+
 def benchmark():
     compile_smallpt()
     return {"cuda_baseline": run_benchmark('build/SMALLPT')}
 
+
 if __name__ == '__main__':
     print(benchmark())
-
