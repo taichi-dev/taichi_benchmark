@@ -2,7 +2,7 @@ import taichi as ti
 import numpy as np
 import argparse
 from time import perf_counter
-from ray_tracing_models import Ray, Camera, Hittable_list, Sphere, PI, random_in_unit_sphere, refract, reflect, reflectance, random_unit_vector
+from .ray_tracing_models import Ray, Camera, Hittable_list, Sphere, PI, random_in_unit_sphere, refract, reflect, reflectance, random_unit_vector
 
 # Rendering parameters
 # max_depth = 10, sample_on_unit_sphere_surface = True
@@ -130,12 +130,12 @@ def run_smallpt(samples_per_pixel = 128, nIters = 20):
         ti.sync()
         t1_stop = perf_counter()
 
-        #time_in_s = (t1_stop-t1_start)/nIters
-        #fps = 1.0 / time_in_s
-        #return {'spp': samples_per_pixel, 'fps': round(fps)}
+        time_in_s = (t1_stop-t1_start)/nIters
+        fps = 1.0 / time_in_s
+        return {'spp': samples_per_pixel, 'fps': round(fps)}
 
-        time_in_ms = (t1_stop-t1_start)*1000/nIters
-        return {'spp': samples_per_pixel, 'time_ms': time_in_ms}
+        #time_in_ms = (t1_stop-t1_start)*1000/nIters
+        #return {'spp': samples_per_pixel, 'time_ms': time_in_ms}
     return run()
 
 
@@ -143,10 +143,10 @@ if __name__ == '__main__':
     samples_per_pixel=256
     for _ in range(1):
         result = run_smallpt(samples_per_pixel)
-        spp = result['spp']
-        time_ms = result['time_ms']
-        print("{} spp run {:.3f} time_ms".format(spp, time_ms))
+        #spp = result['spp']
+        #time_ms = result['time_ms']
+        #print("{} spp run {:.3f} time_ms".format(spp, time_ms))
         
-        #fps = result['fps']
-        #print("{} spp run {:.3f} fps".format(spp, fps))
+        fps = result['fps']
+        print("{} spp run {:.3f} fps".format(spp, fps))
 

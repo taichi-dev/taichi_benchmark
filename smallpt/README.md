@@ -1,6 +1,6 @@
-# SmallPT Benchmark
+# Global Illumination Renderer (SmallPT) Benchmark
 
-## Background
+## Introduction
 SmallPT is a global illumination renderer uses path tracing. Inspired by 
 [Kevin Beason's smallpt: Global Illumination in 99 lines of
 C++](https://www.kevinbeason.com/smallpt/).
@@ -10,8 +10,9 @@ The measured CUDA implementation is based on an open-source implementation named
 The Taichi version is from one of our Taichi developers' implementation
 [path tracing](https://github.com/erizmr/taichi_ray_tracing/blob/master/4_0_path_tracing.py).
 The two implementations are functional equivalent.
+
 <p align="center">
-<img src="fig/cuda.png" width="560">
+<img src="fig/smallpt.png" width="600">
 </p>
 
 
@@ -27,10 +28,10 @@ We conduct performance evaluation on the following device.
 The experiments are executed with the following parameters: Image size 1024 by
 768, sample on unit sphere surface, max depth (bounce) is 10.
 The performance is measured in frames per second (fps), with different
-samples per pixel.
+samples per pixel configured.
 
 <p align="center">
-<img src="fig/bench.png" width="560">
+<img src="fig/bench.png" width="600">
 </p>
 
 ## Reproduction Steps

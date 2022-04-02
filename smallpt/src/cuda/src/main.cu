@@ -307,11 +307,9 @@ int main(int argc, char *argv[])
 
     cudaEventElapsedTime(&milliseconds, start, stop);
 
-    //float fps = 1.0f / (milliseconds / 1000.0f);
-    //printf("{\"spp\":%d, \"fps\": %d}\n", spp_in, static_cast<int>(fps));
-    printf("{\"spp\":%d, \"time_ms\": %f}\n", spp_in, milliseconds);
+    float fps = 1.0f / (milliseconds / 1000.0f);
+    printf("{\"spp\":%d, \"fps\": %d}\n", spp_in, static_cast<int>(fps));
     //save("test.png", width, height, outputCPU);
 
-    //getchar();
     return 0;
 }

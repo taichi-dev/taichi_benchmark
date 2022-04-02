@@ -1,5 +1,5 @@
 import numpy as np
-from path_tracing import run_smallpt as run_pt
+from .path_tracing import run_smallpt as run_pt
 
 def benchmark():
     spps_gpu = np.arange(32, 256+32, 32).tolist()
