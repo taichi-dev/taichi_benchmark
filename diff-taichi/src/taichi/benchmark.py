@@ -1,6 +1,6 @@
 import numpy as np
-from smoke_taichi_cpu import run_smoke as run_smoke_cpu
-from smoke_taichi_gpu import run_smoke as run_smoke_gpu
+from .smoke_taichi_cpu import run_smoke as run_smoke_cpu
+from .smoke_taichi_gpu import run_smoke as run_smoke_gpu
 
 
 def benchmark():

@@ -3,6 +3,7 @@ import time
 import numpy as np
 import cv2
 import os
+import sys
 from imageio import imread, imwrite
 
 
@@ -159,8 +160,13 @@ def run_smoke(steps=25):
         compute_loss()
 
     def main_step():
-        initial_smoke_img = imread("init_smoke.png")[:, :, 0] / 255.0
-        target_img = imread("peace.png")[::2, ::2, 3] / 255.0
+        # Path appending for test only
+        img_path_p = ""
+        if not os.path.exists("init_smoke.png"):
+            img_path_p = "src/taichi/"
+
+        initial_smoke_img = imread(img_path_p + "init_smoke.png")[:, :, 0] / 255.0
+        target_img = imread(img_path_p + "peace.png")[::2, ::2, 3] / 255.0
 
         for i in range(n_grid):
             for j in range(n_grid):

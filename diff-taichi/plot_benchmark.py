@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
+from src.taichi.benchmark import benchmark as benchmark_taichi
+from src.jax.benchmark import benchmark as benchmark_jax
+
 jax_cpu_results = {
     'jax_cpu': [{
         'steps': 25,
@@ -112,6 +115,9 @@ taichi_results = {
 }
 
 
+def run_benchmarks():
+    return benchmark_taichi(), benchmark_jax()
+
 def extract_perf(results):
     perf = []
     for record in results:
@@ -126,10 +132,8 @@ def extract_particles(results):
     return particles
 
 
-def plot_bar(jax_results, taichi_results):
+def plot_bar(jax_results, taichi_results, plot_series):
     fig, ax = plt.subplots(figsize=(6, 4))
-
-    plot_series = "cpu"
 
     x_jax = extract_particles(jax_results["jax_" + plot_series])
     y_jax = extract_perf(jax_results["jax_" + plot_series])
@@ -166,6 +170,15 @@ if __name__ == '__main__':
     except FileExistsError:
         pass
 
-    jax_results = {**jax_cpu_results, **jax_gpu_results}
-    taichi_results = taichi_results
-    plot_bar(jax_results, taichi_results)
+    plot_series = "cpu" # choose to plot cpu or gpu
+    if len(sys.argv) >= 2 and sys.argv[1] == "sample":
+        taichi_results = taichi_results
+        jax_results = {**jax_cpu_results, **jax_gpu_results}
+    else:
+        if plot_series == "cpu":
+            taichi_results, jax_cpu_results = run_benchmarks()
+        else:
+            taichi_results, jax_gpu_results = run_benchmarks()
+
+        jax_results = {**jax_cpu_results, **jax_gpu_results}
+    plot_bar(jax_results, taichi_results, plot_series)
