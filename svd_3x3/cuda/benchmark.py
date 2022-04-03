@@ -59,7 +59,8 @@ def benchmark():
     print(incdir)
     return {"cuda_aos": compile_and_benchmark("benchmark.cu", "svd3_aos", flags=["-I"+incdir, "-DUSE_AOS"]),
             "cuda_soa": compile_and_benchmark("benchmark.cu", "svd3_soa", flags=["-I"+incdir, "-DUSE_SOA"]),
-            "cuda_aos_shared": compile_and_benchmark("benchmark.cu", "svd3_aos_shared", flags=["-I"+incdir, "-DUSE_AOS_SHARED"])}
+            #"cuda_aos_shared": compile_and_benchmark("benchmark.cu", "svd3_aos_shared", flags=["-I"+incdir, "-DUSE_AOS_SHARED"])
+            }
 
 if __name__ == '__main__':
     print(benchmark())
