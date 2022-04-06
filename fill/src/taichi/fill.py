@@ -8,9 +8,6 @@ def fill(N, nIter=500, printResults=False):
 
     a = ti.ndarray(ti.f32, N)
 
-    if N <= 1024 * 1024 * 4:
-        nIter *= 100
-
     a.fill(0.5)
     st = perf_counter()
     for _ in range(nIter):

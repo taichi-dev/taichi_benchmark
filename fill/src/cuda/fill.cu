@@ -44,9 +44,6 @@ int main(int argc, char** argv)
 
   // measure
   int num_runs = 500;
-  if (numElements <= 1024 * 1024 * 4) {
-      num_runs *= 100;
-  }
   cudaEventRecord(start);
   for (int i=0; i<num_runs; i++) {
 #ifdef USE_MEMSET
