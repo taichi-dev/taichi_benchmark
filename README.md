@@ -23,20 +23,27 @@ Compared with baselines, we hightlight inspiring performance achieved by Taichi 
 </p>
 
 * State-of-the-art performance, flexible coding style against CUDA in the [3x3 SVD benchmark](./svd3).
+
 <p align="center">
 <img src="svd3/fig/bench_svd.png" width="400">
 </p>
 
 * Performance approaches device capability roofline, in terms of both computation and memory bandwidth in the [Nested SAXPY Benchmark](./saxpy).
+
 <p align="center">
 <img src="saxpy/fig/roofline_log_scale.png" width="400">
 </p>
 
-Meanwhile, we have also noticed significant performance gap against manually optimized CUDA code in the [N-body benchmark](./n-body). 
+# Gaps
+
+We have also noticed significant performance gap against manually optimized CUDA code in the [N-body benchmark](./n-body). 
+
 <p align="center">
 <img src="n-body/fig/bench_roofline.png" width="400">
 </p>
-It also occurs while comparing different backends in the [2D stencil benchmark](./stencil2d).
+
+We have also witnessed wired performance while comparing different backends in the [2D stencil benchmark](./stencil2d).
+
 <p align="center">
 <img src="stencil2d/fig/bench.png" width="300">
 <img src="stencil2d/fig/bench_cuda_backend.png" width="300">
@@ -45,6 +52,6 @@ It also occurs while comparing different backends in the [2D stencil benchmark](
 <em>Taichi Performance gap with different backends. Left: Vulkan. Right: CUDA.</em>
 </p>
 
-We are now working on the compiler to shrink the gap.
+We are now working on the compiler to shrink the gap. Welcome contribution to the Taichi compiler!
 
 ## Contribution Guideline
