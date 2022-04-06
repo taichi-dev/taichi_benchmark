@@ -21,7 +21,7 @@ Performance is measured as the kernel compute time measured with the `cudaEvent`
 <img src="fig/bench_svd.png" width="600">
 </p>
 
-The figure reveals that Taichi slightly outperform the CUDA implementation in the AOS layout. The performance in SOA layout is neck-to-neck. We notice that the overall performance is generally bound by memory access efficiency, which also indicates high efficiency of the compute kernels.
+The figure reveals that Taichi slightly outperform the CUDA implementation in the AOS layout. The performance in SOA layout is neck-to-neck. We have also noticed that the overall performance is generally bound by memory access efficiency. The results indicate that the compute kernels implemented with Taichi and CUDA are both highly efficient.
 
 ## Reproduction Steps
 
