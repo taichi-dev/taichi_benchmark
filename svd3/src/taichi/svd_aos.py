@@ -1,11 +1,10 @@
 import taichi as ti
 from time import perf_counter
 
-ti.init(arch=ti.cuda,
+def SVD(N, nIter=1):
+    ti.init(arch=ti.cuda,
         device_memory_fraction=0.9,
         kernel_profiler=True)
-
-def SVD(N, nIter=1):
     mat = ti.Matrix.field(3, 3, ti.f32, shape=(N,))
     res = ti.Matrix.field(7, 3, ti.f32, shape=(N,))
 

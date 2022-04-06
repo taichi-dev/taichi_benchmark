@@ -137,6 +137,8 @@ void runCudaPart(float* input, float& output, int N, int nIter)
 	cudaEvent_t start, stop;
 	float elapsedTime;
 
+    svd3 <<<pblks, threads >>>(d_input, d_answer, N);
+
 	cudaEventCreate(&start);
 	cudaEventRecord(start, 0);
 

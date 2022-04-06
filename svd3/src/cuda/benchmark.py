@@ -44,7 +44,7 @@ def compile_and_benchmark(source_name, output_binary_name, flags=[]):
         results = []
         N = 8192
         nIter = 10
-        for k in range(10):
+        for k in range(8):
             argv = ["{} {}".format(N, nIter)]
             results += run_binary(output_binary_name, argv)
             N *= 2
@@ -56,7 +56,6 @@ def benchmark():
     incdir = os.path.join(workdir, "svd3x3/")
     if not os.path.exists(incdir):
         raise ValueError("Include dir not found {}".format(incdir))
-    print(incdir)
     return {"cuda_svd_aos": compile_and_benchmark("svd3.cu", "svd3_aos", flags=["-I"+incdir, "-DUSE_AOS"]),
             "cuda_svd_soa": compile_and_benchmark("svd3.cu", "svd3_soa", flags=["-I"+incdir, "-DUSE_SOA"]),
             #"cuda_aos_shared": compile_and_benchmark("benchmark.cu", "svd3_aos_shared", flags=["-I"+incdir, "-DUSE_AOS_SHARED"])
