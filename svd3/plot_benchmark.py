@@ -49,7 +49,7 @@ def create_bar_plot(results):
     ax.set_xlabel("#Tiles (3x3 matrices)", fontsize=label_font_size)
     ax.set_title("3x3 SVD Benchmark", fontsize=title_font_size)
     ax.grid("minor", axis="y")
-    plt.savefig("fig/svd_benchmark.png", dpi=150)
+    plt.savefig("fig/bench_svd.png", dpi=150)
 
 
 
