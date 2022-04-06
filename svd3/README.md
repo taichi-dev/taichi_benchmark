@@ -23,11 +23,6 @@ Performance is measured as the kernel compute time measured with the `cudaEvent`
 
 The figure reveals that Taichi slightly outperform the CUDA implementation in the AOS layout. The performance in SOA layout is neck-to-neck. We notice that the overall performance is generally bound by memory access efficiency, which also indicates high efficiency of the compute kernels.
 
-## Reference
-
-[1] Gao, M., Wang, X., Wu, K., Pradhana, A., Sifakis, E., Yuksel, C., & Jiang, C. (2018). GPU optimization of material point methods. ACM Transactions on Graphics (TOG), 37(6), 1-12.
-
-
 ## Reproduction Steps
 
 * Pre-requisites
@@ -41,3 +36,7 @@ If you want to compare with CUDA, make sure you have `nvcc` properly installed.
 ```shell
 python3 plot_benchmark.py
 ```
+
+## Reference
+
+[1] Gao, M., Wang, X., Wu, K., Pradhana, A., Sifakis, E., Yuksel, C., & Jiang, C. (2018). GPU optimization of material point methods. ACM Transactions on Graphics (TOG), 37(6), 1-12.
