@@ -34,22 +34,25 @@ int main(int argc, char** argv)
   int threadsPerBlock = 128;
   int blocksPerGrid = std::ceil(double(numElements)/double(threadsPerBlock));
 
+  float v = 0.5;
 #ifdef USE_MEMSET
   // dry run
-  float v = 0.5;
   cuMemsetD32(d_buf, reinterpret_cast<uint32_t &>(v), numElements);
 #else
-  FillByKernel<<<blocksPerGrid, threadsPerBlock>>>(d_buf, 0.5, numElements);
+  FillByKernel<<<blocksPerGrid, threadsPerBlock>>>(d_buf, v, numElements);
 #endif
 
   // measure
   int num_runs = 500;
+  if (numElements <= 1024 * 1024 * 4) {
+      num_runs *= 100;
+  }
   cudaEventRecord(start);
   for (int i=0; i<num_runs; i++) {
 #ifdef USE_MEMSET
     cuMemsetD32(d_buf, reinterpret_cast<uint32_t &>(v), numElements);
 #else
-    FillByKernel<<<blocksPerGrid, threadsPerBlock>>>(d_buf, 0.5, numElements);
+    FillByKernel<<<blocksPerGrid, threadsPerBlock>>>(d_buf, v, numElements);
 #endif
   }
   cudaEventRecord(stop);
@@ -60,7 +63,7 @@ int main(int argc, char** argv)
 
 #ifdef JSON_OUTPUT
   double GBs = 1e-6 * numElements * sizeof(float) / milliseconds * num_runs;
-  printf("{\"N\":%d,\"time\":%.3lf,\"gbs\":%.3lf}\n", numElements, milliseconds/num_runs, GBs);
+  printf("{\"N\":%d,\"time\":%.3lf,\"bandwidth\":%.3lf}\n", numElements, milliseconds/num_runs, GBs);
 #else
   printf("fill %i elements takes %f ms\n", numElements, milliseconds/num_runs);
 #endif
@@ -70,6 +73,6 @@ int main(int argc, char** argv)
 #else
   cudaFree(d_buf);
 #endif
-  delete[] h_out;
+  delete [] h_out;
   return 0;
 }

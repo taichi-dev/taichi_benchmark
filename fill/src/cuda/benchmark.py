@@ -42,11 +42,11 @@ def compile_and_benchmark(source_name, output_binary_name, flags=[]):
 
         # Run Benchmark
         results = []
-        N = 1024
-        for k in range(10):
+        N = 1024 * 1024 * 2
+        for k in range(8):
             argv = ["{}".format(N)]
             results += run_binary(output_binary_name, argv)
-            N *= 4
+            N *= 2
         print("{} test finished.".format(output_binary_name))
         return results
 
