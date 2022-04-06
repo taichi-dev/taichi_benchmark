@@ -8,8 +8,17 @@ Therefore, we kick off the Taichi benchmark project to answer two questions rega
 
 <!-- Items -->
 ## Benchmark Items
-<!-- Highlights -->
-## Highlights
 
-<!-- ## Future Plan -->
-<!-- What's next -->
+## Highlights
+* Same code complexity, doubled performance.
+<p align="center">
+<img src="n-body/fig/roofline_log_scale.png" width="600">
+</p>
+
+* State-of-the-art performance, reduced code complexity.
+
+* Performance approaches device roofline.
+<p align="center">
+<img src="saxpy/fig/roofline_log_scale.png" width="600">
+</p>
+* 
