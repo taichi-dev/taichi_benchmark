@@ -53,7 +53,7 @@ def create_bar_plot(results):
     ax.axhline(y = 760, color='grey', linestyle = 'dashed')
     ax.text(ax.get_xlim()[1] * 0.6, 770, 'DRAM Bandwidth=760GB/s')
     ax.grid("minor", axis="y")
-    plt.savefig("fig/bench_svd.png", dpi=150)
+    plt.savefig("fig/bench_fill.png", dpi=150)
 
 
 
