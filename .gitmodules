@@ -7,6 +7,3 @@
 [submodule "p2g/src/cuda/src/eigen"]
 	path = p2g/src/cuda/src/eigen
 	url = https://gitlab.com/libeigen/eigen.git
-[submodule "small_svd/cuda/3x3_SVD_CUDA"]
-	path = small_svd/cuda/3x3_SVD_CUDA
-	url = https://github.com/kuiwuchn/3x3_SVD_CUDA.git
