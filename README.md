@@ -10,15 +10,24 @@ Therefore, we kick off the Taichi benchmark project to answer two questions rega
 ## Benchmark Items
 
 ## Highlights
-* Same code complexity, doubled performance.
+Compared with baselines, we hightlight inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
+* Minimized coding efforts, doubled performance against CUDA in [MPM Benchmark](./mpm).
 <p align="center">
-<img src="n-body/fig/roofline_log_scale.png" width="600">
+<img src="mpm/fig/bench_2d.png" width="400">
 </p>
 
-* State-of-the-art performance, reduced code complexity.
-
-* Performance approaches device roofline.
+* Comparable coding efforts, doubled performance against JAX in [Differentiable Smoke Benchmark](./diff-taichi).
 <p align="center">
-<img src="saxpy/fig/roofline_log_scale.png" width="600">
+<img src="diff-taichi/fig/bench_gpu.png" width="400">
 </p>
-* 
+
+* State-of-the-art performance, flexible coding style against CUDA in [3x3 SVD Benchmark](./svd3).
+<p align="center">
+<img src="svd3/fig/bench_svd.png" width="400">
+</p>
+
+* Performance approaches device capability roofline, in terms of both computation and memory bandwidth in [Nested SAXPY Benchmark](saxpy).
+<p align="center">
+<img src="saxpy/fig/roofline_log_scale.png" width="400">
+</p>
+
