@@ -158,7 +158,8 @@ def run_smoke(steps=25):
         if not os.path.exists("init_smoke.png"):
             img_path_p = "src/taichi/"
 
-        initial_smoke_img = cv2.imread(img_path_p + "init_smoke.png")[:, :, 0] / 255.0
+        initial_smoke_img = cv2.imread(img_path_p +
+                                       "init_smoke.png")[:, :, 0] / 255.0
         target_img = cv2.resize(cv2.imread(img_path_p + 'taichi.png'),
                                 (n_grid, n_grid))[:, :, 0] / 255.0
 

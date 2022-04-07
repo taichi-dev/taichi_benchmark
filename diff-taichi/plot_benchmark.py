@@ -118,6 +118,7 @@ taichi_results = {
 def run_benchmarks():
     return benchmark_taichi(), benchmark_jax()
 
+
 def extract_perf(results):
     perf = []
     for record in results:
@@ -170,7 +171,7 @@ if __name__ == '__main__':
     except FileExistsError:
         pass
 
-    plot_series = "gpu" # choose to plot cpu or gpu
+    plot_series = "gpu"  # choose to plot cpu or gpu
     if len(sys.argv) >= 2 and sys.argv[1] == "sample":
         taichi_results = taichi_results
         jax_results = {**jax_cpu_results, **jax_gpu_results}

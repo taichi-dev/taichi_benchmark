@@ -165,7 +165,8 @@ def run_smoke(steps=25):
         if not os.path.exists("init_smoke.png"):
             img_path_p = "src/taichi/"
 
-        initial_smoke_img = imread(img_path_p + "init_smoke.png")[:, :, 0] / 255.0
+        initial_smoke_img = imread(img_path_p + "init_smoke.png")[:, :,
+                                                                  0] / 255.0
         target_img = imread(img_path_p + "peace.png")[::2, ::2, 3] / 255.0
 
         for i in range(n_grid):
