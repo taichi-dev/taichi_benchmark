@@ -10,10 +10,13 @@ The measurement is based on open-souce implementations. You can find the
 here](https://github.com/taichi-dev/taichi/blob/master/python/taichi/examples/simulation/mpm3d.py)
 and the [CUDA implementation here](https://github.com/Aisk1436/mpm3d).
 
-For example, the <em>Particle to Grid</em> 
-function is realized by an outermost for-loop within a Taichi kernel.
-Instead of explicitly mapping the problem size to each GPU thread as in CUDA, 
-Taichi automatically parallelizes the outermost for-loop. Consequently, the code
+The MPM application consists of four kernels: Reset, Particle to Grid (P2G),
+Update Grid, and Grid to Particle (G2P). In CUDA implementation, each of these
+is mapped to a CUDA kernel. In Taichi implementation, each of these kernel is 
+mapped to an outermost for-loop within a Taichi kernel (the Mega-Kernel).
+Instead of explicitly mapping the problem size to each GPU thread as in CUDA
+code, 
+Taichi automatically parallelizes the outermost for-loops. Consequently, the code
 is more concise and easier to read.
 
 ## Evaluation
