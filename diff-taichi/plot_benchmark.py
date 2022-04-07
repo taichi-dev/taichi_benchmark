@@ -145,10 +145,10 @@ def plot_bar(jax_results, taichi_results, plot_series):
 
     # series
     bar_pos = [i * 3 for i in range(len(x_jax))]
-    ax.bar(bar_pos, y_taichi, color='blue')
+    ax.bar(bar_pos, y_taichi)
 
     bar_pos = [i * 3 + 1 for i in range(len(x_taichi))]
-    ax.bar(bar_pos, y_jax, color='orange')
+    ax.bar(bar_pos, y_jax)
 
     bar_pos_ticks = [i * 3 + 0.5 for i in range(len(x_taichi))]
     ax.set_xticks(bar_pos_ticks, labels)
@@ -171,7 +171,7 @@ if __name__ == '__main__':
     except FileExistsError:
         pass
 
-    plot_series = "gpu"  # choose to plot cpu or gpu
+    plot_series = "cpu"  # choose to plot cpu or gpu
     if len(sys.argv) >= 2 and sys.argv[1] == "sample":
         taichi_results = taichi_results
         jax_results = {**jax_cpu_results, **jax_gpu_results}
