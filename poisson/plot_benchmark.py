@@ -34,13 +34,13 @@ def plot_bar(numpy_results, numba_results, taichi_results):
 
     # series
     bar_pos = [i * 4 for i in range(len(x_taichi))]
-    ax.bar(bar_pos, y_taichi, color='blue')
+    ax.bar(bar_pos, y_taichi)
 
     bar_pos = [i * 4 + 1 for i in range(len(x_numba))]
-    ax.bar(bar_pos, y_numba, color='orange')
+    ax.bar(bar_pos, y_numba)
 
     bar_pos = [i * 4 + 2 for i in range(len(x_numpy))]
-    ax.bar(bar_pos, y_numpy, color='gray')
+    ax.bar(bar_pos, y_numpy)
 
     bar_pos_ticks = [i * 4 + 1 for i in range(len(x_taichi))]
     ax.set_xticks(bar_pos_ticks, labels)
