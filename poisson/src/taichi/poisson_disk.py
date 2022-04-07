@@ -87,7 +87,7 @@ def run_poisson(desired_samples = 100000):
     def run():
         import time
         sample()  # Warm up
-        repeats = 5
+        repeats = 15
 
         t = time.perf_counter()
         for i in range(repeats):
@@ -98,6 +98,6 @@ def run_poisson(desired_samples = 100000):
     return run()
 
 if __name__ == '__main__':
-    desired_samples = 1000
+    desired_samples = 100000
     print(run_poisson(desired_samples))
 

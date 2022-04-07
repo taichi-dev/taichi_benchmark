@@ -5,7 +5,7 @@ In this benchmark, we compare three Poisson Disk Sampling implementations among
 Taichi, Numpy, and Numba.
 The algorithm is suitable for single-threaded performance comparisons.
 
-<img src="demo/demo.gif" height="270px">
+<img src="demo/demo.gif" height="370px" />
 
 ## Evaluation
 We conduct performance evaluation on the following device.
@@ -18,23 +18,22 @@ We conduct performance evaluation on the following device.
 
 Performance is measured in milliseconds (ms), we run over different
 number of samples.
-
-<p align="center">
-<img src="fig/bench.png" width="600">
-</p>
-
 The reported times are measured using a 400 x 400 grid. 
 The employed Taichi version 
 is [0.9.2](https://github.com/taichi-dev/taichi/releases/tag/v0.9.2), 
 the Numpy version is 1.21.5, the Numba version is 1.55.1, and the 
 python version is 3.9.
 
+<p align="center">
+<img src="fig/bench.png" width="600">
+</p>
+
 ## Reproduction Steps
 
 * Pre-requisites
 ```shell
 python3 -m pip install numpy numba
-python3 -m pip install taichi==0.9.2 
+python3 -m pip install taichi
 python3 -m pip install matplotlib
 ```
 * Run the benchmark and draw the plots
