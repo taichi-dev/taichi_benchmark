@@ -139,10 +139,10 @@ def plot_bar(cuda_results, taichi_results, plot_series="3d"):
     y_taichi = extract_perf(taichi_results["taichi_" + plot_series])
 
     bar_pos = [i * 3 for i in range(len(x_taichi))]
-    ax.bar(bar_pos, y_taichi, color='blue')
+    ax.bar(bar_pos, y_taichi)
 
     bar_pos = [i * 3 + 1 for i in range(len(x_cuda))]
-    ax.bar(bar_pos, y_cuda, color='green')
+    ax.bar(bar_pos, y_cuda)
 
     bar_pos_ticks = [i * 3 + 0.5 for i in range(len(x_cuda))]
     labels = ["{}".format(i) for i in x_cuda]
@@ -170,4 +170,4 @@ if __name__ == '__main__':
         taichi_results = taichi_sample_results
     else:
         taichi_results, cuda_results = run_benchmarks()
-    plot_bar(cuda_results, taichi_results, "2d")
+    plot_bar(cuda_results, taichi_results, "3d")
