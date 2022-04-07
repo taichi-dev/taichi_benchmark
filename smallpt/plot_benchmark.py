@@ -28,8 +28,8 @@ def extract_particles(results):
 def plot_line(cuda_results, taichi_results):
     plt.figure()
     x = extract_particles(taichi_results["taichi_baseline"])
-    plt.plot(x, extract_perf(taichi_results["taichi_baseline"]), marker='o', color='blue')
-    plt.plot(x, extract_perf(cuda_results["cuda_baseline"]), marker='s', color='green')
+    plt.plot(x, extract_perf(taichi_results["taichi_baseline"]), marker='o')
+    plt.plot(x, extract_perf(cuda_results["cuda_baseline"]), marker='s')
 
     plt.grid('minor')
     plt.xlabel("Samples per pixel")
