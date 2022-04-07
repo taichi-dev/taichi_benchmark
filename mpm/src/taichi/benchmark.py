@@ -1,6 +1,6 @@
 import numpy as np
-from mpm2d import run_mpm as run_mpm_2d
-from mpm3d import run_mpm as run_mpm_3d
+from .mpm2d import run_mpm as run_mpm_2d
+from .mpm3d import run_mpm as run_mpm_3d
 
 def benchmark(nIters = 2048):
     n_grids = np.arange(32, 256+32, 32).tolist()

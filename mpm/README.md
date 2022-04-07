@@ -4,14 +4,11 @@
 Material Point Method (MPM) is widely used in physical simulations. The required 
 computations for high-quality scenarios are intensive, and the achievable performance
 is critical for real-time applications.
-In this benchmark, we compare a simple implementation of the MPM method in Taichi
-to its ported version in CUDA.
-
-## Implementation
-The measured CUDA implementation is based on a 
-[MPM3D open-source implementation](https://github.com/Aisk1436/mpm3d) 
-(also for 2D computations) that was originally written in 
-[Taichi](https://github.com/taichi-dev/taichi/blob/master/python/taichi/examples/simulation/mpm3d.py). 
+In this benchmark, we compare a Taichi implementation to its ported version in CUDA.
+The measurement is based on open-souce implementations. You can find the 
+[Taichi implementation
+here](https://github.com/taichi-dev/taichi/blob/master/python/taichi/examples/simulation/mpm3d.py)
+and the [CUDA implementation here](https://github.com/Aisk1436/mpm3d).
 
 For example, the <em>Particle to Grid</em> 
 function is realized by an outermost for-loop within a Taichi kernel.
@@ -26,7 +23,7 @@ We conduct performance evaluation on the following device.
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
-|L2 cache capacity| 4MB|
+|L2 cache capacity| 5MB|
 
 Performance is measured in milliseconds per frame (ms), we run over different
 number of particles, for 2- and 3-dimensions, respectively.
