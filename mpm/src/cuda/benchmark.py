@@ -5,6 +5,7 @@ from contextlib import contextmanager
 
 from subprocess import Popen, PIPE
 
+
 @contextmanager
 def pushd(path):
     prev = os.getcwd()
@@ -13,6 +14,7 @@ def pushd(path):
         yield
     finally:
         os.chdir(prev)
+
 
 def run_binary(binary_file, argv):
     p = Popen(['./' + binary_file] + argv, stdout=PIPE)
@@ -30,6 +32,7 @@ def run_binary(binary_file, argv):
             results.append(res_dict)
     return results
 
+
 def compile_mpm(flags=[]):
     workdir = os.path.dirname(os.path.abspath(__file__))
     with pushd(workdir):
@@ -38,21 +41,25 @@ def compile_mpm(flags=[]):
         output, err = p.communicate()
         rc = p.returncode
         if rc != 0:
-            raise Exception("Cannot generate cmake{}".format(output_binary_name))
+            raise Exception(
+                "Cannot generate cmake{}".format(output_binary_name))
 
-        p = Popen(['cmake', '--build', 'build', '--target', 'MPM2D', 'MPM3D'] + flags, stdout=PIPE)
+        p = Popen(['cmake', '--build', 'build', '--target', 'MPM2D', 'MPM3D'] +
+                  flags,
+                  stdout=PIPE)
         output, err = p.communicate()
         rc = p.returncode
         if rc != 0:
             raise Exception("Cannot compile {}".format(output_binary_name))
         print("Successfully compiled MPM2D and MPM3D")
 
+
 def run_benchmark(output_binary_name, flags=[]):
     workdir = os.path.dirname(os.path.abspath(__file__))
     with pushd(workdir):
         # Run Benchmark
         results = []
-        n_grids = np.arange(32, 256+32, 32).tolist()
+        n_grids = np.arange(32, 256 + 32, 32).tolist()
         for n_grid in n_grids:
             print("running", output_binary_name, "n_grid", n_grid)
             argv = ["{}".format(n_grid)]
@@ -60,10 +67,14 @@ def run_benchmark(output_binary_name, flags=[]):
         print("{} test finished.".format(output_binary_name))
         return results
 
+
 def benchmark():
     compile_mpm()
-    return {"cuda_2d": run_benchmark('build/MPM2D'), "cuda_3d": run_benchmark('build/MPM3D')}
+    return {
+        "cuda_2d": run_benchmark('build/MPM2D'),
+        "cuda_3d": run_benchmark('build/MPM3D')
+    }
+
 
 if __name__ == '__main__':
     print(benchmark())
-

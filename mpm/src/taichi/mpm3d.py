@@ -5,6 +5,7 @@ from time import perf_counter
 # Benchmark MPM 3D
 # dim, steps, dt = 3, 25, 8e-5
 
+
 def run_mpm(n_grid=32, nIters=2048):
     ti.init(arch=ti.gpu, device_memory_GB=4)
 
@@ -30,7 +31,6 @@ def run_mpm(n_grid=32, nIters=2048):
 
     neighbour = (3, ) * dim
 
-
     @ti.kernel
     def substep():
         for I in ti.grouped(grid_m):
@@ -49,7 +49,8 @@ def run_mpm(n_grid=32, nIters=2048):
                 weight = 1.0
                 for i in ti.static(range(dim)):
                     weight *= w[offset[i]][i]
-                grid_v[base + offset] += weight * (p_mass * v[p] + affine @ dpos)
+                grid_v[base +
+                       offset] += weight * (p_mass * v[p] + affine @ dpos)
                 grid_m[base + offset] += weight * p_mass
         for I in ti.grouped(grid_m):
             if grid_m[I] > 0:
@@ -79,13 +80,11 @@ def run_mpm(n_grid=32, nIters=2048):
             J[p] *= 1 + dt * new_C.trace()
             C[p] = new_C
 
-
     @ti.kernel
     def init():
         for i in range(n_particles):
             x[i] = ti.Vector([ti.random() for i in range(dim)]) * 0.4 + 0.15
             J[i] = 1
-
 
     def T(a):
         if dim == 2:
@@ -107,7 +106,7 @@ def run_mpm(n_grid=32, nIters=2048):
         for s in range(steps):
             substep()
         pos = x.to_numpy()
-        # measure 
+        # measure
         t_start = perf_counter()
         for _ in range(nIters):
             for s in range(steps):
@@ -115,14 +114,18 @@ def run_mpm(n_grid=32, nIters=2048):
             pos = x.to_numpy()
             ti.sync()
         t_stop = perf_counter()
-        return {'n_particles': n_particles, 'time_ms': (t_stop - t_start)*1000/nIters}
+        return {
+            'n_particles': n_particles,
+            'time_ms': (t_stop - t_start) * 1000 / nIters
+        }
+
     return run()
 
+
 if __name__ == '__main__':
-    n_grid=32
+    n_grid = 32
     for _ in range(5):
         result = run_mpm(n_grid)
         n_particles = result['n_particles']
         time_ms = result['time_ms']
         print("{} particles run {:.3f} time_ms".format(n_particles, time_ms))
-

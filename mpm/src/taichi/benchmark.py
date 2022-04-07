@@ -2,8 +2,9 @@ import numpy as np
 from .mpm2d import run_mpm as run_mpm_2d
 from .mpm3d import run_mpm as run_mpm_3d
 
-def benchmark(nIters = 2048):
-    n_grids = np.arange(32, 256+32, 32).tolist()
+
+def benchmark(nIters=2048):
+    n_grids = np.arange(32, 256 + 32, 32).tolist()
     mpm_2d_results = []
     mpm_3d_results = []
     for n_grid in n_grids:
@@ -14,5 +15,7 @@ def benchmark(nIters = 2048):
         mpm_3d_results.append(run_mpm_3d(n_grid))
         print("Done.")
     return {"taichi_2d": mpm_2d_results, "taichi_3d": mpm_3d_results}
+
+
 if __name__ == "__main__":
     print(benchmark())
