@@ -5,8 +5,8 @@ Material Point Method (MPM) is widely used in physical simulations. The required
 computations for high-quality scenarios are intensive, and the achievable performance
 is critical for real-time applications.
 In this benchmark, we compare a Taichi implementation to its ported version in CUDA.
-The measurement is based on open-souce implementations. You can find the 
-[Taichi implementation
+The measurement is based on open-souce implementations. You can find the
+original [Taichi implementation
 here](https://github.com/taichi-dev/taichi/blob/master/python/taichi/examples/simulation/mpm3d.py)
 and the [CUDA implementation here](https://github.com/Aisk1436/mpm3d).
 
