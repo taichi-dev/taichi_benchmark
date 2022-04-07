@@ -1,5 +1,5 @@
 import numpy as np
-from smoke_jax import run_smoke as run_smoke_jax
+from .smoke_jax import run_smoke as run_smoke_jax
 
 
 def benchmark():
