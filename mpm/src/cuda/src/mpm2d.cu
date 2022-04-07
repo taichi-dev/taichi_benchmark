@@ -1,3 +1,7 @@
+//
+// Based on https://github.com/Aisk1436/mpm3d
+//
+
 #include <chrono>
 #include <iostream>
 #include <memory>
