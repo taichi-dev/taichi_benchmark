@@ -3,8 +3,6 @@
 ## Introduction
 In this benchmark, we compare a simple implementation of the P2G method in Taichi
 to its ported version in CUDA.
-
-## Implementation
 The measured CUDA implementation is based on the p2g kernel from a 
 [MPM3D open-source implementation](https://github.com/Aisk1436/mpm3d) 
  that was originally written in 
