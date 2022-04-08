@@ -7,6 +7,7 @@ The algorithm is suitable for single-threaded performance comparisons.
 <p align="center">
 <img src="fig/demo.gif" height="370px" />
 </p>
+
 ## Evaluation
 We conduct performance evaluation on the following device.
 
