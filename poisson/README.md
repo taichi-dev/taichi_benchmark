@@ -4,9 +4,9 @@
 In this benchmark, we compare three Poisson Disk Sampling implementations among
 Taichi, Numpy, and Numba.
 The algorithm is suitable for single-threaded performance comparisons.
-
-<img src="demo/demo.gif" height="370px" />
-
+<p align="center">
+<img src="fig/demo.gif" height="370px" />
+</p>
 ## Evaluation
 We conduct performance evaluation on the following device.
 
