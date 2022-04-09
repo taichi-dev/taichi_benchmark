@@ -6,7 +6,7 @@
 #include <iostream>
 #include <memory>
 
-#include "eigen/Eigen/Dense"
+#include <Eigen/Dense>
 #include "utils.h"
 
 using namespace utils;
@@ -268,7 +268,7 @@ int main(const int argc, const char **argv) {
   mpm->init();
   mpm->advance();
   auto x = mpm->to_numpy();
-  int num_frames{2048};
+  int num_frames{512};
 
   auto start_time = std::chrono::high_resolution_clock::now();
   for (auto runs = 0; runs < num_frames; runs++) {

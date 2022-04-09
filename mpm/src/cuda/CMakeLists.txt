@@ -20,6 +20,8 @@ endif()
 
 add_executable(MPM2D "src/mpm2d.cu")
 
+include_directories(${PROJECT_SOURCE_DIR}/../../../common/eigen/)
+
 set_target_properties(MPM2D PROPERTIES CUDA_ARCHITECTURES 86)
 
 target_compile_options(MPM2D PRIVATE --expt-relaxed-constexpr)
