@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
+from src.taichi.benchmark import benchmark as benchmark_taichi
+from src.cuda.benchmark import benchmark as benchmark_cuda
+
+
 cuda_sample_results = {
     'cuda_baseline': [{
         'n_particles': 512,
@@ -99,12 +103,17 @@ def plot_bar(cuda_results, taichi_results):
     plt.title("Particle to Grid 2D (P2G)")
     plt.savefig("fig/bench.png", dpi=150)
 
+def run_benchmarks():
+    return benchmark_taichi(), benchmark_cuda()
 
 if __name__ == '__main__':
     try:
         os.makedirs('fig')
     except FileExistsError:
         pass
-    cuda_results = cuda_sample_results
-    taichi_results = taichi_sample_results
+    if len(sys.argv) >= 2 and sys.argv[1] == "sample":
+        cuda_results = cuda_sample_results
+        taichi_results = taichi_sample_results
+    else:
+        taichi_results, cuda_results = run_benchmarks()
     plot_bar(cuda_results, taichi_results)

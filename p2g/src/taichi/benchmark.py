@@ -1,5 +1,5 @@
 import numpy as np
-from p2g import run_p2g
+from .p2g import run_p2g
 
 
 def benchmark(nIters=2048):
