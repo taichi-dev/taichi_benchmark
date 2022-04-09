@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.17)
 
 project(MPM LANGUAGES CUDA CXX)
+
+if(${CMAKE_CUDA_COMPILER_VERSION} VERSION_LESS "11.0")
+    message(FATAL_ERROR "Outdated nvcc version " ${CMAKE_CUDA_COMPILER_VERSION} " minimal is 11.0")
+endif()
 
 if(NOT DEFINED CMAKE_CUDA_STANDARD)
     set(CMAKE_CUDA_STANDARD 17)
