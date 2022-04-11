@@ -14,10 +14,10 @@ The Taichi programming language is known for attaining high performance with eas
 
 ## Highlights
 Compared with baselines, we hightlight inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
-* Minimized coding efforts, doubled performance against CUDA and JAX in the [MPM](./mpm) and [differentiable smoke simulation](./diff-taichi) benchmarks.
+* Minimized coding efforts, doubled performance against CUDA and JAX in the [MPM](./mpm) and [differentiable smoke simulation](./diff-smoke) benchmarks.
 <p align="center">
 <img src="mpm/fig/bench_2d.png" width="400">
-<img src="diff-taichi/fig/bench_gpu.png" width="400">
+<img src="diff-smoke/fig/bench_gpu.png" width="400">
 </p>
 
 
