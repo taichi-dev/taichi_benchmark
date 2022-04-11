@@ -2,11 +2,18 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
+from src.taichi.benchmark import benchmark as benchmark_taichi
+from src.numpy.benchmark import benchmark as benchmark_numpy
+from src.numba.benchmark import benchmark as benchmark_numba
+
 numba_sample_results = {'numba_gpu': [{'desired_samples': 1000, 'time_ms': 17.34950498212129}, {'desired_samples': 5000, 'time_ms': 107.88116841576993}, {'desired_samples': 10000, 'time_ms': 226.49038201197982}, {'desired_samples': 50000, 'time_ms': 1260.7922151917592}, {'desired_samples': 100000, 'time_ms': 1344.771138811484}]}
 
 numpy_sample_results = {'numpy_cpu': [{'desired_samples': 1000, 'time_ms': 991.2736028200015}, {'desired_samples': 5000, 'time_ms': 5998.027631384321}, {'desired_samples': 10000, 'time_ms': 12623.283750191331}, {'desired_samples': 50000, 'time_ms': 70075.99696719553}, {'desired_samples': 100000, 'time_ms': 74836.31602639798}]}
 
 taichi_sample_results = {'taichi_cpu': [{'desired_samples': 1000, 'time_ms': 14.330414799042046}, {'desired_samples': 5000, 'time_ms': 69.50833240989596}, {'desired_samples': 10000, 'time_ms': 138.9469366054982}, {'desired_samples': 50000, 'time_ms': 691.8933660024777}, {'desired_samples': 100000, 'time_ms': 755.0804344005883}]}
+
+def run_benchmarks():
+    return benchmark_numpy(), benchmark_numba(), benchmark_taichi()
 
 def extract_perf(results):
     perf = []
@@ -64,4 +71,8 @@ if __name__ == '__main__':
         os.makedirs('fig')
     except FileExistsError:
         pass
-    plot_bar(numpy_sample_results, numba_sample_results, taichi_sample_results)
+    if len(sys.argv) >= 2 and sys.argv[1] == "sample":
+        plot_bar(numpy_sample_results, numba_sample_results, taichi_sample_results)
+    else:
+        numpy_sample_results, numba_sample_results, taichi_sample_results = run_benchmarks()
+

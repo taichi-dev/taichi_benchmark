@@ -1,4 +1,4 @@
-from poisson_disk import run_poisson
+from .poisson_disk import run_poisson
 
 {'numba_gpu': [{'desired_samples': 1000, 'time_ms': 17.34950498212129}, {'desired_samples': 5000, 'time_ms': 107.88116841576993}, {'desired_samples': 10000, 'time_ms': 226.49038201197982}, {'desired_samples': 50000, 'time_ms': 1260.7922151917592}, {'desired_samples': 100000, 'time_ms': 1344.771138811484}]}
 
