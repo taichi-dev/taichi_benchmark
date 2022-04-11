@@ -36,7 +36,8 @@ def run_mpm(n_grid=32, nIters=2048):
         for I in ti.grouped(grid_m):
             grid_v[I] = ti.zero(grid_v[I])
             grid_m[I] = 0
-        ti.block_dim(64)
+
+        ti.loop_config(block_dim = 64)
         for p in x:
             Xp = x[p] / dx
             base = int(Xp - 0.5)
@@ -59,7 +60,8 @@ def run_mpm(n_grid=32, nIters=2048):
             cond = (I < bound) & (grid_v[I] < 0) | \
                    (I > n_grid - bound) & (grid_v[I] > 0)
             grid_v[I] = 0 if cond else grid_v[I]
-        ti.block_dim(64)
+
+        ti.loop_config(block_dim = 64)
         for p in x:
             Xp = x[p] / dx
             base = int(Xp - 0.5)
