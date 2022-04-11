@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.17)
 
 project(P2G LANGUAGES CUDA CXX)
 
@@ -13,6 +13,8 @@ if(NOT CMAKE_BUILD_TYPE)
 RelWithDebInfo MinSizeRel."
       FORCE)
 endif()
+
+include_directories(${PROJECT_SOURCE_DIR}/../../../common/eigen/)
 
 add_executable(P2G "src/p2g.cu")
 
