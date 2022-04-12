@@ -29,14 +29,14 @@ Elegant coding styles and high performance are equally important. Through compar
 ## Highlights
 We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we highlight the inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
 
-* Performance approaches device capability roofline, in terms of both computation and memory bandwidth.
+* Performance approaches device capability roofline, in terms of both computation and memory bandwidth. Source [Nested SAXPY](./saxpy) [Array fill](./fill).
 
 <p align="center">
 <img src="saxpy/fig/roofline_log_scale.png" width="400">  
 <img src="fill/fig/bench_fill.png" width="400">
 </p>
 
-* Minimized coding efforts, comparable performance against CUDA.
+* Minimized coding efforts, comparable performance against CUDA. Source [MPM](./mpm) [3x3 SVD](./svd3) [path tracer](./smallpt) [Nested SAXPY](./saxpy). 
 
 <p align="center">
 <img src="mpm/fig/bench_3d.png" width="400" height="300">
@@ -48,16 +48,16 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <img src="saxpy/fig/compute_bench.png" width="400">
 </p>
 
-* Easy-to-read code, doubled performance against JAX (GPU) and Numba (CPU).
+* Easy-to-read code, doubled performance against JAX (GPU) and Numpy (CPU). Source [Differentiable Smoke Simulation](./diff-smoke) [Poisson Disk Sampling](./poisson)
 
 <p align="center">
 <img src="diff-smoke/fig/bench_gpu.png" width="400">
 <img src="poisson/fig/bench.png" width="400">
 </p>
 
-# Gaps
+# Gaps for Improvement
 
-We have also noticed significant performance gap against manually optimized CUDA code in the [N-body](./n-body) and [2D stencil](./stencil2d) benchmarks. 
+We have noticed certain amount of performance gap against manually optimized CUDA code in the [N-body](./n-body) and [2D stencil](./stencil2d) benchmarks. 
 We are working on the Taichi compiler to shrink the performance gaps. Welcome contribution!
 <p align="center">
 <img src="n-body/fig/bench_roofline.png" width="400">
