@@ -68,7 +68,7 @@ We are working on the Taichi compiler to shrink the performance gaps. Welcome co
 We are pushing the benchmark work torwards two directions:
 
 * **More benchmark items with strong baseline implementation**  
-We are working on extending our benchmarks to cover more generalized parallel tasks. Benchmark items are added when there are proper baseline implementations to compare.
+We are working on extending our benchmarks to cover more generalized parallel tasks. Benchmark items can be added when there are proper baseline implementations to compare with.
 
 * **More devices**  
 The current tests are conducted primarily on Nvidia GPUs. We are extending our benchmark on more diverse devices as Taichi is hardware neural. Also, performance reports are welcome if you have a device supported by Taichi!
