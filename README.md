@@ -48,7 +48,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <img src="saxpy/fig/compute_bench.png" width="400">
 </p>
 
-* Easy-to-read code, doubled performance against JAX (GPU) and Numpy (CPU). \[Source: [Differentiable Smoke Simulation](./diff-smoke), [Poisson Disk Sampling](./poisson).\]
+* Easy-to-read code, extraordinary performance against JAX (GPU) and Numba/Numpy (CPU). \[Source: [Differentiable Smoke Simulation](./diff-smoke), [Poisson Disk Sampling](./poisson).\]
 
 <p align="center">
 <img src="diff-smoke/fig/bench_gpu.png" width="400">
