@@ -29,14 +29,14 @@ Elegant coding styles and high performance are equally important. Through compar
 ## Highlights
 We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we highlight the inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
 
-* Performance approaches device capability roofline, in terms of both computation and memory bandwidth. Source [Nested SAXPY](./saxpy) [Array fill](./fill).
+* Performance approaches device capability roofline, in terms of both computation and memory bandwidth. \[Source: [Nested SAXPY](./saxpy) and [Array fill](./fill).\]
 
 <p align="center">
 <img src="saxpy/fig/roofline_log_scale.png" width="400">  
 <img src="fill/fig/bench_fill.png" width="400">
 </p>
 
-* Minimized coding efforts, comparable performance against CUDA. Source [MPM](./mpm) [3x3 SVD](./svd3) [path tracer](./smallpt) [Nested SAXPY](./saxpy). 
+* Minimized coding efforts, comparable performance against CUDA. \[Source [MPM](./mpm), [3x3 SVD](./svd3), [Path Tracer](./smallpt), and [Nested SAXPY](./saxpy).\]
 
 <p align="center">
 <img src="mpm/fig/bench_3d.png" width="400" height="300">
@@ -48,7 +48,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <img src="saxpy/fig/compute_bench.png" width="400">
 </p>
 
-* Easy-to-read code, doubled performance against JAX (GPU) and Numpy (CPU). Source [Differentiable Smoke Simulation](./diff-smoke) [Poisson Disk Sampling](./poisson)
+* Easy-to-read code, doubled performance against JAX (GPU) and Numpy (CPU). \[Source [Differentiable Smoke Simulation](./diff-smoke) and [Poisson Disk Sampling](./poisson).\]
 
 <p align="center">
 <img src="diff-smoke/fig/bench_gpu.png" width="400">
