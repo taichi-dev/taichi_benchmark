@@ -39,8 +39,8 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 * Minimized coding efforts, comparable performance against CUDA.
 
 <p align="center">
-<img src="mpm/fig/bench_3d.png" width="400" height="400">
-<img src="svd3/fig/bench_svd.png" width="400" height="400">
+<img src="mpm/fig/bench_3d.png" width="400" height="300">
+<img src="svd3/fig/bench_svd.png" width="400" height="300">
 </p>
 
 <p align="center">
