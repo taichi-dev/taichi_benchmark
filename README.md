@@ -13,7 +13,7 @@ Through comparing identical algorithms implemented in different frameworks, we c
 In order to fulfill our purposes, we build this benchmark project with the following principles:
 * **State-of-the-art baselines**  
 Compare with well-performed baselines can help Taichi to get aware of further optimization opportunities.
-* **Reproducibile Results**  
+* **Reproducible Results**  
 Tests can be reproduced with the  `plot_benchmark.py` script under each subdirectory.
 * **Easy-to-read Coding Style**  
 Elegant coding styles and high performance are equally important. Thorough comparison between Taichi and manually optimized code can help to understand Taichi's optimization techniques.
