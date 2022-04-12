@@ -67,7 +67,7 @@ We are working on the Taichi compiler to shrink the performance gaps. Welcome co
 ## Future Works
 We are pushing the benchmark work torwards two directions:
 
-* **More benchmark items with strong baseline implementation**  
+* **More benchmark items with strong baseline implementations**  
 We are working on extending our benchmarks to cover more generalized parallel tasks. Benchmark items can be added when there are proper baseline implementations to compare with.
 
 * **More devices**  
