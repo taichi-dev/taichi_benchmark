@@ -16,7 +16,7 @@ Compare with well-performed baselines can help Taichi to get aware of further op
 * **Reproducible Results**  
 Tests can be reproduced with the  `plot_benchmark.py` script under each subdirectory.
 * **Easy-to-read Coding Style**  
-Elegant coding styles and high performance are equally important. Thorough comparison between Taichi and manually optimized code can help to understand Taichi's optimization techniques.
+Elegant coding styles and high performance are equally important. Through comparisons between Taichi and manually optimized code can help to understand Taichi's optimization techniques.
 
 <!-- Items -->
 <!-- ## Benchmark Items -->
