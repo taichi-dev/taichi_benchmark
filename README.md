@@ -16,18 +16,18 @@ Compare with well-performed baselines can help Taichi to get aware of further op
 * **Reproducibile Results**  
 Tests can be reproduced with the  `plot_benchmark.py` script under each subdirectory.
 * **Easy-to-read Coding Style**  
-Elegant coding styles and high performance are equally important. Thorough performance comparison between Taichi and manually tuned code can help to understand optimization techniques.
+Elegant coding styles and high performance are equally important. Thorough comparison between Taichi and manually optimized code can help to understand Taichi's optimization techniques.
 
 <!-- Items -->
-## Benchmark Items
+<!-- ## Benchmark Items -->
 
-#### Bare-metal performance benchmarks
-#### Algorithm building blocks
-#### Applications
+<!-- #### Bare-metal performance benchmarks -->
+<!-- #### Algorithm building blocks -->
+<!-- #### Applications -->
 
 <!-- results -->
 ## Highlights
-Compared with baselines, we hightlight inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
+We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we hightlight inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
 * Minimized coding efforts, doubled performance against CUDA and JAX in the [MPM](./mpm) and [differentiable smoke simulation](./diff-smoke) benchmarks.
 <p align="center">
 <img src="mpm/fig/bench_2d.png" width="400">
@@ -35,16 +35,21 @@ Compared with baselines, we hightlight inspiring performance achieved by Taichi 
 </p>
 
 
-* State-of-the-art performance, flexible coding style against CUDA in the [3x3 SVD](./svd3) and [path tracer](./smallpt) benchmarks.
+* Comparable performance with CUDA, with easy-to-read performance in the [3x3 SVD](./svd3) and [path tracer](./smallpt) benchmarks.
 
 <p align="center">
 <img src="svd3/fig/bench_svd.png" width="400">
 <img src="smallpt/fig/bench.png" width="400">
 </p>
 
+<p align="center">
+<img src="p2g/fig/bench.png" width="450">
+<img src="saxpy/fig/compute_bench.png" width="400">
+</p>
+
 * Performance approaches device capability roofline, in terms of both computation and memory bandwidth in the [nested SAXPY](./saxpy) and [array fill](./fill) benchmarks.
 <p align="center">
-<img src="saxpy/fig/roofline_log_scale.png" width="400">
+<img src="saxpy/fig/roofline_log_scale.png" width="400">  
 <img src="fill/fig/bench_fill.png" width="400">
 </p>
 
@@ -60,10 +65,10 @@ We are working on the Taichi compiler to shrink the performance gaps. Welcome co
 <!-- Future works -->
 <!-- Contribution Guidelines -->
 ## Future Works
-We are pushing the benchmark work in three directions:
-* **Extend more benchmark items**  
-Placeholder
-* **Build stronger baselines**  
-Placeholder
-* **Benchmark on more devices**  
-Placeholder
+We are pushing the benchmark work torwards two directions:
+
+* **More benchmark items with strong baseline implementation**  
+We are working on extending our benchmarks to cover more generalized parallel tasks. Benchmark items are added when there are proper baseline implementations to compare.
+
+* **More devices**  
+The current tests are conducted on Nvidia GPUs. We are extending our benchmark on more diverse devices as Taichi is hardware neural. Also, performance reports are welcomed if you have a device supported by Taichi!
