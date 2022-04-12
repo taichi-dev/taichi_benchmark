@@ -15,7 +15,7 @@ In order to fulfill our purposes, we build this benchmark project with the follo
 Compare with well-performed baselines can help Taichi to get aware of further optimization opportunities.
 * **Reproducible Results**  
 Tests can be reproduced with the  `plot_benchmark.py` script under each subdirectory.
-* **Easy-to-read Coding Style**  
+* **Easy-to-read coding style**  
 Elegant coding styles and high performance are equally important. Through comparisons between Taichi and manually optimized code can help to understand Taichi's optimization techniques.
 
 <!-- Items -->
