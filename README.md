@@ -11,9 +11,12 @@ Performance is not the only objective, in fact, codes in this repository are not
 Through comparing identical algorithms implemented in different frameworks, we can learn and benefit from the entire open-source community to keep improving our language and compiler.
 
 In order to fulfill our purposes, we build this benchmark project with the following principles:
-* **Strong baselines**  
+* **State-of-the-art baselines**  
+Compare with well-performed baselines can help Taichi to get aware of further optimization oppotunities.
 * **Reproducibile Results**  
-* **Readable Coding Style**
+Tests can be reproduced with the  `plot_benchmark.py` script under each subdirectory.
+* **Easy-to-read Coding Style**  
+Elegant coding styles and high performance are equally important. Thorough performance comparison between Taichi and manually tuned code can help to understand optimization techniques.
 
 <!-- Items -->
 ## Benchmark Items
