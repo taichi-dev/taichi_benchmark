@@ -35,7 +35,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 </p>
 
 
-* Comparable performance with CUDA, with easy-to-read performance in the [3x3 SVD](./svd3) and [path tracer](./smallpt) benchmarks.
+* Comparable performance with CUDA, with easy-to-read code in the [3x3 SVD](./svd3) and [path tracer](./smallpt) benchmarks.
 
 <p align="center">
 <img src="svd3/fig/bench_svd.png" width="400">
