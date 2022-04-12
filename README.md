@@ -27,7 +27,7 @@ Elegant coding styles and high performance are equally important. Thorough compa
 
 <!-- results -->
 ## Highlights
-We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we hightlight inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
+We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we highlight the inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
 * Minimized coding efforts, doubled performance against CUDA and JAX in the [MPM](./mpm) and [differentiable smoke simulation](./diff-smoke) benchmarks.
 <p align="center">
 <img src="mpm/fig/bench_2d.png" width="400">
