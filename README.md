@@ -28,29 +28,31 @@ Elegant coding styles and high performance are equally important. Through compar
 <!-- results -->
 ## Highlights
 We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we highlight the inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
-* Minimized coding efforts, doubled performance against CUDA and JAX in the [MPM](./mpm) and [differentiable smoke simulation](./diff-smoke) benchmarks.
-<p align="center">
-<img src="mpm/fig/bench_2d.png" width="400">
-<img src="diff-smoke/fig/bench_gpu.png" width="400">
-</p>
-
-
-* Comparable performance with CUDA, with easy-to-read code in the [3x3 SVD](./svd3) and [path tracer](./smallpt) benchmarks.
-
-<p align="center">
-<img src="svd3/fig/bench_svd.png" width="400">
-<img src="smallpt/fig/bench.png" width="400">
-</p>
-
-<p align="center">
-<img src="p2g/fig/bench.png" width="400">
-<img src="saxpy/fig/compute_bench.png" width="400">
-</p>
 
 * Performance approaches device capability roofline, in terms of both computation and memory bandwidth in the [nested SAXPY](./saxpy) and [array fill](./fill) benchmarks.
 <p align="center">
 <img src="saxpy/fig/roofline_log_scale.png" width="400">  
 <img src="fill/fig/bench_fill.png" width="400">
+</p>
+
+* Minimized coding efforts, comparable performance against CUDA.
+
+<p align="center">
+<img src="mpm/fig/bench_3d.png" width="400">
+<img src="svd3/fig/bench_svd.png" width="400">
+</p>
+
+<p align="center">
+<img src="smallpt/fig/bench.png" width="400">
+<img src="saxpy/fig/compute_bench.png" width="400">
+</p>
+
+
+* easy-to-read code, doubled performance against Numba and JAX in the benchmarks.
+
+<p align="center">
+<img src="diff-smoke/fig/bench_gpu.png" width="400">
+<img src="poisson/fig/bench.png" width="400">
 </p>
 
 # Gaps
