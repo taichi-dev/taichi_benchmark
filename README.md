@@ -71,4 +71,4 @@ We are pushing the benchmark work torwards two directions:
 We are working on extending our benchmarks to cover more generalized parallel tasks. Benchmark items are added when there are proper baseline implementations to compare.
 
 * **More devices**  
-The current tests are conducted on Nvidia GPUs. We are extending our benchmark on more diverse devices as Taichi is hardware neural. Also, performance reports are welcomed if you have a device supported by Taichi!
+The current tests are conducted primarily on Nvidia GPUs. We are extending our benchmark on more diverse devices as Taichi is hardware neural. Also, performance reports are welcome if you have a device supported by Taichi!
