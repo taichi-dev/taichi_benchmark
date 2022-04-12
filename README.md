@@ -43,7 +43,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 </p>
 
 <p align="center">
-<img src="p2g/fig/bench.png" width="450">
+<img src="p2g/fig/bench.png" width="400">
 <img src="saxpy/fig/compute_bench.png" width="400">
 </p>
 
