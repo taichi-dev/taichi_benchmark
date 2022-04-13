@@ -23,7 +23,7 @@ We conduct performance evaluation on the following device.
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
-|L2 cache capacity| 5MB|
+|L2 cache capacity| 5 MB|
 
 The experiments are executed with the following parameters: Image size 1024 by
 768, sample on unit sphere surface, max depth (bounce) is 10.

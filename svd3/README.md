@@ -13,7 +13,7 @@ We conduct performance evaluation on the following device.
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
-|L2 cache capacity| 5MB|
+|L2 cache capacity| 5 MB|
 
 Performance is measured as the kernel compute time measured with the `cudaEvent` APIs, lower is better. The unit is milliseconds (ms). In each experiment, we first conduct a warm-up run, and time for 10 repeated invokes.
 

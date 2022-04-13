@@ -12,7 +12,7 @@ We conduct performance evaluation on the following device.
 |-----|-----------------------|
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
-|L2 cache capacity| 5MB|
+|L2 cache capacity| 5 MB|
 
 Performance is measured with the achieved memory bandwidth, higher is better. In each experiment, we first conduct a warm-up run, and time for 500 repeated invokes as the kernel run time is extremely short. The tested array size jumps from 8MB to properly test against the DRAM bandwidth.
 
