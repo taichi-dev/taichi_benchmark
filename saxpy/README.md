@@ -59,6 +59,8 @@ thrust::transform(d_x.begin(), d_x.end(), d_y.begin(), d_y.begin(), 2.0f * (2.0f
 |FP32 performance| 29700 GFLOPS|
 |Memory bandwidth| 760 GB/s|
 |L2 cache capacity| 5 MB|
+|Driver version| 470.57.02|
+|CUDA version| 11.4|
 
 ### Standard SAXPY
 
