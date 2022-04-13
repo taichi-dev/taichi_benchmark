@@ -5,11 +5,10 @@ import cv2
 import os
 
 
-def run_smoke(steps=25):
+def run_smoke(steps=25, num_iterations = 10):
     real = ti.f32
     ti.init(default_fp=real, arch=ti.cuda, flatten_if=True, debug=False)
 
-    num_iterations = 100
     n_grid = 110
     dx = 1.0 / n_grid
     num_iterations_gauss_seidel = 6

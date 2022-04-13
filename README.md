@@ -11,6 +11,7 @@ Performance is not the only objective, in fact, codes in this repository are not
 Through comparing identical algorithms implemented in different frameworks, we can learn and benefit from the entire open-source community to keep improving our language and compiler.
 
 In order to fulfill our purposes, we build this benchmark project with the following principles:
+
 * **State-of-the-art baselines**  
 Compare with well-performed baselines can help Taichi to get aware of further optimization opportunities.
 * **Reproducible Results**  

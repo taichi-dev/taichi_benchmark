@@ -150,7 +150,7 @@ def run_smoke(num_time_steps=25):
         init_smoke = cv2.resize(
             imread(os.path.join(basepath, 'init_smoke.png')),
             (n_grid, n_grid))[:, :, 0]
-        target = cv2.resize(imread('taichi.png'), (n_grid, n_grid))[:, :, 0]
+        target = cv2.resize(imread(os.path.join(basepath, 'taichi.png')), (n_grid, n_grid))[:, :, 0]
         init_smoke = device_put(init_smoke.astype(np.float32))
         target = device_put(target.astype(np.float32))
         rows, cols = target.shape

@@ -1,0 +1,7 @@
+taichi
+numba
+matplotlib
+opencv-python
+imageio
+jax[cuda11_cudnn82] >= 0.3.4
+--find-links https://storage.googleapis.com/jax-releases/jax_releases.html

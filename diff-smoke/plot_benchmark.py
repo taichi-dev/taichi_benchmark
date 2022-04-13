@@ -116,7 +116,7 @@ taichi_results = {
 
 
 def run_benchmarks():
-    return benchmark_taichi(), benchmark_jax()
+    return benchmark_jax(), benchmark_taichi()
 
 
 def extract_perf(results):
@@ -173,13 +173,10 @@ if __name__ == '__main__':
 
     plot_series = "cpu"  # choose to plot cpu or gpu
     if len(sys.argv) >= 2 and sys.argv[1] == "sample":
-        taichi_results = taichi_results
-        jax_results = {**jax_cpu_results, **jax_gpu_results}
+        taichi_results = taichi_sample_results
+        jax_results = jax_sample_results
     else:
-        if plot_series == "cpu":
-            taichi_results, jax_cpu_results = run_benchmarks()
-        else:
-            taichi_results, jax_gpu_results = run_benchmarks()
-
-        jax_results = {**jax_cpu_results, **jax_gpu_results}
-    plot_bar(jax_results, taichi_results, plot_series)
+        jax_results, taichi_results = run_benchmarks()
+    print(jax_results, taichi_results)
+    plot_bar(jax_results, taichi_results, 'cpu')
+    plot_bar(jax_results, taichi_results, 'gpu')
