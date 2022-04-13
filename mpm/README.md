@@ -18,6 +18,9 @@ Instead of explicitly mapping the problem size to each GPU thread as in CUDA
 code, 
 Taichi automatically parallelizes the outermost for-loops. Consequently, the code
 is more concise and easier to read.
+Note that the CUDA implementation utilizes Eigen matrix and vector data type to 
+benefit from its concise syntax. Both the CUDA and Taichi implementation utilize
+L1 cache instead of explicitly control shared memory. 
 
 ## Evaluation
 We conduct performance evaluation on the following device.
