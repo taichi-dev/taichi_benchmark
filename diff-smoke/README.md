@@ -46,7 +46,7 @@ number of simulation steps, for CPU and GPU implementations, respectively.
 The reported times are measured using a 110 x 110 grid with each step 6 
 Jacobi pressure projections. 
 The employed Taichi version 
-is [0.9.2](https://github.com/taichi-dev/taichi/releases/tag/v0.9.2), and
+is [1.0.0](https://github.com/taichi-dev/taichi/releases/tag/v1.0.0), and
 the JAX
 package is 0.3.4 (jaxlib-0.3.2+cuda11.cudnn82) and python version 3.9.
 
@@ -56,7 +56,7 @@ package is 0.3.4 (jaxlib-0.3.2+cuda11.cudnn82) and python version 3.9.
 * Pre-requisites
 ```shell
 python3 -m pip install jax==0.3.4 jax[cuda11_cudnn82] -f https://storage.googleapis.com/jax-releases/jax_releases.html
-python3 -m pip install taichi==0.9.2 
+python3 -m pip install taichi==1.0.0
 python3 -m pip install matplotlib
 ```
 If you want to compare with CUDA, make sure you have `nvcc` properly installed.

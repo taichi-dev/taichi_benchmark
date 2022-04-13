@@ -23,7 +23,7 @@ Performance is measured in milliseconds (ms), we run over different
 number of samples.
 The reported times are measured using a 400 x 400 grid. 
 The employed Taichi version 
-is [0.9.2](https://github.com/taichi-dev/taichi/releases/tag/v0.9.2), 
+is [1.0.0](https://github.com/taichi-dev/taichi/releases/tag/v1.0.0), 
 the Numpy version is 1.21.5, the Numba version is 1.55.1, and the 
 python version is 3.9.
 
