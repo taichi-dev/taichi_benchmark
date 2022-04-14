@@ -5,7 +5,7 @@ The Taichi programming language is known for attaining high performance with eas
 
 * **Provide a target problem set**  
 Since Taichi is a domain-specific language (DSL) focusing on the computer graphics and parallel computing domain, general benchmark cases cannot fully characterize Taichi to its benefit.
-* **Provide a multidimensional comparison between Taichi and other popular frameworks**  
+* **Provide a multi-dimensional comparison between Taichi and other popular frameworks**  
 Performance is not the only objective, in fact, codes in this repository are not particularly tuned for the optimal performance. We also want to present the friendly, concise syntax Taichi exposed to its users. 
 * **Open discussions for future performance improvements**  
 Through comparing identical algorithms implemented in different frameworks, we can learn and benefit from the entire open-source community to keep improving our language and compiler.
@@ -14,10 +14,10 @@ In order to fulfill our purposes, we build this benchmark project with the follo
 
 * **State-of-the-art baselines**  
 Compare with well-performed baselines can help Taichi to get aware of further optimization opportunities.
-* **Reproducible Results**  
-Tests can be reproduced with the  `plot_benchmark.py` script under each subdirectory.
+* **Reproducible results**  
+Tests can be reproduced with the `plot_benchmark.py` script under each subdirectory.
 * **Easy-to-read coding style**  
-Elegant coding styles and high performance are equally important. Through comparisons between Taichi and manually optimized code can help to understand Taichi's optimization techniques.
+Elegant coding style and high performance are equally important. Through comparisons between Taichi and manually optimized code, users can have a better understanding of Taichi's optimization techniques.
 
 <!-- Items -->
 <!-- ## Benchmark Items -->
@@ -28,7 +28,7 @@ Elegant coding styles and high performance are equally important. Through compar
 
 <!-- results -->
 ## Highlights
-We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we highlight the inspiring performance achieved by Taichi on the basis of its easy-to-use programming style:
+We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we share some inspiring performance results achieved by Taichi on the basis of its easy-to-use programming style:
 
 * Performance approaches device capability roofline, in terms of both computation and memory bandwidth. \[Source: [Nested SAXPY](./saxpy), [Array fill](./fill).\]
 
@@ -56,9 +56,9 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <img src="poisson/fig/bench.png" width="400">
 </p>
 
-# Gaps for Improvement
+## Gaps for Improvement
 
-We have noticed certain amount of performance gap against manually optimized CUDA code in the [N-body](./n-body) and [2D stencil](./stencil2d) benchmarks. 
+We have also noticed certain amount of performance gap against manually optimized CUDA code in the [N-body](./n-body) and [2D stencil](./stencil2d) benchmarks. 
 We are working on the Taichi compiler to shrink the performance gaps. Welcome contribution!
 <p align="center">
 <img src="n-body/fig/bench_roofline.png" width="400">
@@ -68,10 +68,10 @@ We are working on the Taichi compiler to shrink the performance gaps. Welcome co
 <!-- Future works -->
 <!-- Contribution Guidelines -->
 ## Future Works
-We are pushing the benchmark work torwards two directions:
+We are driving the benchmark work in two directions:
 
-* **More benchmark items with strong baseline implementations**  
+* **More use cases with strong baseline implementations**
 We are working on extending our benchmarks to cover more generalized parallel tasks. Benchmark items can be added when there are proper baseline implementations to compare with.
 
-* **More devices**  
-The current tests are conducted primarily on Nvidia GPUs. We are extending our benchmark on more diverse devices as Taichi is hardware neural. Also, performance reports are welcome if you have a device supported by Taichi!
+* **More target backends**
+The current tests are conducted primarily on Nvidia GPUs. We are extending our benchmark on more devices as Taichi is designed to be hardware neural. Also, performance reports are welcome if you have a supported device by Taichi!
