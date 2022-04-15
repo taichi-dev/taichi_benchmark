@@ -2,3 +2,4 @@ src/cuda/cuda
 src/cuda/cub
 src/cuda/thrust
 src/cuda/__pycache__
+src/taichi/__pycache__
