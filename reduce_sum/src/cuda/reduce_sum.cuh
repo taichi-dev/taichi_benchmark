@@ -1,5 +1,5 @@
-#ifndef _TAICHI_BENCHMARK_REDUCE_SRC_CUDA_REDUCE_SUM_CUH_
-#define _TAICHI_BENCHMARK_REDUCE_SRC_CUDA_REDUCE_SUM_CUH_
+#ifndef _TAICHI_BENCHMARK_REDUCE_SUM_SRC_CUDA_REDUCE_SUM_CUH_
+#define _TAICHI_BENCHMARK_REDUCE_SUM_SRC_CUDA_REDUCE_SUM_CUH_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,4 +47,4 @@ void TestResult(float *h_out, float *h_reference) {
         printf("Error result! Out = %f, Ref = %f\n", *h_out, *h_reference);
 }
 
-#endif // _TAICHI_BENCHMARK_REDUCE_SRC_CUDA_REDUCE_SUM_CUH_
+#endif // _TAICHI_BENCHMARK_REDUCE_SUM_SRC_CUDA_REDUCE_SUM_CUH_
