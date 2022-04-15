@@ -31,7 +31,6 @@ def plot_compute(results, machine="2060"):
     taichi_bandwidth = get_bandwidth(results['taichi'])
     bar_pos = [i*5+1 for i in range(len(taichi_bandwidth))]
     ax.bar(bar_pos, taichi_bandwidth)
-    ax.set_xticks(bar_pos, xlabel)
 
     cuda_bandwidth = get_bandwidth(results['cuda'])
     bar_pos = [i*5+2 for i in range(len(cuda_bandwidth))]
@@ -41,12 +40,10 @@ def plot_compute(results, machine="2060"):
     cub_bandwidth = get_bandwidth(results['cub'])
     bar_pos = [i*5+3 for i in range(len(cub_bandwidth))]
     ax.bar(bar_pos, cub_bandwidth)
-    ax.set_xticks(bar_pos, xlabel)
     
     thrust_bandwidth = get_bandwidth(results['thrust'])
     bar_pos = [i*5+4 for i in range(len(thrust_bandwidth))]
     ax.bar(bar_pos, thrust_bandwidth)
-    ax.set_xticks(bar_pos, xlabel)
 
     ax.legend(['Taichi','CUDA/CUDA', 'CUDA/cub', 'CUDA/thrust'])
     ax.set_xlabel("Array shape")
