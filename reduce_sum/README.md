@@ -18,7 +18,7 @@ We conduct performance evaluations on the following device.
 | Driver version    | 470.57.02              | 510.47.03            |
 | CUDA version      | 11.4                   | 11.6                 |
 
-Performance is measured in bandwidth. The higher the bandwidth usage, the better. We run over different numbers with `float` data type. The results in the following figures are averaged over five times.
+Performance is measured in bandwidth(GB/s). The higher is better. We run over different numbers with `float` data type. The results in the following figures are averaged over five times.
 
 - Nvidia RTX 3080
 

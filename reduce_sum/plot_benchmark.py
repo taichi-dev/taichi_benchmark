@@ -25,7 +25,7 @@ def get_bandwidth(ts):
     return Bandwidth
 
 def plot_compute(results, machine="3080"):
-    xlabel = ["2**16","2**20","2**24", "2**26"]
+    xlabel = ["256 KB","4 MB","64 MB", "256 MB"]
     fig, ax = plt.subplots()
 
     taichi_bandwidth = get_bandwidth(results['taichi'])
@@ -35,6 +35,8 @@ def plot_compute(results, machine="3080"):
     cuda_bandwidth = get_bandwidth(results['cuda'])
     bar_pos = [i*5+2 for i in range(len(cuda_bandwidth))]
     ax.bar(bar_pos, cuda_bandwidth)
+
+    bar_pos = [i*5+2.5 for i in range(len(cuda_bandwidth))]
     ax.set_xticks(bar_pos, xlabel)
 
     cub_bandwidth = get_bandwidth(results['cub'])
@@ -46,7 +48,7 @@ def plot_compute(results, machine="3080"):
     ax.bar(bar_pos, thrust_bandwidth)
 
     ax.legend(['Taichi','CUDA', 'CUDA/cub', 'CUDA/thrust'])
-    ax.set_xlabel("Num")
+    ax.set_xlabel("Data Size")
     ax.set_ylabel("Bandwidth (GB/s)")
     if machine == "2060":
         plt.axhline(y = 336, color='grey', linestyle = 'dashed')
@@ -54,7 +56,7 @@ def plot_compute(results, machine="3080"):
     elif machine == "3080":
         plt.axhline(y = 760, color='grey', linestyle = 'dashed')
         plt.text(11, 770, 'DRAM Bandwidth=760GB/s')
-    ax.set_title("ReduceSum benchmark")
+    ax.set_title("ReduceSum Benchmark")
     plt.savefig(f"fig/compute_bench_{machine}.png", dpi=150)
 
 if __name__ == '__main__':
