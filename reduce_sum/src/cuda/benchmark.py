@@ -27,16 +27,16 @@ def compile_and_benchmark(source_name, output_binary_name, flags=[]):
 def run_benchmark(binary_name, num, repeats=5):
     # Run Benchmark
     workdir = os.path.dirname(os.path.abspath(__file__))
-    atime = 0
-    niter = 0
-    while(niter < repeats):
+    total_time = 0
+    n_iter = 0
+    while(n_iter < repeats):
         p = Popen([workdir+'/'+binary_name, str(num)], stdout=PIPE)
         output, err = p.communicate()
         output = output.decode('utf-8')
-        atime += float(output)
-        niter += 1
-    atime /= repeats
-    return str(atime)
+        total_time += float(output)
+        n_iter += 1
+    average_time = total_time / repeats
+    return str(average_time)
 
 def benchmark(scale=list):
     compile_and_benchmark("reduce_sum_cuda.cu", "cuda")

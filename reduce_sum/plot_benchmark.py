@@ -24,7 +24,7 @@ def get_bandwidth(ts):
         Bandwidth.append(4 * scale[ii] * 1000 / float(ts[ii]) / 1e9)
     return Bandwidth
 
-def plot_compute(results, machine="2060"):
+def plot_compute(results, machine="3080"):
     xlabel = ["2**16","2**20","2**24", "2**26"]
     fig, ax = plt.subplots()
 
@@ -45,17 +45,17 @@ def plot_compute(results, machine="2060"):
     bar_pos = [i*5+4 for i in range(len(thrust_bandwidth))]
     ax.bar(bar_pos, thrust_bandwidth)
 
-    ax.legend(['Taichi','CUDA/CUDA', 'CUDA/cub', 'CUDA/thrust'])
-    ax.set_xlabel("Array shape")
+    ax.legend(['Taichi','CUDA', 'CUDA/cub', 'CUDA/thrust'])
+    ax.set_xlabel("Num")
     ax.set_ylabel("Bandwidth (GB/s)")
     if machine == "2060":
         plt.axhline(y = 336, color='grey', linestyle = 'dashed')
         plt.text(11, 336, 'DRAM Bandwidth=336GB/s')
     elif machine == "3080":
         plt.axhline(y = 760, color='grey', linestyle = 'dashed')
-        plt.text(11, 770/6.0, 'DRAM Bandwidth=760GB/s')
-    ax.set_title("ReduceSum benchmark on 1D arrays")
-    plt.savefig("fig/compute_bench.png", dpi=150)
+        plt.text(11, 770, 'DRAM Bandwidth=760GB/s')
+    ax.set_title("ReduceSum benchmark")
+    plt.savefig(f"fig/compute_bench_{machine}.png", dpi=150)
 
 if __name__ == '__main__':
     try:
@@ -64,4 +64,8 @@ if __name__ == '__main__':
         pass
 
     results = run_benchmarks()
-    plot_compute(results)
+    
+    if len(sys.argv) == 2:
+        plot_compute(results, sys.argv[1])
+    else:
+        plot_compute(results)
