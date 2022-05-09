@@ -20,14 +20,14 @@ using Vectori = Eigen::Vector3i;
 using Real = float;
 
 // TODO global var
-__device__ Real dt = 8e-5;
-__device__ Real E = 400;
-__device__ int dim = 3;
-__device__ int steps = 25;
-__device__ int neighbour = 27;
-__device__ Real gravity = 9.8;
-__device__ int bound = 3;
-__device__ Real p_rho = 1.0;
+__constant__ constexpr Real dt = 8e-5;
+__constant__ constexpr Real E = 400;
+__constant__ constexpr int dim = 3;
+__constant__ constexpr int steps = 25;
+__constant__ constexpr int neighbour = 27;
+__constant__ constexpr Real gravity = 9.8;
+__constant__ constexpr int bound = 3;
+__constant__ constexpr Real p_rho = 1.0;
 
 Vector *x_dev;
 Vector *v_dev;
@@ -79,12 +79,12 @@ __global__ void particle_to_grid_kernel(Vector *x, Vector *v, Matrix *C,
   auto idx = blockIdx.x * blockDim.x + threadIdx.x;
   // do not use the auto keyword with Eigen's expressions
   Vector Xp = x[idx] / dx;
-  Vectori base = (Xp.array() - 0.5).cast<int>();
+  Vectori base = (Xp.array() - 0.5f).cast<int>();
   Vector fx = Xp - base.cast<Real>();
-  std::array<Vector, 3> w{0.5 * (1.5 - fx.array()).pow(2),
-                          0.75 - (fx.array() - 1.0).pow(2),
-                          0.5 * (fx.array() - 0.5).pow(2)};
-  auto stress = -dt * 4 * E * p_vol * (J[idx] - 1) / std::pow(dx, 2);
+  std::array<Vector, 3> w{0.5f * (1.5f - fx.array()).square(),
+                          0.75f - (fx.array() - 1.0f).square(),
+                          0.5f * (fx.array() - 0.5f).square()};
+  auto stress = -dt * 4.f * E * p_vol * (J[idx] - 1.f) / (dx * dx);
   Matrix affine = Matrix::Identity() * stress + p_mass * C[idx];
   for (auto offset_idx = 0; offset_idx < neighbour; offset_idx++) {
     Vectori offset = get_offset(offset_idx);
@@ -128,11 +128,11 @@ __global__ void grid_to_particle_kernel(Vector *x, Vector *v, Matrix *C,
                                         int n_grid) {
   auto idx = blockIdx.x * blockDim.x + threadIdx.x;
   Vector Xp = x[idx] / dx;
-  Vectori base = (Xp.array() - 0.5).cast<int>();
+  Vectori base = (Xp.array() - 0.5f).cast<int>();
   Vector fx = Xp - base.cast<Real>();
-  std::array<Vector, 3> w{0.5 * (1.5 - fx.array()).pow(2),
-                          0.75 - (fx.array() - 1.0).pow(2),
-                          0.5 * (fx.array() - 0.5).pow(2)};
+  std::array<Vector, 3> w{0.5f * (1.5f - fx.array()).square(),
+                          0.75f - (fx.array() - 1.0f).square(),
+                          0.5f * (fx.array() - 0.5f).square()};
   Vector new_v = Vector::Zero();
   Matrix new_C = Matrix::Zero();
   for (auto offset_idx = 0; offset_idx < neighbour; offset_idx++) {
@@ -148,7 +148,7 @@ __global__ void grid_to_particle_kernel(Vector *x, Vector *v, Matrix *C,
       grid_idx = grid_idx * n_grid + grid_idx_vector[i];
     }
     new_v += weight * grid_v[grid_idx];
-    new_C += 4.0 * weight * grid_v[grid_idx] * dpos.transpose() / pow(dx, 2);
+    new_C += 4.0f * weight * grid_v[grid_idx] * dpos.transpose() / (dx * dx);
   }
   v[idx] = new_v;
   x[idx] += dt * v[idx];
@@ -225,9 +225,8 @@ public:
 
       grid_to_particle_kernel<<<particle_block_num, threads_per_block>>>(
           x_dev, v_dev, C_dev, J_dev, grid_v_dev, dx, n_grid);
-
-      cuda_check_error();
     }
+    cuda_check_error();
   }
 
   std::unique_ptr<Vector[]> to_numpy() {
