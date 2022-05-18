@@ -24,7 +24,7 @@ include_directories(${PROJECT_SOURCE_DIR}/../../../common/eigen/)
 
 set_target_properties(MPM2D PROPERTIES CUDA_ARCHITECTURES 86)
 
-target_compile_options(MPM2D PRIVATE --expt-relaxed-constexpr)
+target_compile_options(MPM2D PRIVATE --expt-relaxed-constexpr -use_fast_math)
 
 if(CMAKE_BUILD_TYPE EQUAL "Release")
     target_compile_definitions(MPM2D PUBLIC EIGEN_NO_DEBUG)
@@ -34,7 +34,7 @@ add_executable(MPM3D "src/mpm3d.cu")
 
 set_target_properties(MPM3D PROPERTIES CUDA_ARCHITECTURES 86)
 
-target_compile_options(MPM3D PRIVATE --expt-relaxed-constexpr)
+target_compile_options(MPM3D PRIVATE --expt-relaxed-constexpr -use_fast_math)
 
 if(CMAKE_BUILD_TYPE EQUAL "Release")
     target_compile_definitions(MPM3D PUBLIC EIGEN_NO_DEBUG)
