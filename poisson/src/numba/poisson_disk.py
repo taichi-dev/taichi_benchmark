@@ -19,8 +19,8 @@ def run_poisson(desired_samples = 100000):
     
     @numba.jit(nopython=True)
     def coords_to_index(coords):
-        x, y = (coords * inv_dx)
-        return int(x), int(y)
+        cx, cy = coords
+        return int(cx * inv_dx), int(cy * inv_dx)
     
     
     @numba.jit(nopython=True)
@@ -32,13 +32,15 @@ def run_poisson(desired_samples = 100000):
     @numba.jit(nopython=True)
     def generate_random_direction():
         theta = random() * 2 * pi
-        return np.array([cos(theta), sin(theta)])
+        return cos(theta), sin(theta)
     
     
     @numba.jit(nopython=True)
     def generate_around_point(p):
+        px, py = p
+        gx, gy = generate_random_direction()
         rad = (random() + 1) * radius
-        return p + rad * generate_random_direction()
+        return px + rad * gx, py + rad * gy
     
     
     @numba.jit(nopython=True)
