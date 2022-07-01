@@ -66,4 +66,4 @@ if __name__ == '__main__':
         taichi_results = taichi_sample_results
     else:
         taichi_results, cuda_results = run_benchmarks()
-    plot_bar(cuda_results, taichi_results, "3d")
+    plot_bar(cuda_results, taichi_results, "2d")
