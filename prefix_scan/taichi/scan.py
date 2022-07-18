@@ -1,6 +1,6 @@
 import taichi as ti
 import math
-import time 
+import time
 
 ti.init(arch=ti.cuda)
 
@@ -25,9 +25,10 @@ arr_golden = ti.field(ti.f32, shape=n_elements)
 # This should be replaced real smem, size is block_size/32+1
 smem = ti.field(ti.f32, shape=(int(GRID_SZ), 64))
 
+
 @ti.kernel
-def shfl_scan(arr_in: ti.template(), sum_smem: ti.template(), partial_sums:
-        ti.template(), single_block: ti.template()):
+def shfl_scan(arr_in: ti.template(), sum_smem: ti.template(),
+              partial_sums: ti.template(), single_block: ti.template()):
     ti.loop_config(block_dim=BLOCK_SZ)
     for i in arr_in:
         val = arr_in[i]
@@ -38,29 +39,29 @@ def shfl_scan(arr_in: ti.template(), sum_smem: ti.template(), partial_sums:
         warp_id = thread_id // WARP_SZ
 
         # Intra-warp scan, manually unroll
-        offset_j = 1 
+        offset_j = 1
         n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j): 
+        if (lane_id >= offset_j):
             val += n
-        offset_j = 2 
+        offset_j = 2
         n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j): 
+        if (lane_id >= offset_j):
             val += n
-        offset_j = 4 
+        offset_j = 4
         n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j): 
+        if (lane_id >= offset_j):
             val += n
-        offset_j = 8 
+        offset_j = 8
         n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j): 
+        if (lane_id >= offset_j):
             val += n
         offset_j = 16
         n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j): 
+        if (lane_id >= offset_j):
             val += n
         offset_j = 32
         n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j): 
+        if (lane_id >= offset_j):
             val += n
 
         # Put warp scan results to smem
@@ -71,7 +72,7 @@ def shfl_scan(arr_in: ti.template(), sum_smem: ti.template(), partial_sums:
         # Inter-warp scan, use the first thread in the first warp
         if (warp_id == 0 and lane_id == 0):
             for k in range(1, BLOCK_SZ / WARP_SZ):
-                sum_smem[block_id, k] += sum_smem[block_id, k-1]
+                sum_smem[block_id, k] += sum_smem[block_id, k - 1]
         ti.simt.block.sync()
 
         # Update data with warp sums
@@ -80,18 +81,19 @@ def shfl_scan(arr_in: ti.template(), sum_smem: ti.template(), partial_sums:
             warp_sum = sum_smem[block_id, warp_id - 1]
         val += warp_sum
         arr_in[i] = val
-        
+
         # Update partial sums
         if not single_block and (thread_id == BLOCK_SZ - 1):
             partial_sums[block_id] = val
 
 
 @ti.kernel
-def uniform_add(arr_in: ti.template(), nele: ti.template(), partial_sums: ti.template()):
+def uniform_add(arr_in: ti.template(), nele: ti.template(),
+                partial_sums: ti.template()):
 
     ti.loop_config(block_dim=BLOCK_SZ)
     for i in range(nele - BLOCK_SZ):
-        ii = i + BLOCK_SZ # skip the first block
+        ii = i + BLOCK_SZ  # skip the first block
         block_id = int(ii // BLOCK_SZ)
         arr_in[ii] += partial_sums[block_id - 1]
 
@@ -103,10 +105,12 @@ def scan_golden(arr_in: ti.template()):
         cur_sum += arr_in[i]
         arr_in[i] = cur_sum
 
+
 def initialize():
     for i in range(n_elements):
         arrs[0][i] = 1.0
         arr_golden[i] = 1.0
+
 
 # dry run
 initialize()
@@ -116,8 +120,8 @@ for i in range(len(ele_nums) - 1):
     else:
         shfl_scan(arrs[i], smem, arrs[i + 1], False)
 
-for i in range(len(ele_nums)-2, -1, -1):
-    uniform_add(arrs[i], ele_nums[i], arrs[i+1])
+for i in range(len(ele_nums) - 2, -1, -1):
+    uniform_add(arrs[i], ele_nums[i], arrs[i + 1])
 ti.sync()
 
 # measure average
@@ -130,14 +134,14 @@ for _ in range(10):
             shfl_scan(arrs[i], smem, arrs[i + 1], True)
         else:
             shfl_scan(arrs[i], smem, arrs[i + 1], False)
-    
-    for i in range(len(ele_nums)-2, -1, -1):
-        uniform_add(arrs[i], ele_nums[i], arrs[i+1])
+
+    for i in range(len(ele_nums) - 2, -1, -1):
+        uniform_add(arrs[i], ele_nums[i], arrs[i + 1])
     ti.sync()
     time_tot += time.perf_counter() - t
 
 time_in_ms = time_tot / 10 * 1000
-print ("Average execution time in ms", time_in_ms)
+print("Average execution time in ms", time_in_ms)
 
 # compute ground truth
 scan_golden(arr_golden)
