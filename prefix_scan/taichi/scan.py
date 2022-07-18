@@ -4,7 +4,7 @@ import time
 
 ti.init(arch=ti.cuda)
 
-n_elements = 512 
+n_elements = 100000
 WARP_SZ = 32
 BLOCK_SZ = 128
 GRID_SZ = int((n_elements + BLOCK_SZ - 1) / BLOCK_SZ)
@@ -15,7 +15,6 @@ ele_nums = [ele_num]
 while (ele_num > 1):
     ele_num = int((ele_num + BLOCK_SZ - 1) / BLOCK_SZ)
     ele_nums.append(ele_num)
-print("All partial sums size:", ele_nums)
 
 arrs = []
 for en in ele_nums:
@@ -111,39 +110,34 @@ def initialize():
 
 # dry run
 initialize()
-it_id = 0
-for ne in ele_nums:
-    grid_sz = int((ne + BLOCK_SZ - 1) / BLOCK_SZ)
-    if grid_sz == 1:
-        shfl_scan(arrs[-1], smem, arrs[-1], True)
-        ti.sync()
-        print(arrs[-1])
+for i in range(len(ele_nums) - 1):
+    if i == len(ele_nums) - 2:
+        shfl_scan(arrs[i], smem, arrs[i + 1], True)
     else:
-        shfl_scan(arrs[it_id], smem, arrs[it_id + 1], False)
-    ti.sync()
-    it_id += 1
-
-ti.sync()
-
-print("Start uniform_add len(ele_nums): ", len(ele_nums))
+        shfl_scan(arrs[i], smem, arrs[i + 1], False)
 
 for i in range(len(ele_nums)-2, -1, -1):
-    print("Start uniform_add with: ", i)
     uniform_add(arrs[i], ele_nums[i], arrs[i+1])
-
 ti.sync()
 
-## measure average
-#time_tot = 0
-#for _ in range(10):
-#    initialize()
-#    t = time.perf_counter()
-#    scan_inplace(arr, smem, partial_sums)
-#    ti.sync()
-#    time_tot += time.perf_counter() - t
-#
-#time_in_ms = time_tot / 10 * 1000
-#print ("Average execution time in ms", time_in_ms)
+# measure average
+time_tot = 0
+for _ in range(10):
+    initialize()
+    t = time.perf_counter()
+    for i in range(len(ele_nums) - 1):
+        if i == len(ele_nums) - 2:
+            shfl_scan(arrs[i], smem, arrs[i + 1], True)
+        else:
+            shfl_scan(arrs[i], smem, arrs[i + 1], False)
+    
+    for i in range(len(ele_nums)-2, -1, -1):
+        uniform_add(arrs[i], ele_nums[i], arrs[i+1])
+    ti.sync()
+    time_tot += time.perf_counter() - t
+
+time_in_ms = time_tot / 10 * 1000
+print ("Average execution time in ms", time_in_ms)
 
 # compute ground truth
 scan_golden(arr_golden)
