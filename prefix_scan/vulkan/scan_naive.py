@@ -4,10 +4,10 @@ import time
 
 ti.init(arch=ti.vulkan)
 
-#TODO: This implementation requires the element size to be multiple of block_sz 
+#TODO: This implementation requires the element size to be multiple of block_sz
 #      otherwise requires padding the field to the nearest multiple
 BLOCK_SZ = 128
-n_elements = BLOCK_SZ*50
+n_elements = BLOCK_SZ * 50
 GRID_SZ = int((n_elements + BLOCK_SZ - 1) / BLOCK_SZ)
 
 # Declare input array and all partial sums
@@ -26,21 +26,24 @@ arr_golden = ti.field(ti.f32, shape=n_elements)
 # This should be replaced real smem
 smem = ti.field(ti.f32, shape=(int(GRID_SZ), 64))
 
+
 @ti.kernel
 def intra_block_sum(arr_in: ti.template(), offset_j: ti.template()):
     ti.loop_config(block_dim=BLOCK_SZ)
     for i in arr_in:
         thread_id = i % BLOCK_SZ
         if (thread_id >= offset_j):
-            arr_in[i] += arr_in[i-offset_j] 
+            arr_in[i] += arr_in[i - offset_j]
+
 
 @ti.kernel
-def inplace_scan(arr_in: ti.template(), partial_sums: ti.template(), single_block: ti.template()):
+def inplace_scan(arr_in: ti.template(), partial_sums: ti.template(),
+                 single_block: ti.template()):
     ti.loop_config(block_dim=BLOCK_SZ)
     for i in arr_in:
         thread_id = i % BLOCK_SZ
         block_id = int(i // BLOCK_SZ)
- 
+
         # Update partial sums
         if not single_block and (thread_id == BLOCK_SZ - 1):
             partial_sums[block_id] = arr_in[i]
@@ -75,11 +78,11 @@ def initialize():
 initialize()
 for i in range(len(ele_nums) - 1):
     if i == len(ele_nums) - 2:
-        for j_offset in [ 2**j for j in range(0,8) ]:
+        for j_offset in [2**j for j in range(0, 8)]:
             intra_block_sum(arrs[i], j_offset)
         inplace_scan(arrs[i], arrs[i + 1], True)
     else:
-        for j_offset in [ 2**j for j in range(0,8) ]:
+        for j_offset in [2**j for j in range(0, 8)]:
             intra_block_sum(arrs[i], j_offset)
         inplace_scan(arrs[i], arrs[i + 1], False)
     ti.sync()
@@ -100,4 +103,3 @@ for i in range(n_elements):
         break
 
 print("Done")
-
