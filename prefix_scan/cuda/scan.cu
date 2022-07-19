@@ -1,64 +1,70 @@
 // Parallel Prefix Sum (Scan)
-// Ref[0]: https://developer.download.nvidia.com/compute/cuda/1.1-Beta/x86_website/projects/scan/doc/scan.pdf
-// Ref[1]: https://github.com/NVIDIA/cuda-samples/blob/master/Samples/2_Concepts_and_Techniques/shfl_scan/shfl_scan.cu
+// Ref[0]:
+// https://developer.download.nvidia.com/compute/cuda/1.1-Beta/x86_website/projects/scan/doc/scan.pdf
+// Ref[1]:
+// https://github.com/NVIDIA/cuda-samples/blob/master/Samples/2_Concepts_and_Techniques/shfl_scan/shfl_scan.cu
 
 // Last update: July 12, 2022
 // Author: Bo Qiao
 
-#include<iostream>
-#include<cstdlib>
-#include<cmath>
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <limits>
+#include <vector>
 
-#include<thrust/scan.h>
-#include<thrust/device_vector.h>
-#include<thrust/host_vector.h>
-#include<thrust/copy.h>
+#include <thrust/copy.h>
+#include <thrust/device_vector.h>
+#include <thrust/host_vector.h>
+#include <thrust/scan.h>
 
 #define TYPE float
 
 // Scan using shuffle instructions
-__global__ void shfl_scan(TYPE *data, TYPE *partial_sums = NULL) {
-  extern __shared__ TYPE sums[];
-  const int warp_sz = 32;
-  int idx = (blockIdx.x * blockDim.x) + threadIdx.x; 
-  int lane_id = idx % warp_sz;
-  int warp_id = threadIdx.x / warp_sz;
-  
-  TYPE value = data[idx];
+__global__ void shfl_scan(TYPE *data, int len, TYPE *partial_sums = NULL) {
+  int idx = (blockIdx.x * blockDim.x) + threadIdx.x;
+  if (idx < len) {
+    extern __shared__ TYPE sums[];
+    const int warp_sz = 32;
+    int lane_id = idx % warp_sz;
+    int warp_id = threadIdx.x / warp_sz;
 
-  // intra-warp scan
-  for (int i=1; i<=32; i*=2) {
-    TYPE n = __shfl_up_sync(0xffffffff, value, i);
-    if (lane_id >= i) {
-      value += n; 
-    }
-  }
-  
-  // put warp scan results to smem
-  if (threadIdx.x % warp_sz == warp_sz - 1) {
-    sums[warp_id] = value;
-  }
-  __syncthreads();
+    TYPE value = data[idx];
 
-  // inter-warp scan, use the first thread in the first warp
-  if (warp_id == 0 && lane_id == 0) {
-    for (int i=1; i<blockDim.x / warp_sz; i++) {
-      sums[i] += sums[i-1];
+    // intra-warp scan
+    for (int i = 1; i <= 32; i *= 2) {
+      TYPE n = __shfl_up_sync(0xffffffff, value, i);
+      if (lane_id >= i) {
+        value += n;
+      }
     }
-  }
-  __syncthreads();
-  
-  // update data with warp_sums
-  TYPE warp_sum = 0;
-  if (warp_id > 0) {
-    warp_sum = sums[warp_id - 1];
-  }
-  value += warp_sum;
-  data[idx] = value;
-  
-  // update partial sums if applicable
-  if (partial_sums != NULL && threadIdx.x == blockDim.x - 1) {
-    partial_sums[blockIdx.x] = value;
+
+    // put warp scan results to smem
+    if (threadIdx.x % warp_sz == warp_sz - 1) {
+      sums[warp_id] = value;
+    }
+    __syncthreads();
+
+    // inter-warp scan, use the first thread in the first warp
+    if (warp_id == 0 && lane_id == 0) {
+      for (int i = 1; i < blockDim.x / warp_sz; i++) {
+        sums[i] += sums[i - 1];
+      }
+    }
+    __syncthreads();
+
+    // update data with warp_sums
+    TYPE warp_sum = 0;
+    if (warp_id > 0) {
+      warp_sum = sums[warp_id - 1];
+    }
+    value += warp_sum;
+    data[idx] = value;
+
+    // update partial sums if applicable
+    if (partial_sums != NULL && threadIdx.x == blockDim.x - 1) {
+      partial_sums[blockIdx.x] = value;
+    }
   }
 }
 
@@ -75,22 +81,26 @@ __global__ void uniform_add(TYPE *data, TYPE *partial_sums, int len) {
   }
 }
 
+bool AreSameFloats(float a, float b) {
+  return fabs(a - b) < std::numeric_limits<float>::epsilon();
+}
+
 // CPU golden results
 // work-efficient sequential scan: exactly n additions, O(n)
-bool compare_scan_golden(TYPE* output, TYPE* input, int len) {
+bool compare_scan_golden(TYPE *output, TYPE *input, int len) {
   bool pass = true;
   TYPE sum = 0;
-  for (int j=0; j<len; j++) {
+  for (int j = 0; j < len; j++) {
     sum += input[j];
-    if (sum != output[j]) {
-      pass = false; 
-      std::cout << "[Fail] At pos " << j << ", golden " << sum << ", output " << output[j] << std::endl;
+    if (!AreSameFloats(sum, output[j])) {
+      pass = false;
+      std::cout << "[Fail] At pos " << j << ", golden " << sum << ", output "
+                << output[j] << std::endl;
       break;
     }
   }
   return pass;
 }
-
 
 int main(int argc, char **argv) {
   // Parse input size
@@ -100,66 +110,70 @@ int main(int argc, char **argv) {
   }
   std::cout << "[Info] Number of elements: " << n_elements << std::endl;
 
-  // Block size adaption
-  // This step is critical for this implementation, since the two-phase scan
-  // requires all data reside in one block after the initial scan.
-  int blockSize = sqrt(n_elements);
-  if (blockSize*blockSize != n_elements) {
-    blockSize += 1;
-  }
-  if (blockSize <= 128) {
-      blockSize = 128;
-  } else if (blockSize <= 256) {
-      blockSize = 256;
-  } else if (blockSize <= 512) {
-      blockSize = 512;
-  } else if (blockSize <= 1024) {
-      blockSize = 1024;
-  } else {
-     std::cout << "Data size is too large, larger than 1048576 is not supported!" << std::endl;
-     return 1;
-  }
+  const int blockSize = 256;
   std::cout << "[Info] Block Size: " << blockSize << std::endl;
-
-  int gridSize = (n_elements+blockSize-1)/blockSize;
-  int shmem_sz = blockSize/32 * sizeof(TYPE);
-  int n_partialSum = gridSize;
-  int pBlockSize = min(gridSize, blockSize);
-  int pGridSize = (n_partialSum+pBlockSize-1)/pBlockSize;
+  int shmem_sz = blockSize / 32 * sizeof(TYPE);
 
   // Buffer allocations
-  TYPE *h_data, *h_partial_sum, *h_result, *h_result_golden;
+  TYPE *h_data, *h_result, *h_result_golden;
   cudaMallocHost(reinterpret_cast<void **>(&h_data), sizeof(TYPE) * n_elements);
-  cudaMallocHost(reinterpret_cast<void **>(&h_partial_sum), sizeof(TYPE) * gridSize);
-  cudaMallocHost(reinterpret_cast<void **>(&h_result), sizeof(TYPE) * n_elements);
-  cudaMallocHost(reinterpret_cast<void **>(&h_result_golden), sizeof(TYPE) * n_elements);
-  TYPE *d_data, *d_partial_sum;
-  cudaMalloc(reinterpret_cast<void **>(&d_data), sizeof(TYPE) * n_elements);
-  cudaMalloc(reinterpret_cast<void **>(&d_partial_sum), sizeof(TYPE) * gridSize);
+  cudaMallocHost(reinterpret_cast<void **>(&h_result),
+                 sizeof(TYPE) * n_elements);
+  cudaMallocHost(reinterpret_cast<void **>(&h_result_golden),
+                 sizeof(TYPE) * n_elements);
+
+  // Initialize host data
+  for (size_t i = 0; i < n_elements; i++) {
+    h_data[i] = 1.0;
+    h_result_golden[i] = 0.0;
+  }
+
+  // Allocate device buffers to hold input and all intermediate partial sums
+  std::vector<TYPE *> device_data;
+  std::vector<int> device_data_ele_sz;
+  for (int ne = n_elements; ne > 1; ne = (ne + blockSize - 1) / blockSize) {
+    TYPE *data;
+    cudaMalloc(reinterpret_cast<void **>(&data), sizeof(TYPE) * ne);
+    cudaMemset(data, 0, sizeof(TYPE) * ne);
+    device_data.push_back(data);
+    device_data_ele_sz.push_back(ne);
+  }
+
+  // Copy data to device
+  cudaMemcpy(device_data[0], h_data, sizeof(TYPE) * n_elements,
+             cudaMemcpyHostToDevice);
 
   // Use events to time device execution
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
 
-  // Initialize host data
-  for (size_t i=0; i<n_elements; i++) {
-      h_data[i] = 1.0;
-      h_result_golden[i] = 0.0;
-  }
-
-  // Copy data to device
-  cudaMemcpy(d_data, h_data, sizeof(TYPE) * n_elements, cudaMemcpyHostToDevice);
-
   // Kernel launch
   cudaEventRecord(start, 0);
-  shfl_scan<<<gridSize, blockSize, shmem_sz>>>(d_data, d_partial_sum);
-  shfl_scan<<<pGridSize, pBlockSize, shmem_sz>>>(d_partial_sum);
-  uniform_add<<<gridSize-1, blockSize>>>(d_data+blockSize, d_partial_sum, n_elements);
+  int it_id = 0;
+  for (int ne = n_elements; ne > 1; ne = (ne + blockSize - 1) / blockSize) {
+    int grid_size = (ne + blockSize - 1) / blockSize;
+    if (grid_size == 1) {
+      shfl_scan<<<1, blockSize, shmem_sz>>>(device_data.back(), ne);
+    } else {
+      shfl_scan<<<grid_size, blockSize, shmem_sz>>>(device_data[it_id], ne,
+                                                    device_data[it_id + 1]);
+    }
+    it_id++;
+  }
+
+  // Add partial sums back
+  for (int i = device_data_ele_sz.size() - 2; i >= 0; i--) {
+    int p_grid_sz = (device_data_ele_sz[i] + blockSize - 1) / blockSize - 1;
+    uniform_add<<<p_grid_sz, blockSize>>>(
+        device_data[i] + blockSize, device_data[i + 1], device_data_ele_sz[i]);
+  }
+
   cudaEventRecord(stop, 0);
 
   // Copy result back to host
-  cudaMemcpy(h_result, d_data, sizeof(TYPE) * n_elements, cudaMemcpyDeviceToHost);
+  cudaMemcpy(h_result, device_data[0], sizeof(TYPE) * n_elements,
+             cudaMemcpyDeviceToHost);
 
   // Compare ground truth
   compare_scan_golden(h_result, h_data, n_elements);
@@ -168,8 +182,9 @@ int main(int argc, char **argv) {
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&time_ms, start, stop);
   std::cout << "[Benchmark] Execution time: " << time_ms << " ms" << std::endl;
-  std::cout << "[Benchmark] Achieved bandwidth: " << 
-	  (sizeof(TYPE) * (float)n_elements / 1000000.0) / time_ms << " GB/s" << std::endl;
+  std::cout << "[Benchmark] Achieved bandwidth: "
+            << (sizeof(TYPE) * (float)n_elements / 1000000.0) / time_ms
+            << " GB/s" << std::endl;
 
   // Thrust in-place scan as comparison
   thrust::device_vector<TYPE> d_values(h_data, h_data + n_elements);
@@ -184,20 +199,20 @@ int main(int argc, char **argv) {
   cudaEventSynchronize(stop);
   time_ms = 0;
   cudaEventElapsedTime(&time_ms, start, stop);
-  std::cout << "[Benchmark] Thrust Execution time: " << time_ms << " ms" << std::endl;
-  std::cout << "[Benchmark] Thrust Achieved bandwidth: " << 
-	  (sizeof(TYPE) * (float)n_elements / 1000000.0) / time_ms << " GB/s" << std::endl;
+  std::cout << "[Benchmark] Thrust Execution time: " << time_ms << " ms"
+            << std::endl;
+  std::cout << "[Benchmark] Thrust Achieved bandwidth: "
+            << (sizeof(TYPE) * (float)n_elements / 1000000.0) / time_ms
+            << " GB/s" << std::endl;
 
   // Clean ups
-  cudaFreeHost(h_data); 
-  cudaFreeHost(h_partial_sum); 
-  cudaFreeHost(h_result); 
-  cudaFreeHost(h_result_golden); 
-  cudaFree(d_data); 
-  cudaFree(d_partial_sum); 
+  cudaFreeHost(h_data);
+  cudaFreeHost(h_result);
+  cudaFreeHost(h_result_golden);
+  for (auto d_data : device_data) {
+    cudaFree(d_data);
+  }
   cudaEventDestroy(start);
   cudaEventDestroy(stop);
-
   return 0;
 }
-
