@@ -2,11 +2,52 @@ import taichi as ti
 import math
 import time
 
-ti.init(arch=ti.cuda)
+@ti.func
+def warp_inclusive_add_cuda(val:ti.template()):
+    global_tid = ti.global_thread_idx()
+    lane_id = global_tid % 32
+    # Intra-warp scan, manually unroll
+    offset_j = 1
+    n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
+    if (lane_id >= offset_j):
+        val += n
+    offset_j = 2
+    n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
+    if (lane_id >= offset_j):
+        val += n
+    offset_j = 4
+    n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
+    if (lane_id >= offset_j):
+        val += n
+    offset_j = 8
+    n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
+    if (lane_id >= offset_j):
+        val += n
+    offset_j = 16
+    n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
+    if (lane_id >= offset_j):
+        val += n
+    offset_j = 32
+    n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
+    if (lane_id >= offset_j):
+        val += n
+    return val
 
-n_elements = 100000
+target = ti.cuda
+if target == ti.cuda:
+    inclusive_add = warp_inclusive_add_cuda
+    barrier = ti.simt.block.sync
+elif target == ti.vulkan:
+    inclusive_add = ti.simt.subgroup.inclusive_add
+    barrier = ti.simt.subgroup.barrier
+else:
+    raise RuntimeError(f"Arch {target} not supported for parallel scan.")
+
+ti.init(arch=target)
+
 WARP_SZ = 32
 BLOCK_SZ = 128
+n_elements = BLOCK_SZ * 16
 GRID_SZ = int((n_elements + BLOCK_SZ - 1) / BLOCK_SZ)
 
 # Declare input array and all partial sums
@@ -38,42 +79,19 @@ def shfl_scan(arr_in: ti.template(), sum_smem: ti.template(),
         lane_id = i % WARP_SZ
         warp_id = thread_id // WARP_SZ
 
-        # Intra-warp scan, manually unroll
-        offset_j = 1
-        n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j):
-            val += n
-        offset_j = 2
-        n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j):
-            val += n
-        offset_j = 4
-        n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j):
-            val += n
-        offset_j = 8
-        n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j):
-            val += n
-        offset_j = 16
-        n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j):
-            val += n
-        offset_j = 32
-        n = ti.simt.warp.shfl_up_f32(ti.simt.warp.active_mask(), val, offset_j)
-        if (lane_id >= offset_j):
-            val += n
+        val = inclusive_add(val)
+        barrier()
 
         # Put warp scan results to smem
         if (thread_id % WARP_SZ == WARP_SZ - 1):
             sum_smem[block_id, warp_id] = val
-        ti.simt.block.sync()
+        barrier()
 
         # Inter-warp scan, use the first thread in the first warp
         if (warp_id == 0 and lane_id == 0):
             for k in range(1, BLOCK_SZ / WARP_SZ):
                 sum_smem[block_id, k] += sum_smem[block_id, k - 1]
-        ti.simt.block.sync()
+        barrier()
 
         # Update data with warp sums
         warp_sum = 0.0
@@ -149,9 +167,8 @@ scan_golden(arr_golden)
 # Compare
 for i in range(n_elements):
     if arr_golden[i] != arrs[0][i]:
-        print("Failed at pos", i)
-        print("arr_golden", arr_golden[i])
-        print("arr", arrs[0][i])
-        break
+        #print("", i)
+        print(f"Failed at pos {i} arr_golden {arr_golden[i]} vs arr {arrs[0][i]}")
+        #break
 
 print("Done")
