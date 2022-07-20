@@ -12,12 +12,6 @@ def run_benchmarks():
     results['taichi'] = taichi_results['taichi']
     return results
 
-def get_flops(ts):
-    flops = []
-    for ii in range(len(ts)):
-        flops.append(4 * scale[ii] * 1000 / float(ts[ii]) / 1e9)
-    return flops
-
 def get_bandwidth(ts):
     Bandwidth = []
     for ii in range(len(ts)):
