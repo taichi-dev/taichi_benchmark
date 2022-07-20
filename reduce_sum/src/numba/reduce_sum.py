@@ -12,11 +12,13 @@ def reduce_sum(n_items, repeats=5):
         for i in prange(n_items):
             sum += f[i]
         return sum
-    
-    start = time.perf_counter()
 
+    reduce() # skip first run to avoid compilation time
+
+    sum = 0.0        
+    start = time.perf_counter()
     while n_iter < repeats:
         sum = reduce()
         n_iter += 1
-        # print(sum)
-    return (time.perf_counter() - start) / repeats
+
+    return (time.perf_counter() - start) * 1000 / repeats

@@ -10,4 +10,4 @@ def reduce_sum(n_items, repeats=5):
         sum = np.sum(f)
         n_iter += 1
         # print(sum) Verified results are correct
-    return (time.perf_counter() - start) / repeats
+    return (time.perf_counter() - start)*1000 / repeats

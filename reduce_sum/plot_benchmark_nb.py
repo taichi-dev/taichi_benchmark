@@ -1,8 +1,10 @@
 from matplotlib import pyplot as plt
 from src.cuda.benchmark import benchmark as benchmark_cuda
 from src.taichi.benchmark import benchmark as benchmark_taichi
+###
 from src.numba.benchmark import benchmark as benchmark_numba
 from src.numpy.benchmark import benchmark as benchmark_numpy
+### 
 import sys
 import os
 
@@ -63,6 +65,7 @@ def plot_compute(results, machine="3080"):
     ax.bar(bar_pos, numba_bandwidth)
     
     numpy_bandwidth = get_bandwidth(results['numpy'])
+    print('***', numpy_bandwidth)
     bar_pos = [i*bar_step+6 for i in range(len(numpy_bandwidth))]
     ax.bar(bar_pos, numpy_bandwidth)
     

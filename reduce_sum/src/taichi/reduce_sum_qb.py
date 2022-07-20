@@ -1,4 +1,5 @@
 import taichi as ti 
+import time
 
 ti.init(ti.cuda,
     kernel_profiler=True,
@@ -17,11 +18,13 @@ def reduce_sum(n_items, repeats=5):
             ti.atomic_add(sum, f[i])
     kernel_time = 0.0
     n_iter = 0
+    init_kernel()
+    reduce_sum_kernel()
+
+    start = time.perf_counter()
     while n_iter < repeats:
-        init_kernel()
-        ti.profiler.clear_kernel_profiler_info()
         reduce_sum_kernel()
         ti.sync()
-        kernel_time += ti.profiler.get_kernel_profiler_total_time() * 1000
         n_iter += 1
-    return kernel_time/repeats
+    return ( time.perf_counter() - start ) * 1000 / repeats # *1000 to convert to msec
+    # return kernel_time/repeats
