@@ -4,6 +4,8 @@ from src.taichi.benchmark import benchmark as benchmark_taichi
 ###
 from src.numba.benchmark import benchmark as benchmark_numba
 from src.numpy.benchmark import benchmark as benchmark_numpy
+from src.cupy.benchmark import benchmark as benchmark_cupy
+from src.numba_cuda.benchmark import benchmark as benchmark_numba_cuda
 ### 
 import sys
 import os
@@ -16,18 +18,16 @@ def run_benchmarks():
     taichi_results = benchmark_taichi(scale)
     numba_results  = benchmark_numba(scale)
     numpy_results  = benchmark_numpy(scale)
+    cupy_results  = benchmark_cupy(scale)
+    numba_cuda_results  = benchmark_numba_cuda(scale)        
     
     results['taichi'] = taichi_results['taichi']
     results['numba'] = numba_results['numba']
     results['numpy'] = numpy_results['numpy']
+    results['cupy'] = cupy_results['cupy']
+    results['numba_cuda'] = numba_cuda_results['numba_cuda']        
     
     return results
-
-def get_flops(ts):
-    flops = []
-    for ii in range(len(ts)):
-        flops.append(4 * scale[ii] * 1000 / float(ts[ii]) / 1e9)
-    return flops
 
 def get_bandwidth(ts):
     Bandwidth = []
@@ -39,7 +39,7 @@ def plot_compute(results, machine="3080"):
     xlabel = ["256 KB","4 MB","64 MB", "256 MB"]
     fig, ax = plt.subplots()
 
-    bar_step = 7
+    bar_step = 10
     
     taichi_bandwidth = get_bandwidth(results['taichi'])
     bar_pos = [i*bar_step+1 for i in range(len(taichi_bandwidth))]
@@ -65,12 +65,19 @@ def plot_compute(results, machine="3080"):
     ax.bar(bar_pos, numba_bandwidth)
     
     numpy_bandwidth = get_bandwidth(results['numpy'])
-    print('***', numpy_bandwidth)
     bar_pos = [i*bar_step+6 for i in range(len(numpy_bandwidth))]
     ax.bar(bar_pos, numpy_bandwidth)
+
+    cupy_bandwidth = get_bandwidth(results['cupy'])
+    bar_pos = [i*bar_step+7 for i in range(len(cupy_bandwidth))]
+    ax.bar(bar_pos, cupy_bandwidth)
+
+    numba_cuda_bandwidth = get_bandwidth(results['numba_cuda'])
+    bar_pos = [i*bar_step+8 for i in range(len(numba_cuda_bandwidth))]
+    ax.bar(bar_pos, numba_cuda_bandwidth)
     
 
-    ax.legend(['Taichi','CUDA', 'CUDA/cub', 'CUDA/thrust', 'Numba', 'Numpy'])
+    ax.legend(['Taichi','CUDA', 'CUDA/cub', 'CUDA/thrust', 'Numba', 'Numpy', 'CuPy', 'Numba_CUDA'])
     ax.set_xlabel("Data Size")
     ax.set_ylabel("Bandwidth (GB/s)")
     if machine == "2060":
@@ -90,8 +97,11 @@ if __name__ == '__main__':
 
     results = run_benchmarks()
 
-    print(results)
-    
+    bw_results = zip(results.keys(), [get_bandwidth(ts) for ts in results.values()])
+    print('### Bandwidth results ###')
+    for arch, perf in bw_results:
+        print(f'{arch}: {[round(bw,2) for bw in perf]} GB/s')
+
     if len(sys.argv) == 2:
         plot_compute(results, sys.argv[1])
     else:
