@@ -47,6 +47,11 @@ N_np = ((spawn_box_np[1] - spawn_box_np[0]) / particle_diameter + 1).astype(int)
 
 h = 4.0 * particle_radius
 
+# def next_power_of_2(x):  
+#     return 1 if x == 0 else 2**(x - 1).bit_length()
+
+# for i in range(3):
+#     N_np[i] = next_power_of_2(int(N_np[i]))
 
 particle_num = N_np[0] * N_np[1] * N_np[2]
 print(particle_num)
@@ -136,7 +141,7 @@ W_gradient = W_spiky_gradient
 
 @ti.func
 def flatten_cell_id(cell_id: ti.template()) -> ti.i32:
-    return cell_id[0] * grid_N[1] * grid_N[2] + cell_id[1] * grid_N[2] + cell_id[2]
+    return int(cell_id[0] * grid_N[1] * grid_N[2] + cell_id[1] * grid_N[2] + cell_id[2])
 
 
 @ti.func
