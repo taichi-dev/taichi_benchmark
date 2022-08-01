@@ -1,16 +1,22 @@
 import cupy as cp
 import time
+from cupyx.profiler import benchmark
 
 def reduce_sum(n_items, repeats=5):
+    '''
+    Using CuPy's built-in GPU profiler for time measurement.
+    It's common mistake to use Python's time.perf_counter()
+    because CPU has no knowledge of GPU.
+    See https://docs.cupy.dev/en/stable/user_guide/performance.html#benchmarking
+    for further information.
+    
+    Use CUPY_ACCELERATORS=cub environment variable to switch
+    to the CUB backend, which leads to a 100x performance boost.
+    See https://docs.cupy.dev/en/stable/user_guide/performance.html
+    for more details.
+    '''
     f = cp.ones(shape=(n_items,), dtype=cp.float32)
-    # f = cp.random.rand(n_items, dtype=cp.float32)    
-    n_iter = 0
-    sum = cp.sum(f)  # Skip the first run
-    start = time.perf_counter()
-    while n_iter < repeats:
-        sum = cp.sum(f)
-        n_iter += 1
-    return (time.perf_counter() - start) * 1000 / repeats
+    return benchmark(cp.sum, (f,), n_repeat=repeats).gpu_times.mean() * 1000
 
 def c_reduce_sum(n_items, repeats=5):
     '''
