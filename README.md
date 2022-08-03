@@ -50,6 +50,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 </p>
 <p align="center">
   <img src="n-body/fig/bench.png" width="400">
+  <img src="stencil2d/fig/bench.png" width="400">
 </p>
 
 * Easy-to-read code, extraordinary performance against JAX (GPU) and Numba/Numpy (CPU). \[Source: [Differentiable Smoke Simulation](./diff-smoke), [Poisson Disk Sampling](./poisson).\]
@@ -57,14 +58,6 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <p align="center">
 <img src="diff-smoke/fig/bench_gpu.png" width="400">
 <img src="poisson/fig/bench.png" width="400">
-</p>
-
-## Gaps for Improvement
-
-We have also noticed certain amount of performance gap against manually optimized CUDA code in the [2D stencil](./stencil2d) benchmarks. 
-We are working on the Taichi compiler to shrink the performance gaps. Welcome contribution!
-<p align="center">
-<img src="stencil2d/fig/bench_cuda_backend.png" width="400">
 </p>
 
 <!-- Future works -->
