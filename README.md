@@ -42,6 +42,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <p align="center">
 <img src="mpm/fig/bench_3d.png" width="400" height="300">
 <img src="svd3/fig/bench_svd.png" width="400" height="300">
+<img src="n-body/fig/bench_roofline.png" width="400">
 </p>
 
 <p align="center">
@@ -61,7 +62,6 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 We have also noticed certain amount of performance gap against manually optimized CUDA code in the [N-body](./n-body) and [2D stencil](./stencil2d) benchmarks. 
 We are working on the Taichi compiler to shrink the performance gaps. Welcome contribution!
 <p align="center">
-<img src="n-body/fig/bench_roofline.png" width="400">
 <img src="stencil2d/fig/bench_cuda_backend.png" width="400">
 </p>
 
