@@ -42,14 +42,15 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <p align="center">
 <img src="mpm/fig/bench_3d.png" width="400" height="300">
 <img src="svd3/fig/bench_svd.png" width="400" height="300">
-<img src="n-body/fig/bench.png" width="400">
 </p>
 
 <p align="center">
 <img src="smallpt/fig/bench.png" width="400">
 <img src="saxpy/fig/compute_bench.png" width="400">
 </p>
-
+<p align="center">
+  <img src="n-body/fig/bench.png" width="400">
+</p>
 * Easy-to-read code, extraordinary performance against JAX (GPU) and Numba/Numpy (CPU). \[Source: [Differentiable Smoke Simulation](./diff-smoke), [Poisson Disk Sampling](./poisson).\]
 
 <p align="center">
