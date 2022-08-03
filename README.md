@@ -51,6 +51,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 <p align="center">
   <img src="n-body/fig/bench.png" width="400">
 </p>
+
 * Easy-to-read code, extraordinary performance against JAX (GPU) and Numba/Numpy (CPU). \[Source: [Differentiable Smoke Simulation](./diff-smoke), [Poisson Disk Sampling](./poisson).\]
 
 <p align="center">
