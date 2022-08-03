@@ -60,7 +60,7 @@ We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics c
 
 ## Gaps for Improvement
 
-We have also noticed certain amount of performance gap against manually optimized CUDA code in the [N-body](./n-body) and [2D stencil](./stencil2d) benchmarks. 
+We have also noticed certain amount of performance gap against manually optimized CUDA code in the [2D stencil](./stencil2d) benchmarks. 
 We are working on the Taichi compiler to shrink the performance gaps. Welcome contribution!
 <p align="center">
 <img src="stencil2d/fig/bench_cuda_backend.png" width="400">
