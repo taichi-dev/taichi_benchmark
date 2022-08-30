@@ -45,6 +45,6 @@ def saxpy(N, len_coeff):
 
 if __name__ == '__main__':
     for i in [256, 512, 1024, 2048, 4096]:
-        for j in range(5):
+        for j in range(16):
             rd = saxpy(i, 2**(j))
             print("{}x{}@{}, {:.3f}ms, {:.3f} GFLOPS, {:.3f} GB/s".format(rd["N"], rd["N"], rd["fold"], rd["time"], rd["gflops"], rd["gbs"]))
