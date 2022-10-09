@@ -13,9 +13,9 @@ def benchmark(max_nesting=512, print_res=True):
             results += curr_results
     if print_res:
         for res in results:
-            arch = res["config"]["arch"]
-            N = res["config"]["N"]
-            fold = res["config"]["len_coeff"]
+            arch = res["test_config"]["arch"]
+            N = res["test_config"]["N"]
+            fold = res["test_config"]["len_coeff"]
             gflops = res["metrics"]["GFLOPS"]
             gbs = res["metrics"]["GB/s"]
             print("Arch {} {}x{}@{}, {:.3f}ms, {:.3f} GFLOPS, {:.3f} GB/s".format(arch, N, N, fold, res["wall_time"], gflops, gbs))

@@ -58,7 +58,7 @@ __host__ void saxpy(int _N) {
     double GFlops = 1e-6 * N * 2 / avg_time;
     double GBs = 1e-6 * N * sizeof(float) * 3 / avg_time;
 #ifdef JSON_OUTPUT
-    printf("{\"N\": %d, \"time\":%.3lf, \"gflops\":%.3lf, \"gbs\": %.3lf}\n",  _N, avg_time, GFlops, GBs);
+    printf("{\"test_config\": {\"N\": %d, \"nesting_factor\": 1}, \"wall_time\":%.3lf, \"metrics\": {\"GFLOPS\":%.3lf, \"GBS\": %.3lf}}\n",  _N, avg_time, GFlops, GBs);
 #else
     printf("%dx%d, %.3lf ms, %.3lf GFLOPS, %.3lf GB/s\n", _N, _N, avg_time, GFlops, GBs);
 #endif

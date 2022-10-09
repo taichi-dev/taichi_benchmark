@@ -1,7 +1,7 @@
 import taichi as ti
 from taichi_benchmark.common import benchmark
 
-@benchmark(archs=[ti.cuda, ti.opengl, ti.vulkan, ti.metal])
+@benchmark(test_name='Nested SAXPY', archs=[ti.cuda, ti.opengl, ti.vulkan, ti.metal])
 def saxpy(**kwargs):
     N = kwargs['N']
     len_coeff = kwargs['len_coeff']

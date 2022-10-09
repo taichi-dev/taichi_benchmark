@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
-from src.taichi.benchmark import benchmark as benchmark_taichi
-from src.cuda.benchmark import benchmark as benchmark_cuda
+from taichi.benchmark import benchmark as benchmark_taichi
+from cuda.benchmark import benchmark as benchmark_cuda
 import sys
 import os
 

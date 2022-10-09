@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from src.taichi.benchmark import benchmark as benchmark_taichi
+from taichi.benchmark import benchmark as benchmark_taichi
 import math
 import os
 
