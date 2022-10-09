@@ -1,5 +1,5 @@
-from src.cuda.benchmark import benchmark as benchmark_cuda
-from src.taichi.benchmark import benchmark as benchmark_taichi
+from .cuda.benchmark import benchmark as benchmark_cuda
+from .taichi.benchmark import benchmark as benchmark_taichi
 
 import matplotlib.pyplot as plt
 import sys

@@ -1,5 +1,5 @@
-from .nbody import run_nbody as run_baseline
-from .nbody_cache_block import run_nbody as run_cache_block
+from .nbody import nbody as run_baseline
+from .nbody_cache_block import nbody as run_cache_block
 
 def benchmark(nIters = 21):
     nBodies = 128
@@ -9,10 +9,10 @@ def benchmark(nIters = 21):
     for k in range(13):
         print("Benchmark nBodies={}".format(nBodies))
         print("Baseline running...")
-        baseline_results.append(run_baseline(nBodies, nIters=nIters))
+        baseline_results.append(run_baseline(nBodies=nBodies))
         print("Done.")
         print("Block running...")
-        cache_block_results.append(run_cache_block(nBodies, nIters=nIters))
+        cache_block_results.append(run_cache_block(nBodies=nBodies))
         print("Done.")
         nBodies *= 2
     return {"taichi_baseline": baseline_results,

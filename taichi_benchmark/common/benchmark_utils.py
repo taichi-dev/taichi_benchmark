@@ -55,8 +55,7 @@ def cuda_compile_and_benchmark(workdir, source_name, output_binary_name, flags=[
 def get_taichi_version():
     return (f'{_ti_core.get_version_major()}.{_ti_core.get_version_minor()}.{_ti_core.get_version_patch()}', _ti_core.get_commit_hash())
 
-def run_taichi_benchmark(func, arch, **kwargs):
-    repeats = kwargs.get('repeats')
+def run_taichi_benchmark(func, arch, repeats, **kwargs):
     ti.init(arch=arch, device_memory_GB=4,
             offline_cache=False)
     run_init, run_iter, metrics = func(**kwargs)
@@ -71,7 +70,7 @@ def run_taichi_benchmark(func, arch, **kwargs):
     return avg_time, metrics(avg_time)
     
 
-def benchmark(test_name, archs=[cuda, vulkan, metal, opengl, dx11], **options):
+def benchmark(test_name, repeats=100, archs=[cuda, vulkan, metal, opengl, dx11], **options):
     def is_target_platform(arch):
         cur_system = platform.system()
         # For MacOS
@@ -98,7 +97,7 @@ def benchmark(test_name, archs=[cuda, vulkan, metal, opengl, dx11], **options):
                 config = copy.deepcopy(kwargs)
                 config['taichi_version'] = get_taichi_version()
                 config['arch'] = arch
-                avg_time, metrics = run_taichi_benchmark(func, arch, **kwargs)
+                avg_time, metrics = run_taichi_benchmark(func, arch, repeats, **kwargs)
                 results.append(
                     {'test_name' : test_name, 'test_config' : config, 'wall_time' : avg_time*1000.0, 'metrics' : metrics})
             return results

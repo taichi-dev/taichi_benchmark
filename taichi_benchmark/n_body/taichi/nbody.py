@@ -1,8 +1,9 @@
 import taichi as ti
-import time
+from taichi_benchmark.common import benchmark
 
-def run_nbody(nBodies, arch=ti.cuda, nIters=50):
-    ti.init(arch=arch)
+@benchmark(test_name='N-Body baseline', archs=[ti.cuda, ti.vulkan], repeats=20)
+def nbody(**kwargs):
+    nBodies = kwargs['nBodies']
     softening = 1e-9
     dt = 0.01
 
@@ -18,12 +19,13 @@ def run_nbody(nBodies, arch=ti.cuda, nIters=50):
 
     @ti.kernel
     def bodyForce():
-        ti.block_dim(256)
+        ti.loop_config(block_dim=256)
         for i in range(nBodies):
             Fx = 0.0
             Fy = 0.0
             Fz = 0.0
             for j in range(nBodies):
+
                 dx = bodies[j, 0] - bodies[i, 0]
                 dy = bodies[j, 1] - bodies[i, 1]
                 dz = bodies[j, 2] - bodies[i, 2]
@@ -33,34 +35,23 @@ def run_nbody(nBodies, arch=ti.cuda, nIters=50):
                 Fx += dx * invDist3
                 Fy += dy * invDist3
                 Fz += dz * invDist3
-            velocities[i, 0] += dt * Fx;
-            velocities[i, 1] += dt * Fy;
-            velocities[i, 2] += dt * Fz;
+            velocities[i, 0] += dt * Fx
+            velocities[i, 1] += dt * Fy
+            velocities[i, 2] += dt * Fz
 
         for i in range(nBodies):
-            bodies[i, 0] += velocities[i, 0] * dt;
-            bodies[i, 1] += velocities[i, 1] * dt;
-            bodies[i, 2] += velocities[i, 2] * dt;
-
-    def run():
+            bodies[i, 0] += velocities[i, 0] * dt
+            bodies[i, 1] += velocities[i, 1] * dt
+            bodies[i, 2] += velocities[i, 2] * dt
+    
+    def benchmark_init():
         randomizeBodies()
-        bodyForce() # warm-up
-        st = time.time()
-        for i in range(nIters):
-            bodyForce()
-            ti.sync()
-            if st == None:
-                st = time.time()
-        et = time.time()
+        bodyForce()
+    
+    def benchmark_iter():
+        bodyForce()
+    
+    def benchmark_metrics(avg_time):
+        return {'rate': 1e-9 * nBodies * nBodies / avg_time}
 
-        avg_time =  (et - st) * 1000.0 / (nIters - 1)
-        return {'nbodies': nBodies, 'time': avg_time, 'rate': 1e-6 * nBodies * nBodies / avg_time}
-    return run()
-
-if __name__ == '__main__':
-    nBodies = 1024
-    for i in range(10):
-        result = run_nbody(nBodies)
-        avg_time = result['time']
-        print("nBodies={}, spped {:.3f} billion bodies per second.".format(nBodies, 1e-6 * nBodies * nBodies / avg_time))
-        nBodies *= 2
+    return benchmark_init, benchmark_iter, benchmark_metrics

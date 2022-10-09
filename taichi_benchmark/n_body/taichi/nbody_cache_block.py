@@ -1,8 +1,10 @@
 import taichi as ti
-import time
+from taichi_benchmark.common import benchmark
 
-def run_nbody(nBodies, arch=ti.vulkan, nIters=50):
-    ti.init(arch=arch)
+@benchmark(test_name="N-body cache block", archs=[ti.vulkan, ti.cuda], repeats=20)
+def nbody(**kwargs):
+    # ti.init(arch=arch)
+    nBodies = kwargs['nBodies']
     softening = 1e-9
     dt = 0.01
     block_size = 128
@@ -49,33 +51,23 @@ def run_nbody(nBodies, arch=ti.vulkan, nIters=50):
                     Fy += dy * invDist3
                     Fz += dz * invDist3
                 ti.simt.block.sync()
-            velocities[i, 0] += dt * Fx;
-            velocities[i, 1] += dt * Fy;
-            velocities[i, 2] += dt * Fz;
+            velocities[i, 0] += dt * Fx
+            velocities[i, 1] += dt * Fy
+            velocities[i, 2] += dt * Fz
 
         for i in range(nBodies):
-            bodies[i, 0] = bodies[i, 0] + velocities[i, 0] * dt;
-            bodies[i, 1] = bodies[i, 1] + velocities[i, 1] * dt;
-            bodies[i, 2] = bodies[i, 2] + velocities[i, 2] * dt;
+            bodies[i, 0] = bodies[i, 0] + velocities[i, 0] * dt
+            bodies[i, 1] = bodies[i, 1] + velocities[i, 1] * dt
+            bodies[i, 2] = bodies[i, 2] + velocities[i, 2] * dt
 
-    def run():
+    def benchmark_init():
         randomizeBodies()
-        st = None
-        for i in range(nIters):
-            bodyForce()
-            ti.sync()
-            if st == None:
-                st = time.time()
-        et = time.time()
+        bodyForce()
 
-        avg_time =  (et - st) * 1000.0 / (nIters- 1)
-        return {'nbodies': nBodies, 'time': avg_time, 'rate': 1e-6 * nBodies * nBodies / avg_time}
-    return run()
+    def benchmark_iter():
+        bodyForce()
 
-if __name__ == '__main__':
-    nBodies = 1024
-    for i in range(10):
-        result = run_nbody(nBodies)
-        avg_time = result['time']
-        print("nBodies={}, spped {:.3f} billion bodies per second.".format(nBodies, 1e-6 * nBodies * nBodies / avg_time))
-        nBodies *= 2
+    def benchmark_metrics(avg_time):
+        return {'Rate' : 1e-9 * nBodies * nBodies / avg_time}
+    
+    return benchmark_init, benchmark_iter, benchmark_metrics
