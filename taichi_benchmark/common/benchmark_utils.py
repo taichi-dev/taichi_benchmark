@@ -4,14 +4,12 @@ import time
 import json
 import platform
 import copy
-import taichi as ti
-
+from io import StringIO
 from subprocess import Popen, PIPE
 
+import taichi as ti
 from taichi.lang import cpu, cuda, metal, opengl, vulkan, dx11
 from taichi._lib import core as _ti_core
-
-from io import StringIO
 
 import vulkan as vk
 
@@ -147,6 +145,10 @@ def get_os_name():
     cur_uname = platform.uname()
     return f'{cur_uname.system} {cur_uname.release}'
 
+def get_machine_info():
+    machine_info = get_processor_names()
+    machine_info['os'] = get_os_name()
+    return machine_info
 
 def benchmark(test_name, archs=[cuda, vulkan, metal, opengl, dx11], default_repeats=20, **options):
     def is_target_platform(arch):
@@ -170,7 +172,7 @@ def benchmark(test_name, archs=[cuda, vulkan, metal, opengl, dx11], default_repe
         def run_benchmark(**kwargs):
             results = []
             repeats = default_repeats
-            # Override the repeats in options
+            # Override the repeats present in options
             if kwargs.get('repeats') != None:
                 repeats = kwargs['repeats']
                 kwargs.pop('repeats', None)
@@ -183,8 +185,9 @@ def benchmark(test_name, archs=[cuda, vulkan, metal, opengl, dx11], default_repe
                 config['arch'] = arch
                 avg_time, metrics = run_taichi_benchmark(
                     func, arch, repeats, **kwargs)
+                metrics['wall_time'] = avg_time
                 results.append(
-                    {'test_name': test_name, 'test_config': config, 'wall_time': avg_time*1000.0, 'metrics': metrics})
+                    {'test_name': test_name, 'test_config': config, 'metrics': metrics})
             return results
         return run_benchmark
 
