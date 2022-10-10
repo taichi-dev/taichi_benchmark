@@ -1,6 +1,9 @@
 import taichi_benchmark as ti_bench
 
-r_saxpy = ti_bench.saxpy.run()
-print(r)
-r_nbody = ti_bench.n_body.run()
-print(r)
+bench_items = [ti_bench.n_body, ti_bench.saxpy]
+
+results = []
+for item in bench_items:
+    r = item.run()
+    results.append(r)
+print(results)
