@@ -115,7 +115,7 @@ ti.root.dense(ti.ij, (nBodies // block_size, 4)).dense(ti.i, block_size).place(b
 ```
 
 Taichi internally handles the loop decompositions and index permutations according to the block statements in field definitions.
-There are no changes in the `bodyForce` function. If you are unformaliar with the usage, please refer to our document [Fields (Advanced)](https://docs.taichi.graphics/lang/articles/advanced/layout).
+There are no changes in the `bodyForce` function. If you are unfamiliar with the usage, please refer to our document [Fields (Advanced)](https://docs.taichi.graphics/lang/articles/advanced/layout).
 
 #### Partial Unrolling
 
