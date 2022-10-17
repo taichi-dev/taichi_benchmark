@@ -75,19 +75,14 @@ def get_gpu_name():
     return gpu_name
 
 
-def get_processor_names():
-    cur_system = platform.system()
-    if cur_system == "Linux":
-        return {'CPU': get_cpu_name_linux(), 'GPU': get_gpu_name()}
+def get_machine_info():
+    uname = platform.uname()
+    if uname.system == "Linux":
+        return {
+            'os': 'Linux',
+            'release': uname.release,
+            'cpu': get_cpu_name_linux(),
+            'gpu': get_gpu_name(),
+        }
     else:
         raise NotImplementedError
-
-
-def get_os_name():
-    cur_uname = platform.uname()
-    return f'{cur_uname.system} {cur_uname.release}'
-
-def get_machine_info():
-    machine_info = get_processor_names()
-    machine_info['os'] = get_os_name()
-    return machine_info

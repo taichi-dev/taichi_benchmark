@@ -55,7 +55,7 @@ class TaichiBenchmarkRunner:
                     if not bm.check_configuration(**cfg):
                         continue
 
-                    tags = {**bm.tags, **cfg, 'arch': arch.name, 'impl': 'Taichi', 'os': platform.system()}
+                    tags = {**bm.tags, **cfg, 'arch': arch.name, 'impl': 'Taichi'}
                     ti.init(arch=arch, device_memory_GB=bm.memory_gb, offline_cache=False)
                     bm.init(**cfg)
                     repeats = bm.repeats
