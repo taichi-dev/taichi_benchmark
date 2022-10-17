@@ -4,6 +4,7 @@
 from datetime import datetime
 from typing import List
 import json
+import logging
 
 # -- third party --
 import requests
@@ -15,7 +16,10 @@ from .taichi import get_taichi_version
 
 
 # -- code --
-def upload_benchmark_results(metrics: List[BenchmarkResult], auth: str):
+log = logging.getLogger(__name__)
+
+
+def upload_results(metrics: List[BenchmarkResult], auth: str):
     machine = get_machine_info()
     ts = str(datetime.now().astimezone())
     ver = get_taichi_version()
@@ -25,7 +29,7 @@ def upload_benchmark_results(metrics: List[BenchmarkResult], auth: str):
         "name": m.name,
         "commit_id": ver,
         "tags": m.tags,
-        "uploader": "",  # TODO
+        "uploader": "",  # TODO: end user uploading
         "machine": machine,
         "value": m.value,
     } for m in metrics]
@@ -38,4 +42,5 @@ def upload_benchmark_results(metrics: List[BenchmarkResult], auth: str):
             "Authorization": f'Bearer {auth}',
         },
     )
-    print(resp.status_code)
+    resp.raise_for_status()
+    log.info('Upload successful')

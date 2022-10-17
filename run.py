@@ -10,6 +10,7 @@ import dataclasses, json
 # -- own --
 from utils import logconfig
 import core.runner
+import core.upload
 
 
 # -- code --
@@ -41,6 +42,10 @@ def main():
     if options.save:
         log.info('Saving results to %s', options.save)
         save_json(results, options.save)
+
+    if options.upload_auth:
+        log.info('Uploading results to server')
+        core.upload.upload_results(results, options.upload_auth)
 
 if __name__ == '__main__':
     main()
