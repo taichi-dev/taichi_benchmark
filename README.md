@@ -30,34 +30,34 @@ Elegant coding style and high performance are equally important. Through compari
 ## Highlights
 We have conducted performance evaluation on an Nvidia Geforce RTX3080 graphics card. Compared with the baselines, we share some inspiring performance results achieved by Taichi on the basis of its easy-to-use programming style:
 
-* Performance approaches device capability roofline, in terms of both computation and memory bandwidth. \[Source: [Nested SAXPY](./saxpy), [Array fill](./fill).\]
+* Performance approaches device capability roofline, in terms of both computation and memory bandwidth. \[Source: [Nested SAXPY](./suites/saxpy), [Array fill](./suites/fill).\]
 
 <p align="center">
-<img src="saxpy/fig/roofline_log_scale.png" width="400">  
-<img src="fill/fig/bench_fill.png" width="400">
+<img src="suites/saxpy/fig/roofline_log_scale.png" width="400">  
+<img src="suites/fill/fig/bench_fill.png" width="400">
 </p>
 
-* Minimized coding efforts, comparable performance against CUDA. \[Source: [MPM](./mpm), [3x3 SVD](./svd3), [Path Tracer](./smallpt), [Nested SAXPY](./saxpy).\]
+* Minimized coding efforts, comparable performance against CUDA. \[Source: [MPM](./suites/mpm), [3x3 SVD](./suites/svd3), [Path Tracer](./suites/smallpt), [Nested SAXPY](./suites/saxpy).\]
 
 <p align="center">
-<img src="mpm/fig/bench_3d.png" width="400" height="300">
-<img src="svd3/fig/bench_svd.png" width="400" height="300">
+<img src="suites/mpm/fig/bench_3d.png" width="400" height="300">
+<img src="suites/svd3/fig/bench_svd.png" width="400" height="300">
 </p>
 
 <p align="center">
-<img src="smallpt/fig/bench.png" width="400">
-<img src="saxpy/fig/compute_bench.png" width="400">
+<img src="suites/smallpt/fig/bench.png" width="400">
+<img src="suites/saxpy/fig/compute_bench.png" width="400">
 </p>
 <p align="center">
-  <img src="n-body/fig/bench.png" width="400">
-  <img src="stencil2d/fig/bench.png" width="400">
+  <img src="suites/n_body/fig/bench.png" width="400">
+  <img src="suites/stencil2d/fig/bench.png" width="400">
 </p>
 
-* Easy-to-read code, extraordinary performance against JAX (GPU) and Numba/Numpy (CPU). \[Source: [Differentiable Smoke Simulation](./diff-smoke), [Poisson Disk Sampling](./poisson).\]
+* Easy-to-read code, extraordinary performance against JAX (GPU) and Numba/Numpy (CPU). \[Source: [Differentiable Smoke Simulation](./suites/diff-smoke), [Poisson Disk Sampling](./suites/poisson).\]
 
 <p align="center">
-<img src="diff-smoke/fig/bench_gpu.png" width="400">
-<img src="poisson/fig/bench.png" width="400">
+<img src="suites/diff-smoke/fig/bench_gpu.png" width="400">
+<img src="suites/poisson/fig/bench.png" width="400">
 </p>
 
 <!-- Future works -->
