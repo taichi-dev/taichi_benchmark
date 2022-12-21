@@ -13,17 +13,17 @@ from core.taichi import TaichiBenchmark
 # -- code --
 class MPM(TaichiBenchmark):
     name = 'mpm'
-    archs = [ti.cuda, ti.vulkan]
+    archs = [ti.cuda, ti.vulkan, ti.metal]
     matrix = {
-        'n_grid': [32, 64, 128, 192],
+        'n_grid': [32, 64, 128, 256],
         'dim' : [2, 3]
     }
 
     @property
     def repeats(self):
-        if self.dim == 3 and self.n_grid > 64:
-            return 5
-        return 20
+        if self.n_grid > 64:
+            return 10
+        return 40
 
 
     def init(self, n_grid, dim):

@@ -1,3 +1,3 @@
-from . import n_body, saxpy, mpm, fill
+from . import n_body, saxpy, mpm, fill, stencil
 
-__all__ = ['n_body', 'saxpy', 'fill']
+__all__ = ['n_body', 'saxpy', 'mpm', 'fill', 'stencil']
