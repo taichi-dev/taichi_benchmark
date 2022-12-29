@@ -12,7 +12,10 @@ from core.taichi import TaichiBenchmark
 
 class SAXPY(TaichiBenchmark):
     name = 'nested-saxpy'
-    archs = [ti.cuda, ti.opengl, ti.vulkan, ti.metal]
+    # Temp disable opengl,
+    # breaks after updating nvidia driver
+    # archs = [ti.cuda, ti.opengl, ti.vulkan, ti.metal]
+    archs = [ti.cuda, ti.vulkan, ti.metal]
     matrix = {
         'n': [256, 512, 1024, 2048, 4096],
         'len_coeff': [2**j for j in range(9)]
