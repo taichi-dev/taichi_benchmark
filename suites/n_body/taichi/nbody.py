@@ -16,7 +16,7 @@ class NBodyNaive(TaichiBenchmark):
     tags = {'variant': 'Naive'}
     archs = [ti.cuda, ti.vulkan]
     matrix = {
-        'n': [128, 256, 512]
+        'n': [128, 256, 512, 262144]
     }
 
     def init(self, n):

@@ -12,9 +12,9 @@ from core.taichi import TaichiBenchmark
 
 class Stencil(TaichiBenchmark):
     name = 'stencil'
-    archs = [ti.cuda, ti.opengl, ti.vulkan, ti.metal]
+    archs = [ti.cuda, ti.vulkan, ti.metal]
     matrix = {
-        'N': [256, 512, 1024, 2048, 4096],
+        'N': [256, 1024, 4096],
     }
 
     def init(self, N):
