@@ -16,7 +16,7 @@ class Fill(TaichiBenchmark):
     archs = [ti.cuda, ti.vulkan]
     MB = 1024 * 256
     matrix = {
-        'n': [64 * MB, 128 * MB,  1024 * MB, 4096 * MB],
+        'n': [64 * MB, 128 * MB,  512 * MB, 2048 * MB],
     }
 
     @property
