@@ -23,15 +23,26 @@ class Visualizer:
         self.plot_figures()
 
     def load_data_from_log_dir(self):
+        has_master = False
         for (_,_,files) in os.walk(self.log_dir, topdown=True):
             for log_fn in files:
                 if re.search("benchmark_v.*\.log", log_fn):
-                    version_string = re.search("v\d\.\d\.\d", log_fn).group()
+                    re_match = re.search("v\d\.\d\.\d", log_fn)
+                    # version_string = re.search("v\d\.\d\.\d", log_fn).group()
+                    if not has_master and re_match is None:
+                        has_master = log_fn == "benchmark_vmaster.log"
+                        version_string = "master"
+                    else:
+                        version_string = re_match.group()
+                        self.ti_versions.append(version_string)
+
                     print(f"Found benchmark log file for Taichi {version_string}")
                     log_file = open(os.path.join(self.log_dir, log_fn)) 
                     self.benchmark_raw_data[version_string] = json.load(log_file)
-                    self.ti_versions.append(version_string)
         self.ti_versions.sort()
+        if has_master:
+            self.ti_versions.append("master")
+       
 
     def restructure_data_for_plots(self):
         def tags_to_str(tags):
@@ -89,8 +100,8 @@ class Visualizer:
                 labels.append(line_label)
                 line_data = self.plot_data[fig_name][line_label]
                 values = [line_data.get(ti_ver) for ti_ver in self.ti_versions]
-                ax.legend(labels)
                 ax.plot(self.x_pos, values)
+                ax.legend(labels)
 
                 line_id += 1
             plt.show()
