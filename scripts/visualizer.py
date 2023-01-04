@@ -37,12 +37,12 @@ class Visualizer:
                         self.ti_versions.append(version_string)
 
                     print(f"Found benchmark log file for Taichi {version_string}")
-                    log_file = open(os.path.join(self.log_dir, log_fn)) 
+                    log_file = open(os.path.join(self.log_dir, log_fn))
                     self.benchmark_raw_data[version_string] = json.load(log_file)
         self.ti_versions.sort()
         if has_master:
             self.ti_versions.append("master")
-       
+
 
     def restructure_data_for_plots(self):
         def tags_to_str(tags):
@@ -68,7 +68,7 @@ class Visualizer:
                 if self.plot_data[name].get(tags_str) is None:
                     self.plot_data[name][tags_str] = {}
                 self.plot_data[name][tags_str][version] = value
-    
+
     def create_new_subplot(self, fig, n_charts, subplot_id, fig_name):
         subplot_id = n_charts * 100 + 10 + subplot_id
         ax = fig.add_subplot(subplot_id)
@@ -81,6 +81,8 @@ class Visualizer:
         self.x_pos = [i + 1 for i in range(len(self.ti_versions))]
 
         for fig_name in self.plot_data:
+            if fig_name.endswith('wall_time'):
+                continue
             labels = []
             values = []
             nlines = len(self.plot_data[fig_name])
@@ -101,12 +103,12 @@ class Visualizer:
                 line_data = self.plot_data[fig_name][line_label]
                 values = [line_data.get(ti_ver) for ti_ver in self.ti_versions]
                 ax.plot(self.x_pos, values)
-                ax.legend(labels)
+                ax.legend(labels, loc='center left', bbox_to_anchor=(0, 0.5))
 
                 line_id += 1
             plt.show()
         # plt.plot()
-        
+
 if __name__ == '__main__':
     Visualizer(sys.argv[1])
- 
+
