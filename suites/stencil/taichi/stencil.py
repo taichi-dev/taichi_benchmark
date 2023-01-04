@@ -51,7 +51,7 @@ class Stencil(TaichiBenchmark):
                         p += y[I + stencil]
                     x[I] = p * 0.25
 
-        self.run_iter = lambda: jacobi_step()
+        self.run_iter = lambda: jacobi_step
         self.N = N
         init()
 

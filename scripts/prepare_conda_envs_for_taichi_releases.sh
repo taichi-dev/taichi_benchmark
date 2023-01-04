@@ -9,7 +9,7 @@ do
 ENV_NAME="${ENV_PREFIX}_${TI_VER}"
 ENV_AVAIL=`echo ${CONDA_ENVS}|grep ${ENV_NAME}`
 if [ -z "$ENV_AVAIL" ]; then
-echo "[Taicho] Taichi release environment ${ENV_NAME} not available yet. Create it!"
+echo "[Taichi] Taichi release environment ${ENV_NAME} not available yet. Create it!"
 echo "[Conda] Creating conda env ${ENV_NAME} with Python ${PY_VERSION}..."
 conda create -y -n ${ENV_NAME} python=${PY_VERSION}
 echo "[Pip] Installing taichi ${TI_VER}"
