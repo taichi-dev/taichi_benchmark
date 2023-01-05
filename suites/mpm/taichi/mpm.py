@@ -77,7 +77,7 @@ class MPM(TaichiBenchmark):
                         weight *= w[offset[i]][i]
                     grid_v[base +
                            offset] += weight * (p_mass * v[p] + affine @ dpos)
-                    grid_m[base + offset] += weight * p_mass 
+                    grid_m[base + offset] += weight * p_mass
             for I in ti.grouped(grid_m):
                 if grid_m[I] > 0:
                     grid_v[I] /= grid_m[I]
@@ -108,7 +108,7 @@ class MPM(TaichiBenchmark):
                 C[p] = new_C
 
         init()
-        self.mpm_substep = mpm_substep        
+        self.mpm_substep = mpm_substep
         self.steps = steps
         self.n_particles = n_particles
         self.dim = dim
