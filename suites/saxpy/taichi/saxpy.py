@@ -17,8 +17,8 @@ class SAXPY(TaichiBenchmark):
     # archs = [ti.cuda, ti.opengl, ti.vulkan, ti.metal]
     archs = [ti.cuda, ti.vulkan, ti.metal]
     matrix = {
-        'n': [256, 512, 1024, 2048, 4096],
-        'len_coeff': [2**j for j in range(9)]
+        'n': [256, 1024, 2048, 4096],
+        'len_coeff': [1, 32, 64, 128, 256]
     }
 
     @property

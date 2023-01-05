@@ -17,7 +17,7 @@ class NBodyCacheBlock(TaichiBenchmark):
     tags = {'variant': 'CacheBlock'}
     archs = [ti.cuda, ti.vulkan]
     matrix = {
-        'n': [128, 256, 512]
+        'n': [128, 256, 512, 262144]
     }
 
     def init(self, n):
@@ -88,3 +88,19 @@ class NBodyCacheBlock(TaichiBenchmark):
         return {
             'bips': self.n * self.n / avg_time / 1e9,
         }
+
+if __name__ == '__main__':
+    ti.init(arch=ti.cuda, log_level=ti.TRACE, offline_cache=False, print_kernel_nvptx=True)
+    runner=NBodyCacheBlock()
+    runner.init(32768)
+    runner.run_iter()
+
+    import time
+    st = time.perf_counter()
+    for i in range(10):
+        runner.run_iter()
+    et = time.perf_counter()
+    t = (et - st) / 10
+    print(t)
+
+    print(runner.get_metrics(t))
