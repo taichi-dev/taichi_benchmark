@@ -21,9 +21,10 @@ class MPMCompile(MPM):
         
         arch = ti.lang.impl.get_runtime().prog.config().arch
         self.mod = ti.aot.Module(arch) 
+        self.num_compiles = 20
 
     def run_iter(self):
-        for _ in range(self.steps):
+        for _ in range(self.num_compiles):
             self.mod.add_kernel(self.mpm_substep)
     
     def iter_exit(self):
@@ -32,6 +33,5 @@ class MPMCompile(MPM):
 
     def get_metrics(self, avg_time: float) -> Dict[str, float]:
         return {
-            'fps': 1.0 / avg_time,
-            'particles/s': self.n_particles * self.steps / avg_time
+            'compile_time': avg_time,
         }
