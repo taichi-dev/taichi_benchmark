@@ -66,9 +66,12 @@ class TaichiBenchmarkRunner:
                     st = time.perf_counter()
                     for _ in range(repeats):
                         bm.run_iter()
+                    bm.iter_exit()
                     ti.sync()
+                    
                     et = time.perf_counter()
                     avg_time = (et - st) / repeats
+                    
 
                     metrics = bm.get_metrics(avg_time)
                     metrics['wall_time'] = avg_time
@@ -101,6 +104,9 @@ class TaichiBenchmark:
 
     def run_iter(self):
         raise NotImplementedError
+    
+    def iter_exit(self):
+        pass
 
     def get_metrics(self, avg_time: float) -> Dict[str, float]:
         raise NotImplementedError
