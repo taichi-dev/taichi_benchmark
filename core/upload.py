@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import List
 import json
 import logging
+import subprocess
 
 # -- third party --
 import requests
@@ -19,10 +20,16 @@ from .taichi import get_taichi_version
 log = logging.getLogger(__name__)
 
 
+def get_commit_time(commit_id: str) -> datetime:
+    cmd = f'git show -s --format=%ct {commit_id}'
+    output = subprocess.check_output(cmd, shell=True).decode('utf-8')
+    return datetime.fromtimestamp(int(output))
+
+
 def upload_results(metrics: List[BenchmarkResult], auth: str):
     machine = get_machine_info()
-    ts = str(datetime.now().astimezone())
     ver = get_taichi_version()
+    ts = str(get_commit_time(ver).astimezone())
 
     payload = [{
         "time": ts,
