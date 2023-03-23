@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import List
 import json
 import logging
+from pathlib import Path
 import subprocess
 
 # -- third party --
@@ -20,8 +21,18 @@ from .taichi import get_taichi_version
 log = logging.getLogger(__name__)
 
 
+def find_taichi_root():
+    root = Path('/')
+    p = Path(__file__).resolve().parent
+    while p != root:
+        if (p / 'setup.py').exists():
+            return p
+        p = p.parent
+
+
 def get_commit_time(commit_id: str) -> datetime:
-    cmd = f'git show -s --format=%ct {commit_id}'
+    root = find_taichi_root()
+    cmd = f'cd {root} && git show -s --format=%ct {commit_id}'
     output = subprocess.check_output(cmd, shell=True).decode('utf-8')
     return datetime.fromtimestamp(int(output))
 
