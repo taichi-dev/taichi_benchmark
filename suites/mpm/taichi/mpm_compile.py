@@ -14,14 +14,14 @@ class MPMCompile(MPM):
     
     @property
     def repeats(self):
-        return 2
+        return 1
 
     def init(self, n_grid, dim):
         super().init(n_grid, dim)
         
         arch = ti.lang.impl.get_runtime().prog.config().arch
         self.mod = ti.aot.Module(arch) 
-        self.num_compiles = 20
+        self.num_compiles = 100
 
     def run_iter(self):
         for _ in range(self.num_compiles):
