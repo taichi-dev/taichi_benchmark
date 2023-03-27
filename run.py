@@ -18,10 +18,10 @@ log = logging.getLogger(__name__)
 
 
 class EnhancedJSONEncoder(json.JSONEncoder):
-        def default(self, o):
-            if dataclasses.is_dataclass(o):
-                return dataclasses.asdict(o)
-            return super().default(o)
+    def default(self, o):
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
 
 
 def save_json(results, path):
@@ -35,6 +35,7 @@ def main():
     parser.add_argument('--log', default='INFO')
     parser.add_argument('--upload-auth', type=str, default='')
     parser.add_argument('--save', type=str, default='')
+    parser.add_argument('--tags', type=str, default='')
     options = parser.parse_args()
     logconfig.init(getattr(logging, options.log))
 
@@ -45,7 +46,8 @@ def main():
 
     if options.upload_auth:
         log.info('Uploading results to server')
-        core.upload.upload_results(results, options.upload_auth)
+        tags = dict(i.split("=") for i in options.tags.split(","))
+        core.upload.upload_results(results, options.upload_auth, tags)
 
 if __name__ == '__main__':
     main()

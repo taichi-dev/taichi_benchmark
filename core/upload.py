@@ -2,7 +2,7 @@
 
 # -- stdlib --
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 import json
 import logging
 from pathlib import Path
@@ -37,7 +37,7 @@ def get_commit_time(commit_id: str) -> datetime:
     return datetime.fromtimestamp(int(output))
 
 
-def upload_results(metrics: List[BenchmarkResult], auth: str):
+def upload_results(metrics: List[BenchmarkResult], auth: str, tags: Dict[str, str] = {}):
     machine = get_machine_info()
     ver = get_taichi_version()
     ts = str(get_commit_time(ver).astimezone())
@@ -46,7 +46,7 @@ def upload_results(metrics: List[BenchmarkResult], auth: str):
         "time": ts,
         "name": m.name,
         "commit_id": ver,
-        "tags": m.tags,
+        "tags": {**tags, **m.tags},
         "uploader": "",  # TODO: end user uploading
         "machine": machine,
         "value": m.value,
