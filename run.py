@@ -46,7 +46,8 @@ def main():
 
     if options.upload_auth:
         log.info('Uploading results to server')
-        tags = dict(i.split("=") for i in options.tags.split(","))
+        tags = options.tags.strip()
+        tags = dict(i.split("=") for i in tags.split(",")) if tags else {}
         core.upload.upload_results(results, options.upload_auth, tags)
 
 if __name__ == '__main__':
